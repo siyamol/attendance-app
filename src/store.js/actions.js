@@ -34,13 +34,7 @@
 
 
 
-
-
-
-
-
-
- import axios from 'axios';
+import axios from 'axios';
 
 export default {
 async adminLogin({ rootGetters,commit }, payload) {
@@ -72,12 +66,13 @@ async adminRegister ({rootGetters }, payload) {
     throw new Error(error.response?.data?.message ?? error.message);
   }
 },
-async generateQr({ rootGetters,commit }, payload) {
+async generateQr({ rootGetters,commit }) {
   try {
-    const response = await axios.post(`${rootGetters.getURL}/AdminReg/generateQR?email=`, payload);
-    if (response.data.success) {
-      commit('SET_TOKEN', response.data.token); 
-      return { success: true };
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/generateQr`);
+    if (response) {
+      commit('setQr', response.data); 
+      console.log(response.data)
+      return true
     }
     return { success: false };
   } catch (error) {
@@ -174,6 +169,18 @@ async denyLeave({ rootGetters }, payload) {
     const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLeaveRequest/${payload}`);
     if (response.status >= 200 && response.status < 300) {
       // commit('setToken', response.data.token); 
+      return true;
+    }
+    return false ;
+  } catch (error) {
+    console.error(error);
+  }
+},
+async forgotPassword({ rootGetters,commit }, payload) {
+  try {
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/forgot-password`, payload);
+    if (response.status >= 200 && response.status < 300) {
+      commit('forgotPassword', response.data.token); 
       return true;
     }
     return false ;

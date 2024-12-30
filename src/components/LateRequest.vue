@@ -3369,7 +3369,7 @@ button:hover {
 
 
 <template>
-  <div class="page-container">
+ <div class="page-container">
     <div class="sidebar">
       <h2>Admin Panel</h2>
       <ul>
@@ -3387,9 +3387,9 @@ button:hover {
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search icon" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
           </svg>
-          <input v-model="searchText" type="text" placeholder="Search by Name" @input="search" />
-          <input type="date">
-          <!-- <input type="date" v-model="selectedDate" @change="search" class="date-picker" placeholder="YYYY-MM-DD"/> -->
+          <input v-model="searchText" type="text" placeholder="Search by Name/Batch" @input="search" />
+          <!-- <input type="date"> -->
+           <!-- <input type="date" v-model="selectedDate" @change="search" class="date-picker" placeholder="YYYY-MM-DD"/>  -->
         </div>
       </div>
       
@@ -3403,13 +3403,13 @@ button:hover {
             <th class="status-column">Today's Status</th>
           </tr>
         </thead>
-   <tbody>
-          <tr v-for="(student, index) in lateRequests" :key="index">
-            <td>{{ student.studentName }}</td>
+   <!-- <tbody>
+    <tr v-for="(student, index) in filteredStudents" :key="index">
+            <td>{{ student.name }}</td>
             <td>{{ student.batch }}</td>
             <td>{{ student.date }}</td>
-             <td class="reason-column">
-              <div v-if="student.voiceNote">
+             <td class="reason-column"> -->
+              <!-- <div v-if="student.voiceNote">
                 <div class="audio-container">
                   <audio
                     ref="audioPlayers"
@@ -3418,8 +3418,8 @@ button:hover {
                     class="audio-player"
                   ></audio>
                 </div>
-               </div>
-              <div v-else>
+               </div> -->
+              <!-- <div>
                 {{ student.reason }}
               </div>
             </td> 
@@ -3434,6 +3434,30 @@ button:hover {
             </td>
           </tr>
         </tbody>
+         -->
+         <tbody v-if="filteredStudents.length">
+  <tr v-for="(student, index) in filteredStudents" :key="index">
+    <td>{{ student.userName }}</td>
+    <td>{{ student.batchType }}</td>
+    <!-- <td>{{ student.attendanceDate }}</td> -->
+    <td>{{ student.reason }}</td>
+    <td>
+      <div v-if="student.status === 'PENDING'" class="status-buttons">
+        <button @click="approveStudent(index)" class="approve-btn">Approve</button>
+        <button @click="denyStudentreq(index)" class="deny-btn">Deny</button>
+      </div>
+      <div v-else>
+        <span :class="getStatusClass(student.status)">{{ student.status }}</span>
+      </div>
+    </td>
+  </tr>
+</tbody>
+<tbody v-else>
+  <tr>
+    <td colspan="5">No records found</td>
+  </tr>
+</tbody>
+
       </table>
     </div>
   </div>
@@ -3558,7 +3582,7 @@ export default {
 </script> -->
 <script>
 
-// import dayjs from 'dayjs';
+ import dayjs from 'dayjs';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -3573,8 +3597,8 @@ export default {
       //   { studentName: 'Reshma', batch: 'morning', reasonforlate: 'Family emergency', status: '', date: '2024-11-19', voiceNote: 'path/to/voice-note-2.mp3' },  
       //   { studentName: 'Deva', batch: 'evening', reasonforlate: 'Overslept', status: '', date: '2024-11-20', voiceNote: '' },
       // ],
-      playbackSpeeds: [1, 1.5, 2],
-      currentSpeed: [],
+      // playbackSpeeds: [1, 1.5, 2],
+      // currentSpeed: [],
       searchText: '',
       
     };
@@ -3587,22 +3611,37 @@ export default {
     ...mapGetters(['getLate']),
     lateRequests(){
       return this.getLate;
-    }
-    // filteredStudents() {
+    },
+    filteredStudents() {
    
-    //   const formattedSelectedDate = this.selectedDate ? dayjs(this.selectedDate).format('DD-MM-YYYY') : '';
+      // const formattedSelectedDate = this.selectedDate ? dayjs(this.selectedDate).format('DD-MM-YYYY') : '';
       
-    //   return this.students.filter(student => {
-    //     const matchesName = student.studentName.toLowerCase().includes(this.searchText.toLowerCase());
+      // return this.students.filter(student => {
+      //   const matchesName = student.studentName.toLowerCase().includes(this.searchText.toLowerCase());
         
 
-    //     const formattedStudentDate = dayjs(student.date).format('DD-MM-YYYY');
+      //   const formattedStudentDate = dayjs(student.date).format('DD-MM-YYYY');
         
-    //     const matchesDate = formattedSelectedDate ? formattedStudentDate === formattedSelectedDate : true;
+      //   const matchesDate = formattedSelectedDate ? formattedStudentDate === formattedSelectedDate : true;
         
-    //     return matchesName && matchesDate;
-    //   });
-    // }
+      //   return matchesName && matchesDate;
+        
+      // });
+
+      const formattedSelectedDate = this.selectedDate
+        ? dayjs(this.selectedDate).format('YYYY-MM-DD')
+        : '';
+
+      return this.lateRequests.filter((student) => {
+        const matchesName = student.name.toLowerCase().includes(this.searchText.toLowerCase());
+        const matchesBatch = student.batch.toLowerCase().includes(this.searchText.toLowerCase());
+        const matchesDate = formattedSelectedDate
+          ? dayjs(student.date).format('YYYY-MM-DD') === formattedSelectedDate
+          : true;
+
+        return (matchesName || matchesBatch) && matchesDate;
+      });
+    }
   },
   methods: {
     async fetchLateRequest(){
@@ -3644,13 +3683,13 @@ export default {
       return '';
     },
 
-    togglePlaybackSpeed(index) {
-      this.currentSpeed[index] = (this.currentSpeed[index] + 1) % this.playbackSpeeds.length;
-      const audio = this.$refs.audioPlayers[index];
-      if (audio) {
-        audio.playbackRate = this.playbackSpeeds[this.currentSpeed[index]];
-      }
-    }
+    // togglePlaybackSpeed(index) {
+    //   this.currentSpeed[index] = (this.currentSpeed[index] + 1) % this.playbackSpeeds.length;
+    //   const audio = this.$refs.audioPlayers[index];
+    //   if (audio) {
+    //     audio.playbackRate = this.playbackSpeeds[this.currentSpeed[index]];
+    //   }
+    // }
   }
 };
 </script>
@@ -3802,16 +3841,40 @@ button {
   background: linear-gradient(to right, rgb(106, 110, 218), #6e92b8);
 }
 
-.status-approved {
+/* .status-approved {
   color: rgb(77, 98, 229);
   font-weight: bold;
-}
+} */
 
-.status-denied {
+/* .status-denied {
   color: rgb(40, 40, 157);
   font-weight: bold;
+} */
+
+.approve-btn {
+  color: green; /* Text color for the Approve button */
+  font-weight: bold; /* Makes the text bold */
+  border: none; /* Optional: remove button borders */
+  background: transparent; /* Optional: transparent background */
+  cursor: pointer; /* Changes cursor to pointer */
 }
 
+.deny-btn {
+  color: red; /* Text color for the Deny button */
+  font-weight: bold; /* Makes the text bold */
+  border: none; /* Optional: remove button borders */
+  background: transparent; /* Optional: transparent background */
+  cursor: pointer; /* Changes cursor to pointer */
+}
+
+/* Optional: Add hover effect */
+.approve-btn:hover {
+  text-decoration: underline;
+}
+
+.deny-btn:hover {
+  text-decoration: underline;
+}
 .reason-column {
   min-width: 250px;
   max-width: 280px;

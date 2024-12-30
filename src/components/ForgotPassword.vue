@@ -163,7 +163,10 @@ export default {
     <section>
       <div class="reset-password">
         <h2>Reset Password</h2>
-     
+        <div class="form-group">
+          <input v-model="email" type="email" placeholder="Enter Email*" />
+          <span v-if="emaildError" class="error">{{ emailError }}</span>
+        </div>
         
         <div class="form-group">
           <input v-model="password" type="password" placeholder="Enter New Password*" />
@@ -181,9 +184,11 @@ export default {
     </section>
   </template>
   <script>
+  import { mapGetters } from 'vuex';
   export default {
     data() {
       return {
+        email:'',
         password: '',
         confirmPassword: '',
         passwordError: '',
@@ -191,8 +196,31 @@ export default {
         successMessage: '', // Holds the success message
       };
     },
+
+
+
+  mounted() {
+ 
+     this.fetchForgotPassword();
+  },
+
+
+
   
+computed: {
+    ...mapGetters(['getForgotpass']),
+  forgotPassword(){
+       return this.getForgotpass;
+    }
+  },
     methods: {
+      async fetchForgotPassword(){
+      try{
+        await this.$store.dispatch('fetchForgot'); 
+      }catch (error) {
+          console.error(error);
+      } 
+    },
       validatePassword() {
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
         this.passwordError = !passwordRegex.test(this.password)
@@ -215,6 +243,7 @@ export default {
           // Reset password logic here (e.g., calling an API to reset password)
           
           // Optionally, you can clear the password fields
+          this.email = '';
           this.password = '';
           this.confirmPassword = '';
         } else {

@@ -428,7 +428,7 @@
         </div>
         <ul class="menu-items">
           <li><router-link to="/">Home</router-link></li>
-          <li><router-link to="/adminmain">Adminmainpage</router-link></li>
+          <!-- <li><router-link to="/adminmain">Adminmainpage</router-link></li> -->
           <li><router-link to="/admin">Login</router-link></li>
           <li><router-link to="/admin">Logout</router-link></li>
       

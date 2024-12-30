@@ -1570,16 +1570,16 @@ th, td {
           </select>
         </div>
         <!-- Date Picker -->
-        <div class="filter">
+        <!-- <div class="filter">
           <label for="dateFilter">Filter by Date:</label>
-          <!-- Native date picker -->
+
           <input 
             id="dateFilter" 
             type="date" 
             v-model="selectedDate" 
             @change="updateFormattedDate"
           />
-        </div>
+        </div> -->
       </div>
 
       <!-- Export Button (moved to right) -->
@@ -1598,7 +1598,7 @@ th, td {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(student, index) in students" :key="index">
+          <tr v-for="(student, index) in filteredStudents" :key="index">
             <td>{{ student.name }}</td>
             <td>{{ student.batch }}</td>
             <td>{{ student.email }}</td>
@@ -1610,6 +1610,7 @@ th, td {
             </td> -->
           </tr>
         </tbody>
+        
       </table>
     </div>
   </div>
@@ -1640,18 +1641,18 @@ export default {
     students(){
       return this.getUsers
     },
-    // filteredStudents() {
-    //   return this.students.filter(student => {
-    //     // Name filter
-    //     const matchesName = student.name.toLowerCase().includes(this.searchText.toLowerCase());
-    //     // Batch filter
-    //     const matchesBatch = this.selectedBatch === '' || student.batch === this.selectedBatch;
-    //     // Date filter
-    //     const matchesDate = this.selectedDate === '' || student.date === this.selectedDate;
+    filteredStudents() {
+  return this.students.filter(student => {
+    const matchesName = student.name && student.name.toLowerCase().includes(this.searchText.toLowerCase());
+    
+    const matchesBatch = this.selectedBatch === '' || student.batch === this.selectedBatch;
+    
+    const matchesDate = this.selectedDate === '' || student.date === this.selectedDate;
 
-    //     return matchesName && matchesBatch && matchesDate;
-    //   });
-    // },
+    return matchesName && matchesBatch && matchesDate;
+  });
+},
+
   },
   methods: {
     // getStatusClass(status) {
@@ -1668,12 +1669,12 @@ export default {
     },
     printPage() {
       const exportButton = document.querySelector('.export-btn');
-      exportButton.style.display = 'none'; // Hide button while printing
+      exportButton.style.display = 'none'; 
 
-      window.print(); // Trigger print dialog
+      window.print(); 
 
       setTimeout(() => {
-        exportButton.style.display = 'block'; // Show button again after printing
+        exportButton.style.display = 'block'; 
       }, 1000);
     },
     // Method to update the formatted date when a date is selected

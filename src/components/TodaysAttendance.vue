@@ -341,7 +341,7 @@
       </div>
   
       <div class="main-content">
-        <h1 class="page-title">Admin Student Details</h1>
+        <h1 class="page-title">Today's Attendance</h1>
   
         <!-- Filters -->
         <div class="filters-container">
@@ -356,16 +356,16 @@
             <label for="batchFilter">Filter by Batch:</label>
             <select id="batchFilter" v-model="selectedBatch">
               <option value="">All</option>
-              <option value="Morning">Morning</option>
-              <option value="Evening">Evening</option>
+              <option value="Morning Batch">Morning Batch</option>
+              <option value="Evening Batch">Evening Batch</option>
             </select>
           </div>
           <div class="filter">
             <label for="statusFilter">Filter by Status:</label>
             <select id="statusFilter" v-model="selectedStatus">
               <option value="">All</option>
-              <option value="Present">Present</option>
-              <option value="Absent">Absent</option>
+              <option value="Punctual">Punctual</option>
+              <option value="Late">Late</option>
             </select>
           </div>
           
@@ -373,7 +373,9 @@
         </div>
   
        
-  
+        <div class="export-btn-container">
+        <button @click="printPage" class="export-btn">Export to PDF</button>
+      </div>
         <!-- Table -->
         <table>
           <thead>
@@ -387,16 +389,33 @@
               
             </tr>
           </thead>
-          <tbody>
+          <!-- <tbody>
             <tr v-for="(student, index) in todaystatus" :key="index">
-              <td>{{ student.name }}</td>
-              <td>{{ student.batch }}</td>
+              <td>{{ student.userName }}</td>
+              <td>{{ student.batchType }}</td>
               <td>{{ formatDate(student.attendanceDate) }}</td>
               <td>{{ student.scanInTime }}</td>
               <td>{{ student.scanOutTime }}</td>
               <td>{{ student.status }}</td>
             </tr>
-          </tbody>
+          </tbody> -->
+          <tbody v-if="filteredStudents.length">
+  <tr v-for="(student, index) in filteredStudents" :key="index">
+    <td>{{ student.userName }}</td>
+    <td>{{ student.batchType }}</td>
+    <td>{{ formatDate(student.attendanceDate) }}</td>
+    <td>{{ student.scanInTime }}</td>
+    <td>{{ student.scanOutTime }}</td>
+    <td>{{ student.status }}</td>
+  </tr>
+</tbody>
+<tbody v-else>
+  <tr>
+    <td colspan="6">No records found</td>
+  </tr>
+</tbody>
+
+
         </table>
       </div>
     </div>
@@ -445,6 +464,15 @@
       //     return matchesName && matchesBatch && matchesStatus;
       //   });
       // },
+      filteredStudents() {
+    return this.todaystatus.filter((student) => {
+      const matchesName = student.userName.toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesBatch = !this.selectedBatch || student.batchType === this.selectedBatch;
+      const matchesStatus = !this.selectedStatus || student.status === this.selectedStatus;
+
+      return matchesName && matchesBatch && matchesStatus;
+    });
+  },
     },
     methods: {
       async fetchToday(){

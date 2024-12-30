@@ -13,5 +13,11 @@ export default {
     },
     setStatus(state,payload) {
       state.allStatus = payload;
+    },
+    setQr(state,payload) {
+      state.Qr = payload;
+    },
+    forgotPassword(state,payload) {
+     state.allForgots = payload;
     }
   };

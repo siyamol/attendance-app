@@ -2665,7 +2665,7 @@ th.reason-column, td.reason-column {
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search icon" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
           </svg>
-          <input v-model="searchText" type="text" placeholder="Search by Name" />
+          <input v-model="searchText" type="text" placeholder="Search by Name/Batch" />
           <input type="date" v-model="selectedDate" class="date-picker" />
           <!-- <input type="date" v-model="selectedDate" @change="search" class="date-picker" /> -->
          
@@ -2682,16 +2682,32 @@ th.reason-column, td.reason-column {
             <th>Type of Leave</th>
             <th class="reason-column">Reason for Leave</th>
             <th class="status-column">Today's Status</th>
+            <!-- <th>Reason for Leave</th>
+            <th>Today's Status</th> -->
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(student, index) in leaverequest" :key="index">
-            <td>{{ student.studentName }}</td>
+          <tr v-for="(student, index) in leaveRequest" :key="index">
+            <td>{{ student.name }}</td>
             <td>{{ student.batch }}</td>
             <td>{{ formatDate(student.fromDate) }}</td>
             <td>{{ formatDate(student.toDate) }}</td>
             <td>{{ student.numberOfDays }}</td>
             <td>{{ student.leaveType }}</td>
+             <td class="reason-column">{{ student.reason }}</td>
+             <td>
+              <div v-if="student.status == 'PENDING'" class="status-buttons">
+                <button @click="approveStudent(index)" class="approve-btn">Approve</button>
+                <button @click="denyStudentreq(index)" class="deny-btn">Deny</button>
+              </div>
+              <div v-else>
+                <span :class="getStatusClass(student.status)">{{ student.status }}</span>
+              </div>
+            </td>
+   <!-- <td class="status-column">
+   
+    </td>
+           -->
             <!-- <td class="reason-column">
               <div v-if="student.voiceNote">
                 <audio v-if="student.voiceNote" controls>
@@ -2703,8 +2719,8 @@ th.reason-column, td.reason-column {
                 {{ student.reasonForLeave }}
               </div>
             </td> -->
-            <td class="reason-column">
-              <div v-if="student.voiceNote">
+            <!-- <td class="reason-column"> -->
+              <!-- <div v-if="student.voiceNote">
                 <div class="audio-container">
                   <audio
                     ref="audioPlayers"
@@ -2713,11 +2729,11 @@ th.reason-column, td.reason-column {
                     class="audio-player"
                   ></audio>
                 </div>
-               </div>
-              <div v-else>
+               </div> -->
+              <!-- <div v-else>
                 {{ student.reason }}
-              </div>
-            </td> 
+              </div> -->
+            <!-- </td>  -->
 
             <!-- <td class="reason-column">
   <div v-if="student.voiceNote">
@@ -2730,16 +2746,7 @@ th.reason-column, td.reason-column {
     The audio is not available.
   </div>
 </td> -->
-
-            <td>
-              <div v-if="student.status !== 'Approved' && student.status !== 'Denied'" class="status-buttons">
-                <button @click="approveStudent(index)" class="approve-btn">Approve</button>
-                <button @click="denyStudent(index)" class="deny-btn">Deny</button>
-              </div>
-              <div v-else>
-                <span :class="getStatusClass(student.status)">{{ student.status }}</span>
-              </div>
-            </td>
+           
           </tr>
         </tbody>
       </table>
@@ -2751,10 +2758,10 @@ th.reason-column, td.reason-column {
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "AudioPlayer",
+  // name: "AudioPlayer",
   data() {
     return {
-      audioSrc: "https://www.coothead.co.uk/audio/You-Cant-Always-Get-What-You-Want.mp3",
+      // audioSrc: "https://www.coothead.co.uk/audio/You-Cant-Always-Get-What-You-Want.mp3",
       // students: [
       //   {
       //     studentName: "Siya",
@@ -2812,11 +2819,11 @@ export default {
     },
     async approveStudent(index) {
       // this.students[index].status = 'Approved';
-      const payload = this.leaveRequests[index].id;
+      const payload = this.leaveRequest[index].id;
       try{
         const res = await this.$store.dispatch('approveLeave', payload); 
         if(res){
-          this.fetchLateRequest();
+          this.fetchLeaveRequest();
         }
       }catch (error) {
           console.error(error);
@@ -2824,11 +2831,11 @@ export default {
     },
     async denyStudentreq(index) {
       // this.students[index].status = 'Denied';
-      const payload = this.leaveRequests[index].id;
+      const payload = this.leaveRequest[index].id;
       try{
-      const res = await this.$store.dispatch('denyLate', payload); 
+      const res = await this.$store.dispatch('denyLeave', payload); 
       if(res){
-          this.fetchLateRequest();
+          this.fetchLeaveRequest();
         }
       }catch (error) {
           console.error(error);
