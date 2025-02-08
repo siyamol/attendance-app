@@ -414,6 +414,44 @@ async removeUser({  rootGetters,commit }, userId) {
     return false; 
   }
 },
+async addBatch({ rootGetters,commit }, payload) {
+  try {
+     const response = await axios.post(`${rootGetters.getURL}/AdminReg/addBatch`,payload);
+  
+     if (response.status >= 200 && response.status < 300) {
+      commit('batchAdd', payload);
+      return true; 
+    }
+  } catch (error) {
+    console.error('Error removing user:', error);
+    return false; 
+  }
+},
+async fetchbatch({ rootGetters,commit }) {
+  try {
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatches`);
+    if (response.status >= 200 && response.status < 300) {
+      commit('setBatch', response.data); 
+      return true;
+    }
+    return false ;
+  } catch (error) {
+    console.error(error);
+  }
+},
+async dltBatch({  rootGetters }, payload) {
+  try {
+     const response = await axios.delete(`${rootGetters.getURL}/AdminReg/deleteBatch?id=${payload}`);
+  
+     if (response.status >= 200 && response.status < 300) {
+
+      return true; 
+    }
+  } catch (error) {
+    console.error('Error removing user:', error);
+    return false; 
+  }
+},
 };
 
 

@@ -11,6 +11,7 @@ export default {
     getForgotpass: (state) => state.allForgots,
     getQrStatus: (state) => state.qrStatus,
     getRemove: (state) => state.allRemove,
-    getAnotherStatus: (state) => state.anotherStatus
+    getAnotherStatus: (state) => state.anotherStatus,
+    getBatch: (state) => state.batch,
  };
   

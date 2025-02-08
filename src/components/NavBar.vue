@@ -432,6 +432,7 @@
           <li><router-link to="/admin">Login</router-link></li>
           <li><router-link to="/admin">Logout</router-link></li>
           <li><router-link to="/about">About</router-link></li>
+     
         
         </ul>
         <h1 class="logo">Welcome to attendance app</h1>

@@ -1548,6 +1548,7 @@ th, td {
         <li><router-link to="/leave">Leave Request</router-link></li>
         <li><router-link to="/late">Late Request</router-link></li>
         <li><router-link to="/todaysatn"> Attendance</router-link></li>
+        <li><router-link to="/batch">batch</router-link></li>
       </ul>
     </div>
 

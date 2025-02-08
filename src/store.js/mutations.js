@@ -31,5 +31,8 @@ export default {
     },
     setAnotherStatus(state, payload) {
       state.anotherStatus = payload;
+    },
+    setBatch(state, payload) {
+      state.batch = payload;
     }
     };
