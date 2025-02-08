@@ -1,7 +1,8 @@
 
 export default {
- baseURL:'http://192.168.1.40:5050',
-    // baseURL:'http://localhost:8448',
+    // baseURL:'http://192.168.1.26:5050',
+    // baseURL:'http://localhost:5050',
+      baseURL:'http://192.168.1.150:5050',
     data: [],
     token:'',
     allUsers: [],
@@ -10,6 +11,10 @@ export default {
     allStatus:[],
     allForgots:[],
     Qr: '',
-
-  };
+    qrStatus:[],
+    // studentList: [],
+    allRemove:[],
+    anotherStatus: []
+    // allStudents: [] 
+ };
   

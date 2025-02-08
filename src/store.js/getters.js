@@ -9,5 +9,8 @@ export default {
     getStatus: (state) => state.allStatus,
     getQr:(state) => state.Qr,
     getForgotpass: (state) => state.allForgots,
-  };
+    getQrStatus: (state) => state.qrStatus,
+    getRemove: (state) => state.allRemove,
+    getAnotherStatus: (state) => state.anotherStatus
+ };
   

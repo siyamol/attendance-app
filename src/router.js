@@ -24,11 +24,14 @@ import StudentDetails from './components/StudentDetails.vue';
 import AdminLayout from './components/AdminLayout.vue';
 import ForgotPassword from './components/ForgotPassword.vue';
 import TodaysAttendance from './components/TodaysAttendance.vue';
+import AboutPage from './components/AboutPage.vue';
+import FilterAttendance from './components/FilterAttendance.vue';
+import BatchPage from './components/BatchPage.vue';
 const routes = [
 
   { path: '/', component: HomePage },  
 
-   { path: '/nav', component: NavBar},
+  { path: '/nav', component: NavBar},
   { path: '/register',component:RegisterPage},
   { path: '/footer',component:FooterPage},
   { path: '/admin',component:AdminloginPage},
@@ -40,8 +43,10 @@ const routes = [
   { path: '/leave',component:LeaveRequest},
   { path: '/student',component:StudentDetails},
   { path: '/forgot',component:ForgotPassword},  
-  { path: '/todaysatn',component:TodaysAttendance}  
-
+  { path: '/todaysatn',component:TodaysAttendance}  ,
+  { path: '/about',component:AboutPage},
+  { path: '/filter',component:FilterAttendance},
+  { path: '/batch',component:BatchPage}
 ];
 
 

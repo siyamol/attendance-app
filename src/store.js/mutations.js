@@ -19,5 +19,17 @@ export default {
     },
     forgotPassword(state,payload) {
      state.allForgots = payload;
+    },
+    setQrStatus(state,payload) {
+      state.qrStatus = payload;
+    },
+    // setRemove(state,payload) {
+    //   state.allRemove = payload;
+    // },
+    setRemove(state, userId) {
+    state.allRemove.push(userId); 
+    },
+    setAnotherStatus(state, payload) {
+      state.anotherStatus = payload;
     }
-  };
+    };

@@ -431,7 +431,7 @@
           <!-- <li><router-link to="/adminmain">Adminmainpage</router-link></li> -->
           <li><router-link to="/admin">Login</router-link></li>
           <li><router-link to="/admin">Logout</router-link></li>
-      
+          <li><router-link to="/about">About</router-link></li>
         
         </ul>
         <h1 class="logo">Welcome to attendance app</h1>
@@ -465,9 +465,11 @@
   height: 80px; 
   /* background: #8b9ff0;  */
   /* background: linear-gradient(to left, #00c4cc ,#8b3dff); */
-  background: linear-gradient(to left, #34dde2 ,#8b3dff);
+  /* background: linear-gradient(to left, #34dde2 ,#8b3dff); */
+
+   background: #99d2f8;   
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  color: #a8ebef;
+  color: #f5f7fa;
   /* color: #94f7fc; */
   
   }

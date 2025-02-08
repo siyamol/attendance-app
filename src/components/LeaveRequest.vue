@@ -1970,14 +1970,7 @@ button:hover {
   color: #4b3dbf;
 }
 </style>-->
-
-
-
-
-
-
 <!-- 
-
 <template>
   <div class="page-container">
     <div class="sidebar">
@@ -2314,10 +2307,6 @@ th.reason-column, td.reason-column {
 
 
  -->
-
-
-
-
  <!-- <template>
   <div class="page-container">
     <div class="sidebar">
@@ -2654,23 +2643,64 @@ th.reason-column, td.reason-column {
         <li><router-link to="/student">Student Details</router-link></li>
         <li><router-link to="/leave">Leave Request</router-link></li>
         <li><router-link to="/late">Late Request</router-link></li>
-        <li><router-link to="/todaysatn">Today's Attendance</router-link></li>
+        <li><router-link to="/todaysatn"> Attendance</router-link></li>
       </ul>
     </div>
 
     <div class="main-content">
       <h1 class="thr">Leave Request</h1>
-      <div class="search-bar-container ms-5">
+      <!-- <div class="search-bar-container ms-5">
         <div class="search-bar">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search icon" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
           </svg>
           <input v-model="searchText" type="text" placeholder="Search by Name/Batch" />
-          <input type="date" v-model="selectedDate" class="date-picker" />
+          <input type="date" v-model="selectedDate" class="date-picker" />  -->
+          
           <!-- <input type="date" v-model="selectedDate" @change="search" class="date-picker" /> -->
-         
+        <!-- </div>
+      </div> -->
+      
+      <!-- <div class="filters-container">
+        <div class="filter">
+          <label for="nameSearch">Search by Name:</label>
+          <input id="nameSearch" v-model="searchText" type="text" placeholder="Enter Name" />
         </div>
-      </div>
+      
+        <div class="filter">
+          <label for="batchFilter">Filter by Batch:</label>
+          <select id="batchFilter" v-model="searchBatch" type="text" placeholder="Enter Batch">
+            <option value="">All</option>
+            <option value="morning batch">Morning</option>
+            <option value="evening batch">Evening</option>
+          </select>
+        </div>
+      </div>    -->
+      <!-- Date Picker -->
+        <!-- <div class="filter">
+          <label for="dateFilter">Filter by Date:</label>
+
+          <input 
+            id="dateFilter" 
+            type="date" 
+            v-model="selectedDate" 
+            @change="updateFormattedDate"
+          />
+        </div> -->
+        
+        <div class=" ms-5 d-flex justify-content-end me-3">
+        <div class="search">
+          <div class="search-bar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search icon" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+            <input v-model="searchText" type="text" placeholder="Search by Name/Batch" @input="search" />
+          </div>
+          
+        </div>
+  
+      
+      </div> 
       <table>
         <thead>
           <tr>
@@ -2686,12 +2716,14 @@ th.reason-column, td.reason-column {
             <th>Today's Status</th> -->
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="(student, index) in leaveRequest" :key="index">
+        <tbody v-if="filteredLeaveRequest && filteredLeaveRequest.length > 0">
+        <!-- <tbody v-if="leaveRequest && leaveRequest.length >0"> -->
+          <!-- <tr v-for="(student, index) in leaveRequest" :key="index"> -->
+            <tr v-for="(student, index) in filteredLeaveRequest" :key="index">
             <td>{{ student.name }}</td>
             <td>{{ student.batch }}</td>
-            <td>{{ formatDate(student.fromDate) }}</td>
-            <td>{{ formatDate(student.toDate) }}</td>
+            <td>{{ student.fromDate? formatDate(student.fromDate) : '' }}</td>
+            <td>{{ student.toDate? formatDate(student.toDate) : '' }}</td>
             <td>{{ student.numberOfDays }}</td>
             <td>{{ student.leaveType }}</td>
              <td class="reason-column">{{ student.reason }}</td>
@@ -2746,7 +2778,17 @@ th.reason-column, td.reason-column {
     The audio is not available.
   </div>
 </td> -->
-           
+</tr>
+        </tbody>
+        <!-- <tbody v-else>
+          <tr>
+            <td colspan="5">No records found</td>
+         
+          </tr>
+       </tbody> -->
+       <tbody v-else>
+          <tr>
+            <td colspan="8">No records found</td>
           </tr>
         </tbody>
       </table>
@@ -2787,7 +2829,7 @@ export default {
       //   },
       // ],
       searchText: "",
-      selectedDate: "",
+    
     };
   },
   mounted() {
@@ -2797,8 +2839,9 @@ export default {
   computed: {
     ...mapGetters(['getLeave']),
     leaveRequest(){
-      return this.getLeave;
-    }
+      // return this.getLeave;
+      return Array.isArray(this.getLeave) ? this.getLeave : [];
+    },
     // filteredStudents() {
     //   return this.students.filter((student) => {
     //     const matchesName = student.studentName.toLowerCase().includes(this.searchText.toLowerCase());
@@ -2808,6 +2851,18 @@ export default {
     //     return matchesName && (!this.selectedDate || matchesDate);
     //   });
     // },
+    filteredLeaveRequest() {
+    // Return filtered data based on the searchText
+    return this.leaveRequest.filter((student) => {
+      const searchText = this.searchText.toLowerCase();
+      return (
+        student.name.toLowerCase().includes(searchText) ||
+        student.batch.toLowerCase().includes(searchText)
+      );
+    });
+  },
+
+
   },
   methods: {
     async fetchLeaveRequest(){
@@ -2823,6 +2878,7 @@ export default {
       try{
         const res = await this.$store.dispatch('approveLeave', payload); 
         if(res){
+          this.leaveRequest[index].status = 'Approved';
           this.fetchLeaveRequest();
         }
       }catch (error) {
@@ -2835,6 +2891,7 @@ export default {
       try{
       const res = await this.$store.dispatch('denyLeave', payload); 
       if(res){
+        this.leaveRequest[index].status = 'Denied';
           this.fetchLeaveRequest();
         }
       }catch (error) {
@@ -2850,8 +2907,13 @@ export default {
     formatDate(date) {
       return new Date(date).toLocaleDateString("en-GB");
     },
+
+    search() {
+      // This method is required to trigger the filter operation when the input changes
+    },
   },
 };
+
 </script>
 
 <style scoped>
@@ -2863,7 +2925,8 @@ export default {
 .sidebar {
   width: 250px;
   padding: 20px;
-  background: linear-gradient(to top, #7fd7da, #8e4eef);
+  /* background: linear-gradient(to top, #7fd7da, #8e4eef); */
+  background: #8ddbf7; 
   color: white;
   border-right: 1px solid #ddd;
   padding: 50px;
@@ -2897,7 +2960,7 @@ export default {
 }
 
 .sidebar ul li a:hover {
-  background-color: #a39ad9;
+  background: #99d2f8;  
 }
 
 .main-content {
@@ -2909,8 +2972,8 @@ export default {
 .search-bar-container {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
-}
+   margin: 20px 0;
+} 
 
 .search-bar {
   display: flex;
@@ -2957,17 +3020,18 @@ td {
 }
 
 th {
-  background: linear-gradient(to left, #4830e8, #a485f2);
+  /* background: linear-gradient(to left, #4830e8, #a485f2); */
+  background:#4FC3F7;
   color: #fcffff;
   font-weight: bold;
 }
 
 tbody tr:nth-child(even) {
-  background-color: #c6c4f8;
+  background-color: #B3E5FC;
 }
 
 tbody tr:nth-child(odd) {
-  background-color: #c0bdf7;
+  background-color: #81D4FA;
 }
 
 th:nth-child(5),
@@ -3007,7 +3071,7 @@ button:hover {
   margin-top: 0px;
   margin-bottom:1px;
   font-size: 28px;
-  color: #2f6ff9;
+  color: #6d7078;
 }
 
 
@@ -3019,12 +3083,14 @@ button:hover {
 }
 
 .approve-btn {
-  background: linear-gradient(to right, rgb(109, 93, 172), #6a96f5); 
+  /* background: linear-gradient(to right, rgb(109, 93, 172), #6a96f5);  */
+  background:#87CEEB;
   font-size: 12px;
 }
 
 .deny-btn {
-  background: linear-gradient(to right, rgb(106, 110, 218), #6e92b8);
+  /* background: linear-gradient(to right, rgb(106, 110, 218), #6e92b8); */
+  background:#89d2fd ;
   font-size: 12px;
 }
 
@@ -3058,7 +3124,7 @@ th.reason-column, td.reason-column {
   width: 1px;
   height: 1px;
   margin-right: 10px;
-} */
+} 
 /* 
 .audio-player {
   max-width: 20px;
@@ -3099,4 +3165,167 @@ th.reason-column, td.reason-column {
 /* .speed-toggle-btn:hover {
   background-color: #0056b3;
 } */
+ 
+/* .filters-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 1px 100;
+  flex-wrap: wrap;
+  
+
+} */
+
+ 
+.filter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10px;
+  color: #2f6ff9;
+} 
+
+input,
+select {
+  padding: 8px;
+  margin-top: 5px;
+  color: #656363;
+  /* background-color: #bddffb; */
+  /* border: 1px solid #a5b9f4;  */
+  margin-bottom: 1px;
+  /* border-radius: 4px; */
+  width: 250px;
+  
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 250px;
+  border: 1px solid #ccc; /* Add border to create the box */
+  border-radius: 6px; /* Add rounded corners */
+  padding: 5px; /* Add padding for inner spacing */
+  background-color: rgb(255, 249, 249);/* Ensure a clear background */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.search-bar input[type="text"] {
+  border: none; /* Remove inner input border */
+  outline: none; /* Remove focus outline */
+  width: calc(100% - 30px); /* Full width minus space for icon */
+  padding: 5px; /* Add padding for better spacing */
+  font-size: 14px; /* Adjust text size */
+  margin-bottom:3px;
+  margin-top:3px;
+}
+  
+.search-bar i {
+    margin-left: 9px; /* Adjust icon spacing */
+  }
+.search-bar i {
+  margin-left: 10px; 
+  color: #888; 
+  cursor: pointer; 
+}
+
+
+
+
+
+
+
+
+/* 
+
+th:nth-child(1),
+td:nth-child(1) {
+  width: 200px; 
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 150px; 
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 150px; 
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+  width: 150px; 
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+  width: 100px; 
+}
+
+th:nth-child(6),
+td:nth-child(6) {
+  width: 150px; 
+}
+
+th.reason-column,
+td.reason-column {
+  width: 330px;  
+}
+
+th.status-column,
+td.status-column {
+  width: 150px; 
+}
+
+button {
+  border: 1px solid #ddd;
+  padding: 6px 12px; 
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border-radius: 4px;
+  min-width: 80px;
+  min-height: 33px;
+  font-size: 10px;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.status-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.approve-btn {
+  background:#87CEEB;
+  font-size: 12px;
+}
+
+.deny-btn {
+  background:#89d2fd ;
+  font-size: 12px;
+}
+
+.status-approved {
+  color: rgb(90, 148, 255);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.status-denied {
+  color: rgb(121, 73, 252);
+  font-weight: bold;
+  font-size: 14px;
+} */
+
+.reason-column {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal; /* Allow word breaks */
+  min-width: 110px;
+  max-width: 50px; /* Adjustable maximum width */
+}
+
 </style>

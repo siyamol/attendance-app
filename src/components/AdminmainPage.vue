@@ -2069,7 +2069,7 @@ form input[type="submit"]:hover {
         <li><router-link to="/student">Student Details</router-link></li>
         <li><router-link to="/leave">Leave Request</router-link></li>
         <li><router-link to="/late">Late Request</router-link></li>
-        <li><router-link to="/todaysatn">Today's Attendance</router-link></li>
+        <li><router-link to="/todaysatn">Attendance</router-link></li>
       </ul>
     </div>
     <div class="main-content">
@@ -2093,7 +2093,8 @@ form input[type="submit"]:hover {
 .sidebar {
   width: 250px;
   padding: 20px;
-  background: linear-gradient(to top, #7fd7da, #8e4eef);
+  /* background: linear-gradient(to top, #7fd7da, #8e4eef); */
+  background: #8ddbf7; 
   color: white;
   border-right: 1px solid #ddd;
   padding: 50px;
@@ -2127,11 +2128,12 @@ form input[type="submit"]:hover {
 }
 
 .sidebar ul li a:hover {
-  background-color: #a39ad9;
+  /* background-color: #9dd0ff; */
+  background: #99d2f8;  
 }
 
 .main-content {
-  flex-grow: 1; /* Ensure the content area fills the remaining space */
+  flex-grow: 1;  
   padding: 20px;
   background-color: #f4f4f4;
 }

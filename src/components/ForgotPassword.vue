@@ -257,7 +257,7 @@ computed: {
  .reset-password {
   max-width: 500px;
   margin: auto;
-  padding: 20px;
+  padding: 60px;
   border-radius: 8px;
   background-color: #ffffff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -302,7 +302,8 @@ computed: {
   width: 100%;
   height: 45px;
   border: none;
-  background: linear-gradient(to left, #4830e8, #0fa6ed, #4830e8, #0fe4fc);
+  /* background: linear-gradient(to left, #4830e8, #0fa6ed, #4830e8, #0fe4fc); */
+  background:#99d2f8;  
   color: #ffffff;
   font-size: 16px;
   border-radius: 4px;
@@ -314,7 +315,8 @@ computed: {
     width: 100%;
     height: 45px;
     border: none;
-    background: linear-gradient(to left, #4830e8 ,#0fa6ed, #4830e8,#0fe4fc);
+    /* background: linear-gradient(to left, #4830e8 ,#0fa6ed, #4830e8,#0fe4fc); */
+    background:#99d2f8;  
     color: #fff;
     font-size: 16px;
     border-radius: 4px;
@@ -324,8 +326,8 @@ computed: {
   }
   
   .reset-password button:hover {
-    background: linear-gradient(to left, #4830e8 ,#0fa6ed, #4830e8,#0fe4fc);
-    
+    /* background: linear-gradient(to left, #4830e8 ,#0fa6ed, #4830e8,#0fe4fc); */
+    background: #8ddbf7;
   }
   
   .error {

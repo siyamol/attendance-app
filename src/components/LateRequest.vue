@@ -3362,12 +3362,12 @@ button:hover {
 }
 
 
-</style>-->
+</style>
 
 
 
 
-
+''''''''''''''BOX SEARCH BAR WITH AUDIO FUNCTION'''''''''''
 <template>
  <div class="page-container">
     <div class="sidebar">
@@ -3382,16 +3382,30 @@ button:hover {
 
     <div class="main-content">
       <h1 class="thr">Late Request</h1>
-      <div class="search-bar-container ms-5">
+      <div class="filters-container">
+        <div class="filter">
+          <label for="nameSearch">Search by Name:</label>
+          <input id="nameSearch" v-model="searchText" type="text" placeholder="Enter Name" />
+        </div>
+      
+        <div class="filter">
+          <label for="batchFilter">Filter by Batch:</label>
+          <select id="batchFilter" v-model="selectedBatch" type="text" placeholder="Enter Batch">
+            <option value="">All</option>
+            <option value="morning batch">Morning</option>
+            <option value="evening batch">Evening</option>
+          </select>
+        </div>
+     <div class="search-bar-container ms-5">
         <div class="search-bar">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search icon" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
           </svg>
-          <input v-model="searchText" type="text" placeholder="Search by Name/Batch" @input="search" />
+          <input v-model="searchText" type="text" placeholder="Search by Name/Batch" @input="search" /> -->
           <!-- <input type="date"> -->
            <!-- <input type="date" v-model="selectedDate" @change="search" class="date-picker" placeholder="YYYY-MM-DD"/>  -->
-        </div>
-      </div>
+        <!-- </div> 
+      </div> 
       
       <table>
         <thead>
@@ -3403,7 +3417,7 @@ button:hover {
             <th class="status-column">Today's Status</th>
           </tr>
         </thead>
-   <!-- <tbody>
+  <tbody>
     <tr v-for="(student, index) in filteredStudents" :key="index">
             <td>{{ student.name }}</td>
             <td>{{ student.batch }}</td>
@@ -3434,12 +3448,12 @@ button:hover {
             </td>
           </tr>
         </tbody>
-         -->
+         
          <tbody v-if="filteredStudents.length">
   <tr v-for="(student, index) in filteredStudents" :key="index">
-    <td>{{ student.userName }}</td>
-    <td>{{ student.batchType }}</td>
-    <!-- <td>{{ student.attendanceDate }}</td> -->
+    <td>{{ student.name }}</td>
+    <td>{{ student.batch }}</td>
+    <td>{{ student.date }}</td>
     <td>{{ student.reason }}</td>
     <td>
       <div v-if="student.status === 'PENDING'" class="status-buttons">
@@ -3448,6 +3462,7 @@ button:hover {
       </div>
       <div v-else>
         <span :class="getStatusClass(student.status)">{{ student.status }}</span>
+        
       </div>
     </td>
   </tr>
@@ -3462,7 +3477,7 @@ button:hover {
     </div>
   </div>
 </template>
-<!-- 
+
 <scirpt>
 
 export default {
@@ -3579,7 +3594,7 @@ export default {
     }
   }
 };
-</script> -->
+</script> 
 <script>
 
  import dayjs from 'dayjs';
@@ -3588,7 +3603,9 @@ import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
+
       selectedDate: '', 
+      selectedBatch: '',
       // students: [
       //   { studentName: 'Siya', batch: 'morning', reasonforlate: 'Traffic', status: '', date: '2024-12-18', voiceNote: '' },
       //   { studentName: 'Reshma', batch: 'morning', reasonforlate: 'Family emergency', status: '', date: '2024-11-19', voiceNote: '' },
@@ -3926,8 +3943,793 @@ button {
 .speed-toggle-btn:hover {
   background-color: #0056b3;
 } */
+
+.search-bar-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cfccfc;
+  padding: 5px;
+  border-radius: 8px;
+  background-color: #dffbfb;
+  box-shadow: 0 2px 5px rgba(145, 67, 253, 0.1);
+}
+.search-bar input {
+  padding: 8px;
+  width: 250px;
+  height: 25px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+}
+
+th, td {
+  border: 5px solid #a9e6fb;
+  padding: 12px;
+  text-align: center;
+}
+.filters-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 1px 100;
+  flex-wrap: wrap;
+  
+
+}
+
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10px;
+  color: #2f6ff9;
+}
+
+input,
+select {
+  padding: 8px;
+  margin-top: 5px;
+  color: #656363;
+  background-color: #bddffb;
+  border: 1px solid #a5b9f4; 
+  margin-bottom: 1px;
+  border-radius: 4px;
+  width: 250px;
+  
+}
+
 </style>
 
 
+<template>
+  <div class="page-container">
+     <div class="sidebar">
+       <h2>Admin Panel</h2>
+       <ul>
+         <li><router-link to="/student">Student Details</router-link></li>
+         <li><router-link to="/leave">Leave Request</router-link></li>
+         <li><router-link to="/late">Late Request</router-link></li>
+         <li><router-link to="/todaysatn"> Attendance</router-link></li>
+       </ul>
+     </div>
+ 
+     <div class="main-content">
+       <h1 class="thr">Late Request</h1>
+       <div class="filters-container">
+         <div class="filter">
+           <label for="nameSearch">Search by Name:</label>
+           <input id="nameSearch" v-model="searchText" type="text" placeholder="Enter Name" />
+         </div>
+      
+         <div class="filter">
+           <label for="batchFilter">Filter by Batch:</label>
+           <select id="batchFilter" v-model="selectedBatch" type="text" placeholder="Enter Batch">
+             <option value="">All</option>
+             <option value="morning batch">Morning</option>
+             <option value="evening batch">Evening</option>
+           </select>
+         </div>
+
+      </div> 
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Batch</th>
+            <th>Date</th>
+            <th class="reason-column">Reason for Late</th>
+            <th class="status-column">Today's Status</th>
+          </tr>
+        </thead>
+        <tbody v-if="filteredStudents.length">
+  <tr v-for="(student, index) in filteredStudents" :key="index">
+    <td>{{ student.name }}</td>
+    <td>{{ student.batch }}</td>
+    <td>{{ student.date }}</td>
+    <td>{{ student.reason }}</td>
+    <td>
+      <div v-if="student.status === 'PENDING'" class="status-buttons">
+        <button @click="approveStudent(index)" class="approve-btn">Approve</button>
+        <button @click="denyStudentreq(index)" class="deny-btn">Deny</button>
+      </div>
+      <div v-else>
+        <span :class="getStatusClass(student.status)">{{ student.status }}</span>
+        
+      </div>
+    </td>
+  </tr>
+</tbody>
+<tbody v-else>
+  <tr>
+    <td colspan="5">No records found</td>
+  </tr>
+</tbody>
+
+      </table>
+    </div>
+  </div>
+</template>
+<script>
+
+ import dayjs from 'dayjs';
+import { mapGetters } from 'vuex';
+
+export default {
+  data() {
+    return {
+
+      selectedDate: '', 
+      selectedBatch: '',
+      searchText: '',
+      
+    };
+  },
+  mounted() {  this.fetchLateRequest();
+  },
+  computed: {
+    ...mapGetters(['getLate']),
+    lateRequests(){
+      return this.getLate;
+    },
+    filteredStudents() { const formattedSelectedDate = this.selectedDate
+        ? dayjs(this.selectedDate).format('YYYY-MM-DD')
+        : '';
+
+      return this.lateRequests.filter((student) => {
+        const matchesName = student.name.toLowerCase().includes(this.searchText.toLowerCase());
+        const matchesBatch = student.batch.toLowerCase().includes(this.searchText.toLowerCase());
+        const matchesDate = formattedSelectedDate
+          ? dayjs(student.date).format('YYYY-MM-DD') === formattedSelectedDate
+          : true;
+
+        return (matchesName || matchesBatch) && matchesDate;
+      });
+    }
+  },
+  methods: {
+    async fetchLateRequest(){
+      try{
+        await this.$store.dispatch('allLates'); 
+      }catch (error) {
+          console.error(error);
+      } 
+    },
+    async approveStudent(index) { const payload = this.lateRequests[index].id;
+      try{
+        const res = await this.$store.dispatch('approveLate', payload); 
+        if(res){
+          this.fetchLateRequest();
+        }
+      }catch (error) {
+          console.error(error);
+      } 
+    },
+    
+    async denyStudentreq(index) {
+
+      const payload = this.lateRequests[index].id;
+      try{
+      const res = await this.$store.dispatch('denyLate', payload); 
+      if(res){
+          this.fetchLateRequest();
+        }
+      }catch (error) {
+          console.error(error);
+      } 
+    },
+
+    getStatusClass(status) {
+      if (status === 'Approved') return 'status-approved';
+      if (status === 'Denied') return 'status-denied';
+      return '';
+    }, }
+};
+</script>
+
+<style scoped>
+ .page-container {
+  display: flex;
+  min-height: 100vh;
+  
+} 
+
+.sidebar {
+  width: 250px;
+  padding: 20px;
+  background: linear-gradient(to top, #7fd7da, #8e4eef);
+  color: white;
+  border-right: 1px solid #ddd;
+  padding: 50px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  margin-left: 12px;
+  text-align: start;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 10px 0;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: white;
+  display: block;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+  background-color: #a39ad9;
+}
+ .thr {
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom:1px;
+  font-size: 28px;
+  color: #2f6ff9;
+} 
+
+.main-content {
+  flex: 11;
+  padding: 20px;
+  background-color: rgb(204, 238, 245);
+  align-items: center;
+}
+
+.search-bar-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cfccfc;
+  padding: 5px;
+  border-radius: 8px;
+  background-color: #dffbfb;
+  box-shadow: 0 2px 5px rgba(145, 67, 253, 0.1);
+}
+
+.search-bar input {
+  padding: 8px;
+  width: 250px;
+  height: 25px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+}
+
+.date-picker {
+  padding: 8px;
+  border: none;
+  background-color: rgb(255, 255, 255);
+  width: 120px;
+  border-radius: 4px;
+}
+
+table {
+  width: 99%;
+  border-collapse: collapse;
+  margin: 20px auto;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  border: 5px solid #a9e6fb;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background: linear-gradient(to left, #4830e8 ,#a485f2);
+  color: #fcffff;
+  font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #c6c4f8;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #c0bdf7;
+}
+
+button {
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border-radius: 4px;
+  min-width: 80px;
+  font-size: 12px;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.approve-btn {
+  background: linear-gradient(to right, rgb(109, 93, 172), #6a96f5);
+}
+
+.deny-btn {
+  background: linear-gradient(to right, rgb(106, 110, 218), #6e92b8);
+}
+
+.approve-btn:hover {
+  text-decoration: underline;
+}
+
+.deny-btn:hover {
+  text-decoration: underline;
+}
+.reason-column {
+  min-width: 250px;
+  max-width: 280px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.search-bar-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cfccfc;
+  padding: 5px;
+  border-radius: 8px;
+  background-color: #dffbfb;
+  box-shadow: 0 2px 5px rgba(145, 67, 253, 0.1);
+}
+.search-bar input {
+  padding: 8px;
+  width: 250px;
+  height: 25px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+}
+
+th, td {
+  border: 5px solid #a9e6fb;
+  padding: 12px;
+  text-align: center;
+}
+.filters-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 1px 100;
+  flex-wrap: wrap;
+  
+}
+
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10px;
+  color: #2f6ff9;
+}
+
+input,
+select {
+  padding: 8px;
+  margin-top: 5px;
+  color: #656363;
+  background-color: #bddffb;
+  border: 1px solid #a5b9f4; 
+  margin-bottom: 1px;
+  border-radius: 4px;
+  width: 250px;
+  
+}
+
+</style>-->
+
+<template>
+  <div class="page-container">
+    <div class="sidebar">
+      <h2>Admin Panel</h2>
+      <ul>
+        <li><router-link to="/student">Student Details</router-link></li>
+        <li><router-link to="/leave">Leave Request</router-link></li>
+        <li><router-link to="/late">Late Request</router-link></li>
+        <li><router-link to="/todaysatn">Attendance</router-link></li>
+      </ul>
+    </div>
+
+    <div class="main-content">
+      <h1 class="thr">Late Request</h1>
+      <!-- <div class="filters-container">
+        <div class="filter">
+          <label for="searchBar">Search:</label>
+          <input
+            id="searchBar"
+            v-model="searchText"
+            type="text"
+            placeholder="Search by Name or Batch"
+          />
+        </div>
+      </div> -->
+      <div class=" ms-5 d-flex justify-content-end me-3">
+        <div class="search">
+          <div class="search-bar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search icon" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+            <input v-model="searchText" type="text" placeholder="Search by Name/Batch" @input="search" />
+          </div>
+          
+        </div>
+  
+        <!-- <i class="fa fa-search" aria-hidden="true"></i>   -->
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Batch</th>
+            <th>Date</th>
+            <th class="reason-column">Reason for Late</th>
+            <th class="status-column">Today's Status</th>
+          </tr>
+        </thead>
+        <tbody v-if="filteredStudents.length >0">
+          <tr v-for="(student, index) in filteredStudents" :key="index">
+            <td>{{ student.name }}</td>
+            <td>{{ student.batch }}</td>
+            <td>{{ student.date }}</td>
+            <td>{{ student.reason }}</td>
+            <td>
+              <div v-if="student.status === 'PENDING'" class="status-buttons">
+                <button @click="approveStudent(index)" class="approve-btn">
+                  Approve
+                </button>
+                <button @click="denyStudentreq(index)" class="deny-btn">
+                  Deny
+                </button>
+              </div>
+              <div v-else>
+                <span :class="getStatusClass(student.status)">
+                  {{ student.status }}
+                </span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td colspan="5">No records found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script>
+// import dayjs from 'dayjs';
+import { mapGetters } from "vuex";
+
+export default {
+  data() {
+    return {
+      searchText: "", 
+    };
+  },
+  mounted() {
+    this.fetchLateRequest();
+  },
+  computed: {
+    ...mapGetters(["getLate"]),
+    lateRequests() {
+      // return this.getLate;
+      return Array.isArray(this.getLate) ? this.getLate : [];
+    },
+    filteredStudents() {
+      if (this.lateRequests.length > 0) {
+      // if (this.lateRequests && this.lateRequests.length > 0) {
+    return this.lateRequests.filter((student) => {
+      const search = this.searchText.toLowerCase();
+      const matchesName = student.name.toLowerCase().includes(search);
+      const matchesBatch = student.batch.toLowerCase().includes(search);
+      return matchesName || matchesBatch;
+    });
+  }
+  return [];
+    },
+  },
+  methods: {
+    async fetchLateRequest() {
+      try {
+        await this.$store.dispatch("allLates");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async approveStudent(index) {
+      const payload = this.lateRequests[index].id;
+      try {
+        const res = await this.$store.dispatch("approveLate", payload);
+        if (res) {
+          this.fetchLateRequest();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async denyStudentreq(index) {
+      const payload = this.lateRequests[index].id;
+      try {
+        const res = await this.$store.dispatch("denyLate", payload);
+        if (res) {
+          this.fetchLateRequest();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    getStatusClass(status) {
+      if (status === "Approved") return "status-approved";
+      if (status === "Denied") return "status-denied";
+      return "";
+    },
+  },
+};
+</script>
+
+<style scoped>
+.page-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  padding: 20px;
+  /* background: linear-gradient(to top, #7fd7da, #8e4eef); */
+  background: #8ddbf7; 
+  color: white;
+  border-right: 1px solid #ddd;
+  padding: 50px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  margin-left: 12px;
+  text-align: start;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 10px 0;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: white;
+  display: block;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+  background: #99d2f8;  
+  /* background-color: #9dd0ff; */
+}
+
+.thr {
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 1px;
+  font-size: 28px;
+  color: #6d7078;
+}
+
+.main-content {
+  flex: 11;
+  padding: 20px;
+  background-color: rgb(204, 238, 245);
+  align-items: center;
+}
+
+.filters-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 1px 100;
+  flex-wrap: wrap;
+}
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10px;
+  color: #2f6ff9;
+}
+table {
+  width: 99%;
+  border-collapse: collapse;
+  margin: 20px auto;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+  border: 5px solid #a9e6fb;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  /* background: linear-gradient(to left, #4830e8, #a485f2); */
+  background:#4FC3F7;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #B3E5FC;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #81D4FA;
+}
+
+button {
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border-radius: 4px;
+  min-width: 80px;
+  font-size: 12px;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.approve-btn {
+  /* background: linear-gradient(to right, rgb(109, 93, 172), #6a96f5); */
+  background:#87CEEB;
+}
+
+.deny-btn {
+  /* background: linear-gradient(to right, rgb(106, 110, 218), #6e92b8); */
+  background:#89d2fd ;
+}
+
+.reason-column {
+  min-width: 250px;
+  max-width: 280px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+/* 
+
+ 
+  .search-bar {
+    width: 250px;
+    border: none; /* Remove the border */
+
+  
+  
+  .search-bar input[type="text"] {
+    border: none; /* Remove border */
+    outline: none; /* Remove outline */
+    width: 100%; /* Full width */
+    padding: 4px; /* Add padding */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
+  
+  /* Rest of your CSS */
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    width: 250px;
+    border: none; /* Remove the border */
+    border-bottom: 1px solid black; /* Add bottom border */
+  }
+  
+  .search-bar input[type="text"] {
+    border: none; /* Remove border */
+    outline: none; /* Remove outline */
+    width: calc(100% - 30px); /* Full width minus space for icon */
+    padding: 4px; /* Add padding */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
+  
+  .search-bar i {
+    margin-left: 5px; /* Adjust icon spacing */
+  }
+  .search-bar {
+  display: flex;
+  align-items: center;
+  width: 250px;
+  border: 1px solid #ccc; /* Add border to create the box */
+  border-radius: 6px; /* Add rounded corners */
+  padding: 5px; /* Add padding for inner spacing */
+  background-color: rgb(255, 249, 249); /* Ensure a clear background */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.search-bar input[type="text"] {
+  border: none; /* Remove inner input border */
+  outline: none; /* Remove focus outline */
+  width: calc(100% - 30px); /* Full width minus space for icon */
+  padding: 5px; /* Add padding for better spacing */
+  font-size: 14px; /* Adjust text size */
+}
+
+.search-bar i {
+  margin-left: 10px; /* Add spacing between the icon and input */
+  color: #888; /* Icon color */
+  cursor: pointer; /* Change cursor to pointer for interactivity */
+}
+
+</style>
 
 

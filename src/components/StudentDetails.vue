@@ -1547,30 +1547,30 @@ th, td {
         <li><router-link to="/student">Student Details</router-link></li>
         <li><router-link to="/leave">Leave Request</router-link></li>
         <li><router-link to="/late">Late Request</router-link></li>
-        <li><router-link to="/todaysatn">Today'sAttendance</router-link></li>
+        <li><router-link to="/todaysatn"> Attendance</router-link></li>
       </ul>
     </div>
 
     <!-- Main Content Area -->
     <div class="main-content">
-      <h1 class="page-title">Admin Student Details</h1>
+      <h1 class="page-title">Student Details</h1>
       <div class="filters-container">
-        <!-- Name Search -->
+   
         <div class="filter">
           <label for="nameSearch">Search by Name:</label>
           <input id="nameSearch" v-model="searchText" type="text" placeholder="Enter Name" />
         </div>
-        <!-- Batch Filter -->
+        
         <div class="filter">
           <label for="batchFilter">Filter by Batch:</label>
           <select id="batchFilter" v-model="selectedBatch">
             <option value="">All</option>
-            <option value="Morning">Morning</option>
-            <option value="Evening">Evening</option>
+            <option value="morning batch">Morning</option>
+            <option value="evening batch">Evening</option>
           </select>
         </div>
         <!-- Date Picker -->
-        <!-- <div class="filter">
+         <!-- <div class="filter">
           <label for="dateFilter">Filter by Date:</label>
 
           <input 
@@ -1579,7 +1579,7 @@ th, td {
             v-model="selectedDate" 
             @change="updateFormattedDate"
           />
-        </div> -->
+        </div>  -->
       </div>
 
       <!-- Export Button (moved to right) -->
@@ -1593,15 +1593,25 @@ th, td {
             <th>Name</th>
             <th>Batch</th>
             <th>Email</th>
+            <th>Phone Number</th>
+            <th>Remove Student</th>
             <!-- <th>Date</th>
             <th>Today's Status</th> -->
           </tr>
         </thead>
-        <tbody>
+    
+          <tbody v-if="filteredStudents.length">
+            
           <tr v-for="(student, index) in filteredStudents" :key="index">
             <td>{{ student.name }}</td>
-            <td>{{ student.batch }}</td>
-            <td>{{ student.email }}</td>
+            <td>{{ student.batchId }}</td>
+            <td>{{ student.email }}</td> 
+            <td>{{ student.phoneNumber }}</td>
+            <td><button @click="removeStudent(student.userId)" class="remove-btn">Remove</button></td>
+         
+          
+       
+         
             <!-- <td>{{ student.date }}</td> -->
             <!-- <td>
               <span :class="getStatusClass(student.status)">
@@ -1610,15 +1620,20 @@ th, td {
             </td> -->
           </tr>
         </tbody>
-        
+        <tbody v-else>
+  <tr>
+    <td colspan="5">No records found</td>
+  </tr>
+</tbody>
+
       </table>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
+import { mapGetters, mapActions } from 'vuex';
+// import { mapGetters} from 'vuex';
 export default {
   data() {
     return {
@@ -1632,41 +1647,83 @@ export default {
       // ],
       searchText: '',
       selectedBatch: '',
-      selectedDate: '', // Store date in YYYY-MM-DD format
-      formattedDate: '', // Store formatted date (DD/MM/YYYY)
+      // selectedDate: '', 
+      // formattedDate: '', 
     };
   },
   computed: {
     ...mapGetters(['getUsers']),
     students(){
-      return this.getUsers
+      return this.getUsers;
     },
     filteredStudents() {
   return this.students.filter(student => {
-    const matchesName = student.name && student.name.toLowerCase().includes(this.searchText.toLowerCase());
+    // const matchesName = student.name && student.name.toLowerCase().includes(this.searchText.toLowerCase());
+    const matchesName = student.name && student.name.toLowerCase().startsWith(this.searchText.toLowerCase().trim());
+    const matchesBatch = this.selectedBatch === ''||
+    (student.batch && student.batch.toLowerCase().trim() === this.selectedBatch.toLowerCase().trim());
+    // student.batch === this.selectedBatch;
     
-    const matchesBatch = this.selectedBatch === '' || student.batch === this.selectedBatch;
-    
-    const matchesDate = this.selectedDate === '' || student.date === this.selectedDate;
-
-    return matchesName && matchesBatch && matchesDate;
+    // const matchesDate = this.selectedDate === '' || student.date === this.selectedDate;
+    return matchesName && matchesBatch
+    // && matchesDate
+    ;
   });
 },
 
   },
   methods: {
+    ...mapActions(['allUsers', 'removeUser']), // Import removeUser action
     // getStatusClass(status) {
     //   if (status === 'Present') return 'status-present';
     //   if (status === 'Absent') return 'status-absent';
     //   return '';
     // },
-    async fetchUsers() {
-      try{
+    //  async fetchUsers() {
+    //   try{
+    //      await this.$store.dispatch('allUsers'); 
+    //    }catch (error) {
+    //        console.error(error);
+    //    } 
+    //  },
+     async removeStudent(userId) {
+    if (confirm('Are you sure you want to remove this student?')) {
+      try {
+        const res = await this.$store.dispatch('removeUser', userId);
+        if(res){
+          this.fetchUsers();
+        }
+      } catch (error) {
+        console.error('Error removing student:', error);
+      }
+    }
+  },
+
+  async fetchUsers() {
+      try {
         await this.$store.dispatch('allUsers'); 
-      }catch (error) {
-          console.error(error);
-      } 
+      } catch (error) {
+        console.error(error);
+      }
     },
+  // async removeStudent(userId) {
+  //     const confirmDelete = confirm('Are you sure you want to remove this student?');
+
+  //     if (confirmDelete) {
+  //       const success = await this.removeUser(userId); 
+
+  //       if (success) {
+  //         alert('Student removed successfully!');
+       
+  //         this.filteredStudents = this.filteredStudents.filter(student => student.id !== userId);
+          
+  //       } else {
+  //         alert('Failed to remove student. Please try again.');
+  //       }
+  //     }
+  //   },
+
+},
     printPage() {
       const exportButton = document.querySelector('.export-btn');
       exportButton.style.display = 'none'; 
@@ -1678,24 +1735,24 @@ export default {
       }, 1000);
     },
     // Method to update the formatted date when a date is selected
-    updateFormattedDate() {
-      if (this.selectedDate) {
-        const [year, month, day] = this.selectedDate.split('-');
-        this.formattedDate = `${day}/${month}/${year}`;
-      }
-    },
-  },
+    // updateFormattedDate() {
+    //   if (this.selectedDate) {
+    //     const [year, month, day] = this.selectedDate.split('-');
+    //     this.formattedDate = `${day}/${month}/${year}`;
+    //   }
+    // },
+
   watch: {
     // Watch selectedDate to update formattedDate
-    selectedDate(newDate) {
-      if (newDate) {
-        const [year, month, day] = newDate.split('-');
-        this.formattedDate = `${day}/${month}/${year}`;
-      }
-    },
+    // selectedDate(newDate) {
+    //   if (newDate) {
+    //     const [year, month, day] = newDate.split('-');
+    //     this.formattedDate = `${day}/${month}/${year}`;
+    //   }
+    // },
   },
   mounted(){
-    this.fetchUsers();
+  this.fetchUsers();
   }
 };
 </script>
@@ -1708,7 +1765,8 @@ export default {
 .sidebar {
   width: 250px;
   padding: 20px;
-  background: linear-gradient(to top, #7fd7da, #8e4eef);
+  /* background: linear-gradient(to top, #7fd7da, #8e4eef); */
+  background: #8ddbf7; 
   color: white;
   border-right: 1px solid #ddd;
   padding: 50px;
@@ -1742,7 +1800,7 @@ export default {
 }
 
 .sidebar ul li a:hover {
-  background-color: #a39ad9;
+  background: #99d2f8;  
 }
 
 .main-content {
@@ -1776,23 +1834,27 @@ export default {
 }
 
 th, td {
-  border: 5px solid #a9e6fb;
+border: 5px solid #a9e6fb; 
   padding: 12px;
   text-align: center;
 }
 th {
-  background: linear-gradient(to left, #4830e8 ,#a485f2);
+  /* background: linear-gradient(to left, #4830e8 ,#a485f2); */
+  /* background: #80D8FF; */
+  background:#4FC3F7;
   color: #fcffff;
   font-weight: bold;
 }
 tbody tr:nth-child(even) {
-  background-color: #c6c4f8;
+  /* background-color: #c6c4f8; */
+  background-color: #B3E5FC;
 }
 
 tbody tr:nth-child(odd) {
-  background-color: #c0bdf7;
+  /* background-color: #c0bdf7; */
+  background-color: #81D4FA;
 }
-.status-present {
+/* .status-present {
   color: rgb(77, 98, 229);
   font-weight: bold;
 }
@@ -1800,16 +1862,22 @@ tbody tr:nth-child(odd) {
 .status-absent {
   color: rgb(40, 40, 157);
   font-weight: bold;
-}
+} */
 
 
 
-.page-title {
+
+  .page-title {
   text-align: center;
   font-size: 28px;
   margin-top: 0px;
-  color: #2f6ff9;
+  color:#64B5F6;
+  border-bottom: 2px solid #c6ddff; /* Adjust thickness and color */
+  display: inline-block; /* Ensures the border is only as wide as the text */
+  padding-bottom: 5px; /* Adds space between the text and underline */
 }
+
+
 
 .filters-container {
   display: flex;
@@ -1834,8 +1902,10 @@ select {
   padding: 8px;
   margin-top: 5px;
   color: #656363;
+  /* background-color: #bddffb;
+  border: 1px solid #a5b9f4;  */
   background-color: #bddffb;
-  border: 1px solid #a5b9f4; 
+  border: 1px solid #B3E5FC;
   margin-bottom: 1px;
   border-radius: 4px;
   width: 250px;
@@ -1849,8 +1919,9 @@ select {
 }
 
 button.export-btn {
-
-    background: linear-gradient(to left, #4830e8 ,#0fa6ed, #4830e8,#0fe4fc);
+/* 
+    background: linear-gradient(to left, #4830e8 ,#0fa6ed, #4830e8,#0fe4fc); */
+    background:#64B5F6;
   color: white;
   padding: 10px 20px;
   font-size: 16px;
@@ -1860,9 +1931,9 @@ button.export-btn {
   cursor: pointer;
 }
 
-button.export-btn:hover {
+/* button.export-btn:hover {
   background-color:#a174f5;
-}
+} */
 
 table {
   width: 99%;
@@ -1873,7 +1944,7 @@ table {
 }
 
 th, td {
-  border: 5px solid #a9e6fb;
+  /* border: 5px solid #99cee1;around the raw */
   padding: 12px;
   text-align: center;
 }
@@ -1883,5 +1954,14 @@ th, td {
     display: none;
   }
 }
-
+.remove-btn {
+  display: block; /* Ensure visibility */
+  background-color: rgb(75, 171, 231); /* Highlight */
+  color: white;
+  padding: 5px 13px;
+  border: none;
+  cursor: pointer;
+  margin-left:45px;
+  border-radius: 6px;
+}
 </style>
