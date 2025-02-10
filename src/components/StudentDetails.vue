@@ -35,6 +35,7 @@
         <i class="fa fa-search" aria-hidden="true"></i>  
          Removed Font Awesome search icon  
       </div>
+      yavdmhsdmhd
       <table>
       <thead>
           <tr>
@@ -1548,6 +1549,7 @@ th, td {
         <li><router-link to="/leave">Leave Request</router-link></li>
         <li><router-link to="/late">Late Request</router-link></li>
         <li><router-link to="/todaysatn"> Attendance</router-link></li>
+        <li><router-link to="/filter">Attendance Filter</router-link></li>
         <li><router-link to="/batch">batch</router-link></li>
       </ul>
     </div>
