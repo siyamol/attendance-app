@@ -5203,6 +5203,7 @@ tbody tr:nth-child(odd) {
         <li><router-link to="/leave">Leave Request</router-link></li>
         <li><router-link to="/late">Late Request</router-link></li>
         <li><router-link to="/todaysatn">Attendance</router-link></li>
+        <li><router-link to="/filter">Attendance Filter</router-link></li>
       </ul>
     </div>
 
@@ -5325,6 +5326,7 @@ export default {
       selectedStudentName: null,
     //  selectedStudentMonth: null,
       filteredStudentList: [], 
+      refreshInterval: null,
     };
   },
   watch: {
@@ -5337,7 +5339,9 @@ export default {
   mounted() {
     this.fetchToday();
   },
-
+  beforeUnmount() {
+    clearInterval(this.refreshInterval); // Clear interval on component destroy
+  },
   //..... computed: {
   //   ...mapGetters(["getStatus"]),
   //   todaystatus() {
@@ -5486,6 +5490,12 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    startAutoRefresh() {
+      this.refreshInterval = setInterval(() => {
+        console.log("Refreshing attendance data...");
+        this.fetchToday(); // Auto-fetch data every 30 seconds
+      }, 10000); // Adjust the interval as needed
     },
     printPage() {
       const exportButton = document.querySelector(".export-btn");
