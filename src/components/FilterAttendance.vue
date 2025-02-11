@@ -1480,7 +1480,7 @@ tbody tr:nth-child(odd) {
     display: none;
   }
 }
-</style>-->
+ </style>-->
 <template>
   <div class="page-container">
     <div class="sidebar">
@@ -1491,6 +1491,7 @@ tbody tr:nth-child(odd) {
         <li><router-link to="/late">Late Request</router-link></li>
         <li><router-link to="/todaysatn">Attendance</router-link></li>
         <li><router-link to="/filter">Attendance Filter</router-link></li>
+        <li><router-link to="/batch">Batch</router-link></li>
       </ul>
     </div>
 
@@ -1500,7 +1501,7 @@ tbody tr:nth-child(odd) {
       <form @submit.prevent="onSearch" class="nav-search-bar">
         <!-- Student Name Search Field -->
         <div class="filter-container">
-          <label class="filter-label">Search Student:</label>
+          <label class="filter-label"></label>
           <input 
             v-model="searchQuery" 
             type="text" 
@@ -1517,14 +1518,20 @@ tbody tr:nth-child(odd) {
 
         <!-- Date Range Picker (Always Visible) -->
         <div class="date-range-container">
-          <label class="filter-label">Select Date Range:</label>
+          <label class="filter-label"></label>
           <div class="date-picker-wrapper">
             <input v-model="startDate" type="date" class="nav-input date-picker" placeholder="Start Date" />
             <input v-model="endDate" type="date" class="nav-input date-picker" placeholder="End Date" />
           </div>
         </div>
+        <button type="submit" class="nav-search-submit" @click="onSearch">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search icon" viewBox="0 0 16 16">
+    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+  </svg>
+</button>
 
-        <button type="submit" class="search-button">Search</button>
+
+
       </form>
 
       <div class="export-btn-container">
@@ -1629,29 +1636,41 @@ export default {
     getDefaultEndDate() {
       return new Date().toISOString().split("T")[0]; // Default end date is today
     }
+  },
+  onSearch() {
+    // Ensure searchQuery is trimmed and not empty
+    if (!this.searchQuery.trim()) {
+      alert("Please enter a search query");
+      return;
+    }
+
+    this.filteredStudents = this.students.filter(student =>
+      student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
   }
 };
 </script>
 
 <style scoped>
-/* Filter Field Styling */
+
 .filter-container {
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
+
 }
 
 .filter-label {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 5px;
+  width: 145px;
 }
 
-/* Date Range Picker */
 .date-range-container {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .date-picker-wrapper {
@@ -1660,10 +1679,10 @@ export default {
 }
 
 .date-picker {
-  width: 200px;
+  width: 100px;
 }
 
-/* Search Results */
+
 .search-results {
   position: absolute;
   background: white;
@@ -1685,7 +1704,7 @@ export default {
   background-color: #f0f0f0;
 }
 
-/* Export Button Styling */
+
 .export-btn-container {
   text-align: right;
   margin-bottom: 20px;
@@ -1711,8 +1730,6 @@ export default {
     display: none;
   }
 }
-<style scoped>
-
 .page-container {
   display: flex;
   min-height: 100vh;
@@ -1728,7 +1745,7 @@ export default {
   background-color: rgb(204, 238, 245);
 }
 
-/* Search Results Dropdown */
+
 .search-container {
   position: relative;
 }
@@ -1754,9 +1771,9 @@ export default {
   background-color: #f0f0f0;
 }
 
-/* Selected Student Name Display */
+
 .selected-student {
-  margin-top: 10px;
+  margin-top: 1px;
   padding: 10px;
   background-color: #eef;
   border-radius: 5px;
@@ -1807,7 +1824,7 @@ export default {
   background: #99d2f8;  
 }
 
-/* Main Content Styling */
+
 .main-content {
   flex: 1;
   padding: 20px;
@@ -1821,7 +1838,7 @@ export default {
   color: #68caff;
 }
 
-/* Filters Styling */
+
 .filters-container {
   display: flex;
   justify-content: space-around;
@@ -1848,7 +1865,7 @@ select {
   width: 250px;
 }
 
-/* Export Button Styling */
+
 .export-btn-container {
   text-align: right;
   margin-bottom: 20px;
@@ -1870,7 +1887,6 @@ button.export-btn:hover {
   background-color: #74c1f5;
 }
 
-/* Table Styling */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -1899,25 +1915,13 @@ tbody tr:nth-child(odd) {
   background-color: #81D4FA;
 }
 
-/* Status Coloring */
-/* .status-present {
-  color: rgb(77, 98, 229);
-  font-weight: bold;
-}
-
-.status-absent {
-  color: rgb(185, 185, 242);
-  font-weight: bold;
-} */
-
-/* Print Styling */
 @media print {
   .export-btn {
     display: none;
   }
 }
 
-/* Navigation Bar Styling */
+
 .nav-container {
   display: flex;
   justify-content: center;
@@ -1944,13 +1948,13 @@ tbody tr:nth-child(odd) {
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  appearance: none; /* Removes default dropdown arrow */
+  appearance: none;
   width: 120px;
  
 }
 
 .nav-dropdown::after {
-  content: '\f0d7'; /* FontAwesome down arrow icon */
+  content: '\f0d7';
   font-family: 'FontAwesome';
   font-size: 14px;
   position: absolute;
@@ -1963,13 +1967,13 @@ tbody tr:nth-child(odd) {
 .nav-input-container {
   flex-grow: 1;
   display: flex;
-  align-items: center; /* Center the elements vertically */
+  align-items: center; 
 }
 
 .nav-input {
   width: 100%;
-  padding: 6px 8px; /* Reduced padding */
-  font-size: 14px; /* Smaller font size */
+  padding: 6px 8px;
+  font-size: 14px; 
   border: 1px solid #ccc;
   border-radius: 5px;
   color:#0a0a0a;
@@ -1978,23 +1982,14 @@ tbody tr:nth-child(odd) {
 
 .date-range-container {
   display: flex;
-  gap: 8px; /* Reduced gap */
+  gap: 8px;
   width: 100%;
-  align-items: center; /* Center the elements vertically */
+  align-items: center; 
 
 }
 
-.nav-dropdown select {
-  padding: 6px; /* Reduced padding */
-  font-size: 14px; /* Smaller font size */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  appearance: none; /* Removes default dropdown arrow */
-  width: 100px;
-  }
-
 .nav-dropdown::after {
-  content: '\f0d7'; /* FontAwesome down arrow icon */
+  content: '\f0d7'; 
   font-family: 'FontAwesome';
   font-size: 14px;
   position: absolute;
@@ -2006,13 +2001,13 @@ tbody tr:nth-child(odd) {
 }
 
 .nav-search-submit {
-  padding: 6px 12px; /* Reduced padding */
+  padding: 6px 12px; 
   background-color: #0073e6;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px; /* Smaller font size */
+  font-size: 14px; 
   
 }
 
@@ -2032,12 +2027,12 @@ tbody tr:nth-child(odd) {
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 500px; /* Reduced max-width for a smaller search bar */
-  background-color: #9fdcfc; /* Lighter background color */
+  max-width: 550px; 
+  background-color: #9fdcfc; 
   padding: 8px;
   border-radius: 5px;
-  gap: 8px; /* Reduced gap */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Added light shadow */
+  gap: 8px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
 
 .nav-dropdown {
@@ -2047,16 +2042,16 @@ tbody tr:nth-child(odd) {
 
 .nav-dropdown select {
   padding: 5px 8px; /* Smaller padding */
-  font-size: 13px; /* Slightly smaller font size */
+  font-size: 13px; 
   border: 1px solid #ccc;
   border-radius: 5px;
-  appearance: none; /* Removes default dropdown arrow */
-  width: 100px; /* Adjusted width */
+  appearance: none; 
+  width: 100px;
  
 }
 
 .nav-dropdown::after {
-  content: '\f0d7'; /* FontAwesome down arrow icon */
+  content: '\f0d7'; 
   font-family: 'FontAwesome';
   font-size: 13px;
   position: absolute;
@@ -2074,30 +2069,16 @@ tbody tr:nth-child(odd) {
  
 }
 
-/* .nav-input {
-  width: 100%;
-  padding: 5px 10px;
-  font-size: 13px; 
-  border: 1px solid #ccc;
-  border-radius: 5px;
-} */
 
-/* .date-range-container {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  align-items: center;
-  
-} */
 
 .nav-search-submit {
-  padding: 5px 12px; /* Reduced padding */
+  padding: 5px 12px;
   background-color: #0073e6;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 13px; /* Slightly smaller font size */
+  font-size: 13px; 
 }
 
 .nav-search-submit:hover {
@@ -2106,46 +2087,41 @@ tbody tr:nth-child(odd) {
 }
 
 .nav-search-submit:focus {
-  outline: none; /* Remove outline on focus */
+  outline: none; 
 }
-
+/* 
 .nav-dropdown select:focus,
 .nav-input:focus {
-  border-color: #7ec7ec; /* Highlight border on focus */
-  box-shadow: 0 0 5px rgba(0, 115, 230, 0.3); /* Subtle focus shadow */
-}
+  border-color: #7ec7ec;
+  box-shadow: 0 0 5px rgba(0, 115, 230, 0.3);
+} */
 .date-picker-container {
   display: flex;
-  gap: 10px; /* Adds spacing between the date pickers */
+  gap: 10px; 
   align-items: center;
 }
 
 .date-picker {
-  width: 150px; /* Set a fixed width for each date picker */
+  width: 150px; 
 }
-/* Month Picker Container */
-.month-picker-container {
+
+
+
+
+.nav-search-submit {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
+  transition: transform 0.2s;
+  box-shadow: none;
 }
 
-/* Month Picker Input */
-.month-picker {
-  width: 180px;
-  padding: 8px 12px;
-  font-size: 16px;
-  border: 2px solid #4FC3F7;
-  border-radius: 5px;
-  background-color: #f9fcff;
-  color: #333;
-  cursor: pointer;
-  text-align: center;
-}
 
-/* Ensure both search field and month picker are visible */
 .nav-input-container {
   display: flex;
   flex-direction: column;
@@ -2157,4 +2133,49 @@ tbody tr:nth-child(odd) {
     display: none;
   }
 }
+.nav-search-submit {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-search-submit svg {
+  width: 20px;
+  height: 20px;
+  color: #fffeff;
+  transition: transform 0.2s ease-in-out;
+}
+
+.nav-search-submit:hover svg {
+  transform: scale(1.1);
+  color: #ffffff;
+}
+
+.search-results {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  width: 20%;
+  max-height: 150px;
+  overflow-y: auto;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-results li {
+  padding: 8px;
+  cursor: pointer;
+
+}
+
+.search-results li:hover {
+  background-color: #f0f0f0;
+  
+}
+
 </style>

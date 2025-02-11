@@ -5860,37 +5860,9 @@ tbody tr:nth-child(odd) {
 
 }
 
-.nav-dropdown select {
-  padding: 6px; /* Reduced padding */
-  font-size: 14px; /* Smaller font size */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  appearance: none; /* Removes default dropdown arrow */
-  width: 100px;
-  }
 
-.nav-dropdown::after {
-  content: '\f0d7'; /* FontAwesome down arrow icon */
-  font-family: 'FontAwesome';
-  font-size: 14px;
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
 
-}
 
-.nav-search-submit {
-  padding: 6px 12px; /* Reduced padding */
-  background-color: #0073e6;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px; /* Smaller font size */
-  
-}
 
 .nav-search-submit:hover {
   background-color: #005bb5;
@@ -5916,32 +5888,8 @@ tbody tr:nth-child(odd) {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Added light shadow */
 }
 
-.nav-dropdown {
-  position: relative;
-  display: inline-block;
-}
 
-.nav-dropdown select {
-  padding: 5px 8px; /* Smaller padding */
-  font-size: 13px; /* Slightly smaller font size */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  appearance: none; /* Removes default dropdown arrow */
-  width: 100px; /* Adjusted width */
- 
-}
 
-.nav-dropdown::after {
-  content: '\f0d7'; /* FontAwesome down arrow icon */
-  font-family: 'FontAwesome';
-  font-size: 13px;
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: rgb(43, 156, 255);
-}
 
 .nav-input-container {
   flex-grow: 1;
