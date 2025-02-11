@@ -1565,8 +1565,8 @@ export default {
       endDate: this.getDefaultEndDate(),
       filteredStudentList: [],
       students: [
-        { userName: "John Doe", batchType: "Morning", attendanceDate: "2024-02-05", scanInTime: "09:00", scanOutTime: "17:00" },
-        { userName: "Jane Smith", batchType: "Evening", attendanceDate: "2024-02-05", scanInTime: "10:00", scanOutTime: "18:00" }
+        // { userName: "John Doe", batchType: "Morning", attendanceDate: "2024-02-05", scanInTime: "09:00", scanOutTime: "17:00" },
+        // { userName: "Jane Smith", batchType: "Evening", attendanceDate: "2024-02-05", scanInTime: "10:00", scanOutTime: "18:00" }
       ], // Example data, replace with API data
     };
   },
