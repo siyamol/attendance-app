@@ -452,33 +452,23 @@ async dltBatch({  rootGetters }, payload) {
     return false; 
   }
 },
-// actions: {
-//   async updateBatch({ rootGetters }, payload) {
-//     try {
-//       const response = await axios.fetch(`${rootGetters.getURL}/AdminReg/updateBatch?id=${payload.id}&batchTypeId=1`, {
-//         method: "PUT",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-        // body: JSON.stringify({
-//           batchName: payload.batchName,
-//           startTime: payload.startTime,
-//           endTime: payload.endTime,
-//         }),
-//       });
 
-//       if (response.ok) {
-//         return true;
-//       } else {
-//         throw new Error("Failed to update batch.");
-//       }
-//     } catch (error) {
-//       console.error("Error updating batch:", error);
-//       return false;
-//     }
-//   },
-// }
+async updateBatch({ dispatch }, batchData) {
+  try {
+    await axios.put(
+      `http://localhost:5050/AdminReg/updateBatch?id=${batchData.id}&batchTypeId=${batchData.batchTypeId}`,
+      batchData
+    );
+     
+    if (response.status >= 200 && response.status < 300) {
 
+      return true; 
+    }
+    dispatch("fetchbatch");
+  } catch (error) {
+    console.error("Error updating batch:", error);
+  }
+},
 };
 
 

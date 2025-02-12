@@ -13,5 +13,7 @@ export default {
     getRemove: (state) => state.allRemove,
     getAnotherStatus: (state) => state.anotherStatus,
     getBatch: (state) => state.batch,
+    getBatches: (state) => state.batches,
+    getBatchToEdit: (state) => state.batchToEdit,
  };
   

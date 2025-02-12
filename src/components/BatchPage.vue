@@ -299,6 +299,7 @@ tbody tr:nth-child(even) {
             <td>
               <button @click="editBatch(batch)" class="edit-btn">Edit</button>
               <button @click="deleteBatch(batch.id)" class="delete-btn">Delete</button>
+          
             </td>
           </tr>
         </tbody>
@@ -317,7 +318,7 @@ export default {
       batchName: "",
       startTime: "",
       endTime: "",
-      isEditing: false, // Flag to track update mode
+      isEditing: false, 
     };
   },
   computed: {
@@ -384,6 +385,8 @@ export default {
         console.error(error);
       }
     },
+    
+
 
     async deleteBatch(index) {
       if (confirm("Are you sure you want to remove this batch?")) {
@@ -410,7 +413,9 @@ export default {
       this.isEditing = false;
     },
   },
+  
 };
+
 </script>
 
 <style scoped>
