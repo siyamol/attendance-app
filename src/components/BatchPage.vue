@@ -7,8 +7,13 @@
         <li><router-link to="/leave">Leave Request</router-link></li>
         <li><router-link to="/late">Late Request</router-link></li>
         <li><router-link to="/todaysatn"> Attendance</router-link></li>
+<<<<<<< HEAD
         <li><router-link to="/batch">Batch</router-link></li>
+=======
+     
+>>>>>>> 7a37809e3a6358da34f09cbdd1975d198f97634c
         <li><router-link to="/filter">Attendance Filter</router-link></li>
+        <li><router-link to="/batch">Batch</router-link></li>
       </ul>
     </div>
 
