@@ -272,16 +272,22 @@ tbody tr:nth-child(even) {
     <div class="main-content">
       <h2>Manage Batches</h2>
 
-      <!-- Form to Add/Update Batches -->
+      
       <form @submit.prevent="isEditing ? updateBatch() : addBatch()" class="batch-form">
         <input v-model="batchName" type="text" placeholder="Batch Name" required />
         <input v-model="startTime" type="time" required />
         <input v-model="endTime" type="time" required />
+        <select v-model="batchType" required>
+    <option value="">Select Batch Type</option>
+    <option value=""></option>
+    <option value=""></option>
+    <option value=""></option>
+  </select>
+
         <button type="submit" class="add-btn">{{ isEditing ? "Update" : "Add" }}</button>
         <button v-if="isEditing" type="button" @click="cancelEdit" class="cancel-btn">Cancel</button>
       </form>
 
-      <!-- Display Added Batches -->
       <table>
         <thead> 
           <tr>
@@ -315,6 +321,7 @@ export default {
   data() {
     return {
       batchId: null,
+      batchType: "",  
       batchName: "",
       startTime: "",
       endTime: "",
@@ -332,25 +339,32 @@ export default {
   },
   methods: {
     async addBatch() {
-      if (!this.batchName || !this.startTime || !this.endTime) {
+      if (!this.batchType || !this.batchName || !this.startTime || !this.endTime) {
         alert("Please fill all fields.");
         return;
       }
       const payload = {
+        id:this.batchTypeId,
+      data:{
+        batchType: this.batchType,
+        batchId:this.batchTypeId,
         batchName: this.batchName,
         startTime: this.startTime + ":00",
         endTime: this.endTime + ":00",
+      }
       };
 
       try {
         const res = await this.$store.dispatch("addBatch", payload);
         if (res) {
           alert("Batch successfully added!");
-          this.$store.dispatch("fetchbatch");
-          this.resetForm();
+          // this.$store.dispatch("fetchbatch");
+          // this.resetForm();
+          await this.$store.dispatch("fetchbatch"); // Fetch updated batches
+          this.resetForm(); // Reset form fields
         }
       } catch (error) {
-        console.error(error);
+        console.error("Error adding batch:", error);
       }
     },
 
