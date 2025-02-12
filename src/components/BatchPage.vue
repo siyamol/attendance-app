@@ -283,7 +283,7 @@ tbody tr:nth-child(even) {
 
       <!-- Display Added Batches -->
       <table>
-        <thead>
+        <thead> 
           <tr>
             <th>Batch Name</th>
             <th>Starting Time</th>
