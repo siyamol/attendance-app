@@ -277,13 +277,22 @@ tbody tr:nth-child(even) {
         <input v-model="batchName" type="text" placeholder="Batch Name" required />
         <input v-model="startTime" type="time" required />
         <input v-model="endTime" type="time" required />
-        <select v-model="batchType" class="batch-type-box" required>
-    <option value="">Select Batch Type</option>
-    <option value=""></option>
-    <option value=""></option>
-    <option value=""></option>
-  </select>
+        <!-- <select v-model="batchType" class="batch-type-box" required>
 
+     <option value="Select Batch Type">Select Batch Type</option> 
+ 
+    <option value="morning">morning</option>
+    <option value=""></option>
+    <option value=""></option>
+  </select> -->
+  <select v-model="batchType" class="batch-type-box" required>
+    <!-- <option value="">Select Batch Type</option>
+    <option value=""></option>
+    <option value=""></option> -->
+    <option v-for="type in batchTypes" :key="type.id" :value="type.id">
+      {{ type.batchType }}
+    </option>
+  </select>
         <button type="submit" class="add-btn">{{ isEditing ? "Update" : "Add" }}</button>
         <button v-if="isEditing" type="button" @click="cancelEdit" class="cancel-btn">Cancel</button>
       </form>
@@ -315,7 +324,7 @@ tbody tr:nth-child(even) {
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters} from 'vuex';
 
 export default {
   data() {
@@ -329,13 +338,28 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getBatch"]),
+    ...mapGetters(["getBatch","getType"]),
+    batchTypes() {
+      return this.getType;
+    },
     batches() {
       return this.getBatch;
-    },
+    }
   },
+
+
+  // async fetchBatchTypes() {
+  //     const success = await this.$store.dispatch("getallbatchType");
+  //     if (success) {
+  //       console.log('Batch types fetched successfully');
+  //     } else {
+  //       console.log('Failed to fetch batch types');
+  //     }
+  //   },
   mounted() {
     this.$store.dispatch("fetchbatch");
+    this.$store.dispatch('getallbatchType');
+
   },
   methods: {
     async addBatch() {
@@ -344,10 +368,8 @@ export default {
         return;
       }
       const payload = {
-        id:this.batchTypeId,
-      data:{
-        batchType: this.batchType,
-        batchId:this.batchTypeId,
+        id:this.batchType,
+        data:{
         batchName: this.batchName,
         startTime: this.startTime + ":00",
         endTime: this.endTime + ":00",
@@ -368,6 +390,7 @@ export default {
       }
     },
 
+  
     editBatch(batch) {
       this.batchId = batch.id;
       this.batchName = batch.batchName;
@@ -400,8 +423,6 @@ export default {
       }
     },
     
-
-
     async deleteBatch(index) {
       if (confirm("Are you sure you want to remove this batch?")) {
         try {
@@ -677,7 +698,7 @@ input {
 
 .batch-type-box:focus {
   border-color: #0056b3; /* Darker blue on focus */
-  background-color: #ffffff; /* White background on focus */
+  background-color: #a8f4fa; /* White background on focus */
   
 }
 </style>

@@ -473,7 +473,7 @@ async getallbatchType({ rootGetters,commit }, payload) {
      const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatchType`,payload);
   
      if (response.status >= 200 && response.status < 300) {
-      commit('setGetall', payload);
+      commit('setGetall',response.data);
       return true; 
     }
   } catch (error) {
