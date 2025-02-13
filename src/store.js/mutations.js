@@ -35,10 +35,16 @@ export default {
     setBatch(state, payload) {
       state.batch = payload;
     },
-    setBatches(state, payload) {
-      state.batches = payload;
+    // setBatches(state, payload) {
+    //   state.batches = payload;
+    // },
+    // setBatchToEdit(state, payload) {
+    //   state.batchToEdit = payload;
+    // },
+    fetchBatch(state, payload){
+    state.batch = payload;
     },
-    setBatchToEdit(state, payload) {
-      state.batchToEdit = payload;
+    setGetall(state, payload) {
+      state.getall = payload;
     }
     };

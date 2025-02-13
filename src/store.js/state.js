@@ -1,9 +1,9 @@
 
 export default {
-// baseURL:'http://103.247.19.200:5050',
+ baseURL:'http://103.247.19.200:5050',
  //  baseURL:'http://localhost:5050',
  //  baseURL:'http://192.168.1.150:5050',
- baseURL:'http://192.168.1.20:5050',
+    //  baseURL:'http://192.168.1.32:5050',
 
 //   baseURL:'http://192.168.1.116:5050',
 
@@ -18,10 +18,10 @@ export default {
     qrStatus:[],
     // studentList: [],
     allRemove:[],
-    anotherStatus: [],
-    batch:[],
+    // anotherStatus: [],
+    // batch:[],
     // allStudents: [] 
     batchType: [],
-    batchToEdit: [], 
+
  };
   

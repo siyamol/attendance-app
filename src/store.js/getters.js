@@ -12,8 +12,12 @@ export default {
     getQrStatus: (state) => state.qrStatus,
     getRemove: (state) => state.allRemove,
     getAnotherStatus: (state) => state.anotherStatus,
-    getBatch: (state) => state.batch,
-    getBatchType: (state) => state.batchType,
-    getBatchToEdit: (state) => state.batchToEdit,
+    //  getBatch: (state) => state.batch,
+    // getBatchType: (state) => state.batchType,
+    // getBatchToEdit: (state) => state.batchToEdit,
+       getBatch: (state) => state.batch,
+    getType:(state) => state.getall
+
+
  };
   

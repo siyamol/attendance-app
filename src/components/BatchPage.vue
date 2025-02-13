@@ -277,7 +277,7 @@ tbody tr:nth-child(even) {
         <input v-model="batchName" type="text" placeholder="Batch Name" required />
         <input v-model="startTime" type="time" required />
         <input v-model="endTime" type="time" required />
-        <select v-model="batchType" required>
+        <select v-model="batchType" class="batch-type-box" required>
     <option value="">Select Batch Type</option>
     <option value=""></option>
     <option value=""></option>
@@ -590,22 +590,29 @@ th {
   flex: 10;
   padding: 20px;
   background-color: rgb(204, 238, 245);
+  
 }
 
 .batch-form {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  
 }
 
 input {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: rgb(179, 221, 248);
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
 }
 
 .add-btn {
-  background-color: rgb(19, 123, 187);
+  background-color: rgb(91, 178, 233);
   color: white;
   padding: 8px 15px;
   border: none;
@@ -613,12 +620,12 @@ input {
 }
 
 .add-btn:hover {
-  background-color: darkgreen;
+  background-color: rgb(112, 200, 248);
 }
 
 .cancel-btn {
-  background-color: grey;
-  color: white;
+  background-color: rgb(91, 178, 233);
+  color:  rgb(255, 255, 255);
   padding: 8px 15px;
   border: none;
   cursor: pointer;
@@ -629,22 +636,48 @@ input {
 }
 
 .edit-btn {
-  background-color: orange;
+  background-color: rgb(132, 185, 251);
   color: white;
-  padding: 5px 10px;
+  padding: 5px 26px;
   border: none;
   cursor: pointer;
 }
 
 .delete-btn {
-  background-color: red;
+  background-color: rgb(215, 176, 255);
   color: white;
-  padding: 5px 10px;
+  padding: 5px 18px;
   border: none;
   cursor: pointer;
 }
 
 .delete-btn:hover {
-  background-color: darkred;
+  background-color: rgb(254, 174, 242);
+}
+.edit-btn{
+  background-color: rgb(142, 201, 253);
+}
+.batch-type-box {
+  width: 14%; /* Adjust as needed */
+  padding: 10px;
+  border: 2px solid #007bff; /* Blue border */
+  border-radius: 5px;
+  /* Light gray background */
+  font-size: 16px;
+  outline: none;
+  padding: 8px;
+
+  border-radius: 4px;
+  background-color: rgb(179, 221, 248);
+
+  padding: 8px 15px;
+  border: none;
+
+}
+
+.batch-type-box:focus {
+  border-color: #0056b3; /* Darker blue on focus */
+  background-color: #ffffff; /* White background on focus */
+  
 }
 </style>

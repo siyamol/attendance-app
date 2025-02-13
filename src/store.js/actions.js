@@ -457,7 +457,7 @@ async updateBatch({ rootGetters, dispatch },payload ) {
   try {
     const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
    if (response.status >= 200 && response.status < 300) {
-      await dispatch("fetchbatch");
+      await dispatch("fetchBatch");
       return true; 
     }
     
@@ -468,19 +468,20 @@ async updateBatch({ rootGetters, dispatch },payload ) {
 },
 
 
-// async addbatchType({ rootGetters,commit }, payload) {
-//   try {
-//      const response = await axios.post(`${rootGetters.getURL}/AdminReg/addBatchType`,payload);
+async getallbatchType({ rootGetters,commit }, payload) {
+  try {
+     const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatchType`,payload);
   
-//      if (response.status >= 200 && response.status < 300) {
-//       commit('batchAdd', payload);
-//       return true; 
-//     }
-//   } catch (error) {
-//     console.error('Error removing user:', error);
-//     return false; 
-//   }
-// },
+     if (response.status >= 200 && response.status < 300) {
+      commit('setGetall', payload);
+      return true; 
+    }
+  } catch (error) {
+    console.error('Error removing user:', error);
+    return false; 
+  }
+},
+
 };
 
 
