@@ -264,8 +264,8 @@ tbody tr:nth-child(even) {
         <li><router-link to="/leave">Leave Request</router-link></li>
         <li><router-link to="/late">Late Request</router-link></li>
         <li><router-link to="/todaysatn">Attendance</router-link></li>
-        <li><router-link to="/batch">Batch</router-link></li>
         <li><router-link to="/filter">Attendance Filter</router-link></li>
+        <li><router-link to="/batch">Batch</router-link></li>
       </ul>
     </div>
 

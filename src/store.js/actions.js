@@ -482,6 +482,18 @@ async getallbatchType({ rootGetters,commit }, payload) {
   }
 },
 
+async getallbatchId({ rootGetters,commit }, payload) {
+  try {
+     const response = await axios.get(`${rootGetters.getURL}/AdminReg/attendance/today?batchId=${payload}`);
+    if (response.status >= 200 && response.status < 300) {
+      commit('state.batchId',response.data);
+      return true; 
+    }
+  } catch (error) {
+    console.error('Error removing user:', error);
+    return false; 
+  }
+},
 };
 
 

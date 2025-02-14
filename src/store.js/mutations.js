@@ -46,8 +46,8 @@ export default {
     },
     setGetall(state, payload) {
       state.getall = payload;
-     }
-    // setGetall(state, batchTypes) {
-    //   state.batchTypes = batchTypes;
-    // }
+     },
+    setBatchid(state, payload){
+      state.batchId = payload;
+    }
     };

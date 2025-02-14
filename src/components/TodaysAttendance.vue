@@ -5188,7 +5188,15 @@ tbody tr:nth-child(odd) {
 .date-picker {
   width: 150px; /* Set a fixed width for each date picker */
 }
-</style>-->
+</style>
+
+
+
+
+
+
+
+
 
 <template>
   <div class="page-container">
@@ -5211,7 +5219,7 @@ tbody tr:nth-child(odd) {
     <div class="main-content">
       <h1 class="page-title">Attendance</h1>
 
-      <!-- Search Form -->
+  
       <form @submit.prevent="onSearch" class="nav-search-bar">
         <div class="nav-dropdown">
           <select v-model="selectedCategory" class="nav-search-dropdown">
@@ -5227,7 +5235,7 @@ tbody tr:nth-child(odd) {
 </div>
 
         <div class="nav-input-container">
-          <!-- Search by Name with Auto-Suggest -->
+  
           <div v-if="selectedCategory === 'search-alias=name'" class="search-container">
             <input
               v-model="searchQuery"
@@ -5242,15 +5250,13 @@ tbody tr:nth-child(odd) {
     </li>
   </ul>
           </div>
-        
 
-          <!-- Date Range Picker -->
           <div v-if="selectedCategory === 'search-alias=date'" class="date-picker-container">
     <input v-model="startDate" type="date" class="nav-input date-picker" />
     <input v-model="endDate" type="date" class="nav-input date-picker" />
   </div>
         </div>
-       <!-- Month Picker -->
+  
 <div v-if="selectedCategory === 'search-alias=month'" class="month-picker-container">
   <label for="monthPicker">Select Month:</label>
   <input
@@ -5272,7 +5278,6 @@ tbody tr:nth-child(odd) {
         <button type="submit" class="search-button">Search</button> 
       </form>
 
-      <!-- Selected Student Display -->
       <div v-if="selectedStudentName" class="selected-student">
         <strong>Selected Student:</strong> {{ selectedStudentName }}
       </div>
@@ -5283,7 +5288,6 @@ tbody tr:nth-child(odd) {
         <button @click="printPage" class="export-btn">Export to PDF</button>
       </div>
 
-      <!-- Attendance Table -->
       <table>
         <thead>
           <tr>
@@ -5977,6 +5981,441 @@ tbody tr:nth-child(odd) {
   gap: 10px;
 }
 
+</style>-->
+<template>
+  <div class="page-container">
+    <date-pick v-model="date" :displayFormat="'DD.MM.YYYY'"></date-pick>
+    <div class="sidebar">
+      <h2>Admin Panel</h2>
+      <ul>
+        <li><router-link to="/student">Student Details</router-link></li>
+        <li><router-link to="/leave">Leave Request</router-link></li>
+        <li><router-link to="/late">Late Request</router-link></li>
+        <li><router-link to="/todaysatn">Attendance</router-link></li>
+        <li><router-link to="/filter">Attendance Filter</router-link></li>
+        <li><router-link to="/batch">Batch</router-link></li>
+      </ul>
+    </div>
+
+    <div class="main-content">
+      <h1 class="page-title">Attendance</h1>
+
+      <!-- Search Form -->
+      <form @submit.prevent="onSearch" class="nav-search-bar">
+        <div class="nav-dropdown">
+          <select v-model="selectedCategory" class="nav-search-dropdown">
+            <option value="search-alias=aps">All</option>
+            <option value="search-alias=name">Name</option>
+            <option value="search-alias=batch">Batch</option>
+          </select>
+        </div>
+
+        <!-- Search by Name with Auto-Suggest -->
+        <div v-if="selectedCategory === 'search-alias=name'" class="search-container">
+          <input
+            v-model="searchQuery"
+            type="text"
+            class="nav-input"
+            placeholder="Search Student Name"
+            @input="updateSearchResults"
+          />
+          <ul v-if="filteredStudentList.length > 0 && selectedCategory === 'search-alias=name'" class="search-results">
+            <li v-for="(student, index) in filteredStudentList" :key="index" @click="selectStudent(student)">
+              {{ student.userName }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Batch Filter -->
+        <div v-if="selectedCategory === 'search-alias=batch'" class="batch-filter-container">
+          <select v-model="selectedBatch" class="nav-input">
+            <option value="">Select Batch</option>
+            <option value="morning">Morning</option>
+            <option value="evening">Evening</option>
+            <option value="regular">Regular</option>
+          </select>
+        </div>
+
+        <button type="submit" class="search-button">Search</button>
+      </form>
+
+      <!-- Selected Student Display -->
+      <div v-if="selectedStudentName" class="selected-student">
+        <strong>Selected Student:</strong> {{ selectedStudentName }}
+      </div>
+
+      <div class="export-btn-container">
+        <button @click="printPage" class="export-btn">Export to PDF</button>
+      </div>
+
+      <!-- Attendance Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Batch</th>
+            <th>Attendance Date</th>
+            <th>In Time</th>
+            <th>Out Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(student, index) in filteredStudents" :key="index">
+            <td>{{ student.userName }}</td>
+            <td>{{ student.batchType }}</td>
+            <td>{{ formatDate(student.attendanceDate) }}</td>
+            <td>{{ student.scanInTime }}</td>
+            <td>{{ student.scanOutTime }}</td>
+            <td>{{ student.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template><script>
+import { mapGetters, mapActions} from "vuex";
+
+export default {
+  data() {
+    return {
+      selectedCategory: "search-alias=aps",
+      searchQuery: "",
+      selectedBatch: "",
+      filteredBySearch: null,
+      selectedStudentName: null,
+      filteredStudentList: [],
+    };
+  },
+  computed: {
+    ...mapGetters(["getStatus", "getBatchid"]),
+    todaystatus() {
+      return this.getStatus;
+    },
+    batchList() {
+      return this.getBatchid; // Access batchId data from the store
+    },
+    filteredStudents() {
+      let filteredList = this.todaystatus;
+
+      // Apply name filter if a student is selected
+      if (this.searchQuery && this.selectedCategory === "search-alias=name") {
+        filteredList = filteredList.filter((student) =>
+          student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      }
+
+      // Apply batch filter if a batch is selected
+      if (this.selectedBatch && this.selectedCategory === "search-alias=batch") {
+        filteredList = filteredList.filter(
+          (student) => student.batchType.toLowerCase() === this.selectedBatch.toLowerCase()
+        );
+      }
+
+      return filteredList;
+    },
+  },
+  methods: {
+    ...mapActions(["fetchToday", "getallbatchId"]),
+    async fetchToday() {
+      try {
+        await this.$store.dispatch("fetchToday");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async fetchBatchIds() {
+      try {
+        const payload = {}; // Add any required payload for the API call
+        await this.$store.dispatch("getallbatchId", payload);
+      } catch (error) {
+        console.error("Error fetching batch IDs:", error);
+      }
+    },
+    printPage() {
+      const exportButton = document.querySelector(".export-btn");
+      exportButton.style.display = "none";
+      window.print();
+      setTimeout(() => {
+        exportButton.style.display = "block";
+      }, 1000);
+    },
+    formatDate(date) {
+      const dateObj = new Date(date);
+      const day = ("0" + dateObj.getDate()).slice(-2);
+      const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+      const year = dateObj.getFullYear();
+      return `${day}/${month}/${year}`;
+    },
+    updateSearchResults() {
+      if (this.searchQuery.length > 0) {
+        this.filteredStudentList = this.todaystatus
+          .filter((student) =>
+            student.userName.toLowerCase().startsWith(this.searchQuery.toLowerCase())
+          )
+          .sort((a, b) => a.userName.localeCompare(b.userName));
+      } else {
+        this.filteredStudentList = [];
+      }
+    },
+    selectStudent(student) {
+      this.selectedStudentName = student.userName;
+      this.filteredBySearch = [student];
+      this.filteredStudentList = [];
+      this.searchQuery = student.userName;
+    },
+    onSearch() {
+      if (this.selectedCategory === "search-alias=name" && this.searchQuery) {
+        this.filteredBySearch = this.todaystatus.filter((student) =>
+          student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+
+        if (this.filteredBySearch.length > 0) {
+          this.selectedStudentName = this.filteredBySearch[0].userName;
+        } else {
+          this.selectedStudentName = null;
+        }
+      }
+    },
+    resetSearchFields() {
+      this.searchQuery = "";
+      this.selectedBatch = "";
+      this.selectedStudentName = null;
+      this.filteredBySearch = null;
+    },
+  },
+  async mounted() {
+    await this.fetchToday(); // Fetch today's attendance
+    await this.fetchBatchIds(); // Fetch batch IDs when the component is mounted
+  },
+};
+</script>
+<style scoped>
+/* Search Results Dropdown */
+.search-container {
+  position: relative;
+}
+
+.search-results {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-results li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.search-results li:hover {
+  background-color: #f0f0f0;
+}
+
+/* Selected Student Name Display */
+.selected-student {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #eef;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* Batch Filter Container */
+.batch-filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Other styles remain unchanged */
+.page-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  padding: 20px;
+  background: #8ddbf7;
+  color: white;
+  border-right: 1px solid #ddd;
+  padding: 50px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  margin-left: 12px;
+  text-align: start;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 10px 0;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: white;
+  display: block;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+  background: #99d2f8;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: rgb(204, 238, 245);
+}
+
+.page-title {
+  text-align: center;
+  font-size: 28px;
+  margin-top: 0px;
+  color: #68caff;
+}
+
+.export-btn-container {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+button.export-btn {
+  background: #64B5F6;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.export-btn:hover {
+  background-color: #74c1f5;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  border: 5px solid #a9e6fb;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background: #4FC3F7;
+  color: #fcffff;
+  font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #B3E5FC;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #81D4FA;
+}
+
+@media print {
+  .export-btn {
+    display: none;
+  }
+}
+
+.nav-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.nav-search-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  background-color: #f3f3f3;
+  padding: 10px;
+  border-radius: 5px;
+  gap: 10px;
+}
+
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown select {
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  appearance: none;
+  width: 120px;
+}
+
+.nav-dropdown::after {
+  content: '\f0d7';
+  font-family: 'FontAwesome';
+  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.nav-input-container {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+.nav-input {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #0a0a0a;
+}
+
+.search-button {
+  padding: 6px 12px;
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.search-button:hover {
+  background-color: #005bb5;
+}
 </style>
 
 

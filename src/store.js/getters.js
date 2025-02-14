@@ -16,8 +16,8 @@ export default {
     // getBatchType: (state) => state.batchType,
     // getBatchToEdit: (state) => state.batchToEdit,
     getBatch: (state) => state.batch,
-    getType:(state) => state.getall
-   // getBatchTypes: (state) => state.batchTypes
+    getType:(state) => state.getall,
+    getBatchid:(state) => state.batchId
 
  };
   
