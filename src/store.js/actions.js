@@ -115,6 +115,16 @@ async allLates({ rootGetters,commit }) {
   }
 },
 
+
+
+
+
+
+
+
+
+
+
 async fetchLateRequest({ rootGetters, commit }) {
   try {
     const response = await axios.get(`${rootGetters.getURL}/AdminReg/late-requests`);
@@ -153,7 +163,43 @@ async denyLate({ rootGetters }, payload) {
     console.error(error);
   }
 },
-
+async fetchUserLeaveRequests({ rootGetters, commit }, userId) {
+  try {
+    const response = await axios.get(`${rootGetters.getURL}/UserReg/leave-requests?userId=${userId}`);
+    if (response.status >= 200 && response.status < 300) {
+      const data = Array.isArray(response.data) ? response.data : [];
+        commit('setUserLeaveRequests', data); 
+        return true;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+    commit('setUserLeaveRequests', []); // Fallback to an empty array on error
+      return false;
+  }
+},
+async approveLeave({ rootGetters }, payload) {
+  try {
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/approveLeaveRequest/${payload}`);
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+  }
+},
+async denyLeave({ rootGetters }, payload) {
+  try {
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLeaveRequest/${payload}`);
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+  }
+},
 
 
 
@@ -209,7 +255,7 @@ async denyLates({ rootGetters }, payload) {
     console.error(error);
   }
 },
-async approveLeave({ rootGetters }, payload) {
+async approveLeaves({ rootGetters }, payload) {
   try {
     const response = await axios.post(`${rootGetters.getURL}/AdminReg/approveLeaveRequest/${payload}`);
     if (response.status >= 200 && response.status < 300) {
@@ -221,7 +267,7 @@ async approveLeave({ rootGetters }, payload) {
     console.error(error);
   }
 },
-async denyLeave({ rootGetters }, payload) {
+async denyLeaves({ rootGetters }, payload) {
   try {
     const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLeaveRequest/${payload}`);
     if (response.status >= 200 && response.status < 300) {

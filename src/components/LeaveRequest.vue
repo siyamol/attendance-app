@@ -2799,7 +2799,7 @@ th.reason-column, td.reason-column {
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   // name: "AudioPlayer",
@@ -2833,14 +2833,16 @@ export default {
       searchText: "",
      userId: 1, // Replace with dynamic user ID if needed
       batchId: null,
+      isLoading: true,
     };
   },
   mounted() {
     // this.currentSpeed = this.students.map(() => 0);
     this.fetchLeaveRequest();
+    this.fetchUserLeaveRequestsData();
   },
   computed: {
-    ...mapGetters(['getLeave']),
+    ...mapGetters(['getLeave', 'getUserLeaveRequests']),
     leaveRequest(){
       // return this.getLeave;
       return Array.isArray(this.getLeave) ? this.getLeave : [];
@@ -2856,7 +2858,11 @@ export default {
     // },
     filteredLeaveRequest() {
     // Return filtered data based on the searchText
-    return this.leaveRequest.filter((student) => {
+    // return this.leaveRequest.filter((student) => {
+      if (!Array.isArray(this.userLeaveRequests)) {
+        return [];
+      }
+      return this.userLeaveRequests.filter((student) => {
       const searchText = this.searchText.toLowerCase();
       return (
         student.name.toLowerCase().includes(searchText) ||
@@ -2868,21 +2874,48 @@ export default {
 
   },
   methods: {
+    ...mapActions(['fetchLeaves', 'fetchUserLeaveRequests', 'approveLeave', 'denyLeave']),
     async fetchLeaveRequest(){
-      try{
-        await this.$store.dispatch('fetchLeaves'); 
-      }catch (error) {
+      // try{
+      //   await this.$store.dispatch('fetchLeaves'); 
+      // }
+    
+      try {
+        await this.fetchLeaves();
+      } 
+      catch (error) {
           console.error(error);
       } 
     },
+    // async fetchUserLeaveRequests() {
+    //   try {
+    //     await this.$store.dispatch('fetchUserLeaveRequests', this.userId); 
+    //   } catch (error) {
+    //     console.error(error);
+    //   } 
+    // },
+    async fetchUserLeaveRequestsData() {
+      this.isLoading = true;
+      try {
+        await this.fetchUserLeaveRequests(this.userId);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async approveStudent(index) {
       // this.students[index].status = 'Approved';
-      const payload = this.leaveRequest[index].id;
+      // const payload = this.leaveRequest[index].id;
+      const payload = this.userLeaveRequests[index].id;
       try{
-        const res = await this.$store.dispatch('approveLeave', payload); 
+        const res = await this. this.approveLeave(payload);
         if(res){
-          this.leaveRequest[index].status = 'Approved';
-          this.fetchLeaveRequest();
+          //  this.leaveRequest[index].status = 'Approved';
+          // this.fetchLeaveRequest();
+          this.userLeaveRequests[index].status = 'Approved';
+          // this.fetchUserLeaveRequests();
+          this.fetchUserLeaveRequestsData();
         }
       }catch (error) {
           console.error(error);
@@ -2890,12 +2923,13 @@ export default {
     },
     async denyStudentreq(index) {
       // this.students[index].status = 'Denied';
-      const payload = this.leaveRequest[index].id;
+      // const payload = this.leaveRequest[index].id;
+            const payload = this.userLeaveRequests[index].id;
       try{
-      const res = await this.$store.dispatch('denyLeave', payload); 
+        const res = await this.denyLeave(payload);
       if(res){
-        this.leaveRequest[index].status = 'Denied';
-          this.fetchLeaveRequest();
+        this.userLeaveRequests[index].status = 'Denied';
+        this.fetchUserLeaveRequestsData();
         }
       }catch (error) {
           console.error(error);

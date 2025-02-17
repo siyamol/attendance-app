@@ -14,6 +14,9 @@ export default {
     setLeave(state,payload) {
       state.allLeave = payload;
     },
+    setUserLeaveRequests(state, payload) {
+      state.userLeaveRequests = payload;
+    },
     setStatus(state,payload) {
       state.allStatus = payload;
     },
@@ -53,7 +56,5 @@ export default {
     setBatchid(state, payload){
       state.batchId = payload;
     },
-    setBatchleaverequests(state, payload) {
-      state.batchLeaveRequests = payload;
-    },
+   
     };
