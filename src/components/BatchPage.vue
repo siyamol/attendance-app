@@ -271,9 +271,13 @@ tbody tr:nth-child(even) {
 
     <div class="main-content">
       <h2>Manage Batches</h2>
-
-      
+      <div v-if="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
       <form @submit.prevent="isEditing ? updateBatch() : addBatch()" class="batch-form">
+        <!-- Form inputs -->
+        
+      <!-- <form @submit.prevent="isEditing ? updateBatch() : addBatch()" class="batch-form"> -->
         <input v-model="batchName" type="text" placeholder="Batch Name" required />
         <input v-model="startTime" type="time" required />
         <input v-model="endTime" type="time" required />
@@ -289,6 +293,7 @@ tbody tr:nth-child(even) {
     <!-- <option value="">Select Batch Type</option>
     <option value=""></option>
     <option value=""></option> -->
+    <option value="">Select Batch Type</option>
     <option v-for="type in batchTypes" :key="type.id" :value="type.id">
       {{ type.batchType }}
     </option>
@@ -307,10 +312,11 @@ tbody tr:nth-child(even) {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(batch) in batches" :key="batch.id">
+          <tr v-for="batch in batches" :key="batch.id">
             <td>{{ batch.batchName }}</td>
             <td>{{ batch.startTime }}</td>
             <td>{{ batch.endTime }}</td>
+            <td>{{ batch.batchType }}</td>
             <td>
               <button @click="editBatch(batch)" class="edit-btn">Edit</button>
               <button @click="deleteBatch(batch.id)" class="delete-btn">Delete</button>
@@ -335,6 +341,7 @@ export default {
       startTime: "",
       endTime: "",
       isEditing: false, 
+      errorMessage: "",
     };
   },
   computed: {
@@ -362,9 +369,24 @@ export default {
 
   },
   methods: {
+    isDuplicateBatch() {
+      return this.batches.some(
+        (batch) =>
+          batch.batchName.toLowerCase() === this.batchName.toLowerCase() &&
+          batch.batchType === this.batchType
+      );
+    },
     async addBatch() {
+      this.errorMessage = "";
       if (!this.batchType || !this.batchName || !this.startTime || !this.endTime) {
-        alert("Please fill all fields.");
+
+       this.errorMessage = "Please fill all fields.";
+        return;
+      
+      }
+          // Check for duplicate batch name
+          if (this.isDuplicateBatch()) {
+        this.errorMessage = "A batch with the same name already exists for this batch type.";
         return;
       }
       const payload = {
@@ -396,19 +418,29 @@ export default {
       this.batchName = batch.batchName;
       this.startTime = batch.startTime;
       this.endTime = batch.endTime;
+       this.batchType = batch.batchType;
       this.isEditing = true;
     },
 
     async updateBatch() {
+      this.errorMessage = "";
       if (!this.batchName || !this.startTime || !this.endTime) {
-        alert("Please fill all fields.");
+        // alert("Please fill all fields.");
+        this.errorMessage = "Please fill all fields.";
+        return;
+      }
+      if (this.isDuplicateBatch() && !this.isEditing) {
+        this.errorMessage = "A batch with the same name already exists for this batch type.";
         return;
       }
       const payload = {
         id: this.batchId,
-        batchName: this.batchName,
-        startTime: this.startTime,
-        endTime: this.endTime,
+        data: {
+      batchName: this.batchName,
+      startTime: this.startTime,
+      endTime: this.endTime,
+    }
+     
       };
 
       try {
@@ -442,6 +474,7 @@ export default {
 
     resetForm() {
       this.batchId = null;
+      this.batchType = "";
       this.batchName = "";
       this.startTime = "";
       this.endTime = "";
@@ -700,5 +733,11 @@ input {
   border-color: #0056b3; /* Darker blue on focus */
   background-color: #a8f4fa; /* White background on focus */
   
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 </style>

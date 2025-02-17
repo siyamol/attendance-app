@@ -8,6 +8,9 @@ export default {
     setLate(state,payload) {
       state.allLate = payload;
     },
+    setBatchLateRequests(state, { batchId, requests }) {
+      state.batchLateRequests = { ...state.batchLateRequests, [batchId]: requests };
+    },
     setLeave(state,payload) {
       state.allLeave = payload;
     },
@@ -49,5 +52,8 @@ export default {
      },
     setBatchid(state, payload){
       state.batchId = payload;
-    }
+    },
+    setBatchleaverequests(state, payload) {
+      state.batchLeaveRequests = payload;
+    },
     };

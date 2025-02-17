@@ -2831,7 +2831,8 @@ export default {
       //   },
       // ],
       searchText: "",
-    
+     userId: 1, // Replace with dynamic user ID if needed
+      batchId: null,
     };
   },
   mounted() {

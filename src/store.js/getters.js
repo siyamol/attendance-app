@@ -5,6 +5,7 @@ export default {
     getToken: (state) => state.getToken,
     getUsers: (state) => state.allUsers,
     getLate: (state) => state.allLate,
+    getBatchLateRequests: (state) => (batchId) => state.batchLateRequests[batchId] || [],
     getLeave: (state) => state.allLeave,
     getStatus: (state) => state.allStatus,
     getQr:(state) => state.Qr,

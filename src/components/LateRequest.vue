@@ -4415,6 +4415,12 @@ select {
   
         <!-- <i class="fa fa-search" aria-hidden="true"></i>   -->
       </div>
+      <div class="batch-selector">
+        <label for="batch">Select Batch:</label>
+        <select id="batch" v-model="selectedBatch" @change="fetchBatchLateRequests">
+          <option v-for="batch in batches" :key="batch.id" :value="batch.id">{{ batch.name }}</option>
+        </select>
+      </div>
       <table>
         <thead>
           <tr>
@@ -4466,17 +4472,25 @@ export default {
   data() {
     return {
       searchText: "", 
+      selectedBatch: null,
+      batches: [
+        { id: 1, name: 'Batch 1' },
+        { id: 2, name: 'Batch 2' },
+        // Add more batches as needed
+      ]
     };
   },
   mounted() {
     this.fetchLateRequest();
   },
   computed: {
-    ...mapGetters(["getLate"]),
+    ...mapGetters(["getLate", "getBatchLateRequests"]),
     lateRequests() {
-      // return this.getLate;
-      return Array.isArray(this.getLate) ? this.getLate : [];
+      return this.selectedBatch ? this.getBatchLateRequests(this.selectedBatch) : this.getLate;
     },
+      // return this.getLate;
+    //   return Array.isArray(this.getLate) ? this.getLate : [];
+    // },
     filteredStudents() {
       if (this.lateRequests.length > 0) {
       // if (this.lateRequests && this.lateRequests.length > 0) {
@@ -4493,9 +4507,18 @@ export default {
   methods: {
     async fetchLateRequest() {
       try {
-        await this.$store.dispatch("allLates");
+        await this.$store.dispatch("fetchLateRequest");
       } catch (error) {
         console.error(error);
+      }
+    },
+    async fetchBatchLateRequests() {
+      if (this.selectedBatch) {
+        try {
+          await this.$store.dispatch("fetchBatchLateRequests", this.selectedBatch);
+        } catch (error) {
+          console.error(error);
+        }
       }
     },
     async approveStudent(index) {
@@ -4731,7 +4754,19 @@ button {
   color: #888; /* Icon color */
   cursor: pointer; /* Change cursor to pointer for interactivity */
 }
+.batch-selector {
+  margin-bottom: 20px;
+}
 
+.batch-selector label {
+  margin-right: 10px;
+}
+
+.batch-selector select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
 </style>
 
 

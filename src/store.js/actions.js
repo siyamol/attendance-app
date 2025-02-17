@@ -114,6 +114,53 @@ async allLates({ rootGetters,commit }) {
     console.error(error);
   }
 },
+
+async fetchLateRequest({ rootGetters, commit }) {
+  try {
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/late-requests`);
+    commit('setLate', response.data);
+  } catch (error) {
+    console.error(error);
+  }
+},
+async fetchBatchLateRequests({ commit, rootGetters }, batchId) {
+  try {
+    const response = await axios.get(`${rootGetters.getURL}/UserReg/late-requests?batchId=${batchId}`);
+    commit('setBatchLateRequests', { batchId, requests: response.data });
+  } catch (error) {
+    console.error(error);
+  }
+},
+async approveLate({ rootGetters }, payload) {
+  try {
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/approveLateRequest/${payload}`);
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+  }
+},
+async denyLate({ rootGetters }, payload) {
+  try {
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLateRequest/${payload}`);
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+  }
+},
+
+
+
+
+
+
+
+
 async fetchLeaves({ rootGetters,commit }) {
   try {
     const response = await axios.get(`${rootGetters.getURL}/AdminReg/getLeaveRequestsForToday`);
@@ -138,7 +185,7 @@ async fetchToday({ rootGetters,commit }) {
     console.error(error);
   }
 },
-async approveLate({ rootGetters }, payload) {
+async approveLates({ rootGetters }, payload) {
   try {
     const response = await axios.post(`${rootGetters.getURL}/AdminReg/approveLateRequest/${payload}`);
     if (response.status >= 200 && response.status < 300) {
@@ -150,7 +197,7 @@ async approveLate({ rootGetters }, payload) {
     console.error(error);
   }
 },
-async denyLate({ rootGetters }, payload) {
+async denyLates({ rootGetters }, payload) {
   try {
     const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLateRequest/${payload}`);
     if (response.status >= 200 && response.status < 300) {
