@@ -56,7 +56,6 @@ export default {
     setBatchid(state, payload){
       state.batchId = payload;
     },
-<<<<<<< HEAD
     setBatchleaverequests(state, payload) {
       state.batchLeaveRequests = payload;
     },
@@ -66,7 +65,4 @@ export default {
     SET_ATTENDANCE(state, attendance) {
       state.attendance = attendance;
     }
-=======
-   
->>>>>>> bfd0587e5a6d74a756162c2fe4f35c16314a81f7
     };

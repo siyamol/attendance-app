@@ -19,11 +19,7 @@ export default {
     getBatch: (state) => state.batch,
     getType:(state) => state.getall,
     getBatchid:(state) => state.batchId,
-<<<<<<< HEAD
     students: state => state.students,
     attendance: state => state.attendance
-=======
-    getUserLeaveRequests: (state) => state.userLeaveRequests,
->>>>>>> bfd0587e5a6d74a756162c2fe4f35c16314a81f7
  };
   
