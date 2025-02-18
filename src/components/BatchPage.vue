@@ -289,15 +289,15 @@ tbody tr:nth-child(even) {
     <option value=""></option>
     <option value=""></option>
   </select> -->
-  <select v-model="batchType" class="batch-type-box" required>
+  <!-- <select v-model="batchType" class="batch-type-box" required> -->
     <!-- <option value="">Select Batch Type</option>
     <option value=""></option>
     <option value=""></option> -->
-    <option value="">Select Batch Type</option>
+    <!-- <option value="">Select Batch Type</option>
     <option v-for="type in batchTypes" :key="type.id" :value="type.id">
       {{ type.batchType }}
     </option>
-  </select>
+  </select> -->
         <button type="submit" class="add-btn">{{ isEditing ? "Update" : "Add" }}</button>
         <button v-if="isEditing" type="button" @click="cancelEdit" class="cancel-btn">Cancel</button>
       </form>
@@ -308,6 +308,7 @@ tbody tr:nth-child(even) {
             <th>Batch Name</th>
             <th>Starting Time</th>
             <th>Ending Time</th>
+            <th>Batch Type</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -316,7 +317,7 @@ tbody tr:nth-child(even) {
             <td>{{ batch.batchName }}</td>
             <td>{{ batch.startTime }}</td>
             <td>{{ batch.endTime }}</td>
-            <td>{{ batch.batchType }}</td>
+            <td>{{ batch.batchType.batchType }}</td>
             <td>
               <button @click="editBatch(batch)" class="edit-btn">Edit</button>
               <button @click="deleteBatch(batch.id)" class="delete-btn">Delete</button>

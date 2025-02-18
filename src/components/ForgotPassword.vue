@@ -193,7 +193,7 @@ export default {
         confirmPassword: '',
         passwordError: '',
         confirmPasswordError: '',
-        successMessage: '', // Holds the success message
+        successMessage: '',
       };
     },
 
@@ -227,7 +227,6 @@ computed: {
           ? 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number'
           : '';
   
-        // Validate confirm password matches the password
         this.confirmPasswordError = this.confirmPassword !== this.password
           ? 'Passwords do not match'
           : '';
