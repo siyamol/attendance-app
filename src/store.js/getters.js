@@ -18,7 +18,8 @@ export default {
     // getBatchToEdit: (state) => state.batchToEdit,
     getBatch: (state) => state.batch,
     getType:(state) => state.getall,
-    getBatchid:(state) => state.batchId
-
+    getBatchid:(state) => state.batchId,
+    students: state => state.students,
+    attendance: state => state.attendance
  };
   

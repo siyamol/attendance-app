@@ -56,4 +56,10 @@ export default {
     setBatchleaverequests(state, payload) {
       state.batchLeaveRequests = payload;
     },
+    SET_STUDENTS(state, students) {
+      state.students = students;
+    },
+    SET_ATTENDANCE(state, attendance) {
+      state.attendance = attendance;
+    }
     };

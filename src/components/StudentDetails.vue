@@ -1553,9 +1553,7 @@ th, td {
         <li><router-link to="/batch">Batch</router-link></li>
       </ul>
     </div>
-
-    <!-- Main Content Area -->
-    <div class="main-content">
+ <div class="main-content">
       <h1 class="page-title">Student Details</h1>
       <div class="filters-container">
    
@@ -1611,11 +1609,7 @@ th, td {
             <td>{{ student.email }}</td> 
             <td>{{ student.phoneNumber }}</td>
             <td><button @click="removeStudent(student.userId)" class="remove-btn">Remove</button></td>
-         
-          
-       
-         
-            <!-- <td>{{ student.date }}</td> -->
+          <!-- <td>{{ student.date }}</td> -->
             <!-- <td>
               <span :class="getStatusClass(student.status)">
                 {{ student.status }}

@@ -1563,6 +1563,7 @@ tbody tr:nth-child(odd) {
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from 'vuex';
 export default {
   data() {
     return {
@@ -1571,50 +1572,68 @@ export default {
       startDate: this.getDefaultStartDate(),
       endDate: this.getDefaultEndDate(),
       filteredStudentList: [],
-      students: [
-        // { userName: "John Doe", batchType: "Morning", attendanceDate: "2024-02-05", scanInTime: "09:00", scanOutTime: "17:00" },
-        // { userName: "Jane Smith", batchType: "Evening", attendanceDate: "2024-02-05", scanInTime: "10:00", scanOutTime: "18:00" }
-      ], // Example data, replace with API data
+      // students: [
+        
+      // ],
     };
   },
   computed: {
-    filteredStudents() {
-      let filteredList = this.students;
+    ...mapState(['students', 'attendance']),
+    ...mapGetters(['students', 'attendance']),
+    // filtered() {
+    //   let filteredList = this.students;
+    //   if (this.selectedStudent) {
+    //     filteredList = filteredList.filter(student =>
+    //       student.userName.toLowerCase().includes(this.selectedStudent.toLowerCase())
+    //     );
+    //   }
+    //  if (this.startDate && this.endDate) {
+    //     const start = new Date(this.startDate);
+    //     const end = new Date(this.endDate);
+    //     filteredList = filteredList.filter(student => {
+    //       const studentDate = new Date(student.attendanceDate);
+    //       return studentDate >= start && studentDate <= end;
+    //     });
+    //   }
 
-      // Filter by Name
-      if (this.selectedStudent) {
-        filteredList = filteredList.filter(student =>
-          student.userName.toLowerCase().includes(this.selectedStudent.toLowerCase())
-        );
-      }
-
-      // Filter by Date Range
-      if (this.startDate && this.endDate) {
-        const start = new Date(this.startDate);
-        const end = new Date(this.endDate);
-        filteredList = filteredList.filter(student => {
-          const studentDate = new Date(student.attendanceDate);
-          return studentDate >= start && studentDate <= end;
-        });
-      }
-
-      return filteredList;
+    //   return filteredList;
+    // }
+    filteredAttendance() {
+      return this.attendance;
     }
   },
   methods: {
+    ...mapActions(['fetchStudents', 'fetchAttendance']),
     updateSearchResults() {
       if (!this.searchQuery) {
         this.filteredStudentList = [];
         return;
       }
+    // updateSearchResults() {
+    //   if (!this.searchQuery) {
+    //     this.filteredStudentList = [];
+    //     return;
+    //   }
       this.filteredStudentList = this.students.filter(student =>
         student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
     selectStudent(student) {
-      this.selectedStudent = student.userName;
+      this.selectedStudent = student;
+      // this.selectedStudent = student.userName;
       this.searchQuery = student.userName;
       this.filteredStudentList = [];
+    },
+    async onSearch() {
+      if (!this.selectedStudent) {
+        alert("Please select a student");
+        return;
+      }
+      await this.fetchAttendance({
+        userId: this.selectedStudent.userId,
+        startDate: this.startDate,
+        endDate: this.endDate
+      });
     },
     printPage() {
       const exportButton = document.querySelector(".export-btn");
@@ -1637,16 +1656,19 @@ export default {
       return new Date().toISOString().split("T")[0]; // Default end date is today
     }
   },
-  onSearch() {
-    // Ensure searchQuery is trimmed and not empty
-    if (!this.searchQuery.trim()) {
-      alert("Please enter a search query");
-      return;
-    }
+  // onSearch() {
+   
+  //   if (!this.searchQuery.trim()) {
+  //     alert("Please enter a search query");
+  //     return;
+  //   }
 
-    this.filteredStudents = this.students.filter(student =>
-      student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
+  //   this.filteredStudents = this.students.filter(student =>
+  //     student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
+  //   );
+  // }
+  async created() {
+    await this.fetchStudents();
   }
 };
 </script>
