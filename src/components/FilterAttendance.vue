@@ -1563,7 +1563,7 @@ tbody tr:nth-child(odd) {
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapGetters} from 'vuex';
 export default {
   data() {
     return {
@@ -1578,8 +1578,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['students', 'attendance']),
-    ...mapGetters(['students', 'attendance']),
+    ...mapGetters(['filteredAttendance']),
     // filtered() {
     //   let filteredList = this.students;
     //   if (this.selectedStudent) {
@@ -1598,13 +1597,9 @@ export default {
 
     //   return filteredList;
     // }
-    filteredAttendance() {
-      return this.attendance;
-    }
   },
   methods: {
-    ...mapActions(['fetchStudents', 'fetchAttendance']),
-    updateSearchResults() {
+        updateSearchResults() {
       if (!this.searchQuery) {
         this.filteredStudentList = [];
         return;
@@ -1629,7 +1624,7 @@ export default {
         alert("Please select a student");
         return;
       }
-      await this.fetchAttendance({
+      await this.$store.dispatch('fetchAttendance', {
         userId: this.selectedStudent.userId,
         startDate: this.startDate,
         endDate: this.endDate
@@ -1668,7 +1663,7 @@ export default {
   //   );
   // }
   async created() {
-    await this.fetchStudents();
+    await this.$store.dispatch('fetchStudents');
   }
 };
 </script>
