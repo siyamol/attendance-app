@@ -1571,7 +1571,7 @@ tbody tr:nth-child(odd) {
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapGetters} from 'vuex';
 export default {
   data() {
     return {
@@ -1588,8 +1588,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['students', 'attendance']),
-    ...mapGetters(['students', 'attendance']),
+    ...mapGetters(['filteredAttendance']),
     // filtered() {
     //   let filteredList = this.students;
     //   if (this.selectedStudent) {
@@ -1608,34 +1607,40 @@ export default {
 
     //   return filteredList;
     // }
-    filteredAttendance() {
-      return this.attendance;
-    }
   },
   methods: {
     ...mapActions(['fetchStudents', 'fetchAttendance']),
-    
+    updateSearchResults() {
+      if (!this.searchQuery) {
+        this.filteredStudentList = [];
+        return;
+      }
+    // updateSearchResults() {
+    //   if (!this.searchQuery) {
+    //     this.filteredStudentList = [];
+    //     return;
+    //   }
+      this.filteredStudentList = this.students.filter(student =>
+        student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+    selectStudent(student) {
+      this.selectedStudent = student;
+      // this.selectedStudent = student.userName;
+      this.searchQuery = student.userName;
+      this.filteredStudentList = [];
+    },
     async onSearch() {
       if (!this.selectedStudent) {
         alert("Please select a student");
         return;
-      }      //   userId: this.selectedStudent.userId,
-      //   startDate: this.startDate,
-      //   endDate: this.endDate
-      // });
-   
-      const payload = {
-    userId: this.selectedStudent.userId, // Use the selected student's userId
-    startDate: this.startDate,         // Use the startDate from the component's data
-    endDate: this.endDate               // Use the endDate from the component's data
-  };
-
-  // Call the action with the payload
-  console.log("Payload for fetchAttendance:", payload);
-
-  await this.fetchAttendance(payload);
-},
-    
+      }
+      await this.fetchAttendance({
+        userId: this.selectedStudent.userId,
+        startDate: this.startDate,
+        endDate: this.endDate
+      });
+    },
     printPage() {
       const exportButton = document.querySelector(".export-btn");
       exportButton.style.display = "none";
@@ -1669,7 +1674,7 @@ export default {
   //   );
   // },
   async created() {
-    await this.fetchStudents();
+    await this.$store.dispatch('fetchStudents');
   }
 };
 </script>
