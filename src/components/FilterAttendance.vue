@@ -1501,8 +1501,8 @@ tbody tr:nth-child(odd) {
       <form @submit.prevent="onSearch" class="nav-search-bar">
         <!-- Student Name Search Field -->
         <div class="filter-container">
-          <label class="filter-label"></label>
-          <input 
+          <label class="filter-label">Select a Student</label>
+          <!-- <input 
             v-model="searchQuery" 
             type="text" 
             class="nav-input" 
@@ -1514,11 +1514,17 @@ tbody tr:nth-child(odd) {
               {{ student.userName }}
             </li>
           </ul>
+        </div> -->
+        <select v-model="selectedStudent" class="nav-input">
+            <option value="" disabled>Select a student</option>
+            <option v-for="student in students" :key="student.userId" :value="student">
+              {{ student.userName }}
+            </option>
+          </select>
         </div>
-
         <!-- Date Range Picker (Always Visible) -->
         <div class="date-range-container">
-          <label class="filter-label"></label>
+          <label class="filter-label">Date range</label>
           <div class="date-picker-wrapper">
             <input v-model="startDate" type="date" class="nav-input date-picker" placeholder="Start Date" />
             <input v-model="endDate" type="date" class="nav-input date-picker" placeholder="End Date" />
@@ -1549,7 +1555,9 @@ tbody tr:nth-child(odd) {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(student, index) in filteredStudents" :key="index">
+          <tr v-for="(student, index) in filteredAttendance" :key="index">
+
+
             <td>{{ student.userName }}</td>
             <td>{{ student.batchType }}</td>
             <td>{{ formatDate(student.attendanceDate) }}</td>
@@ -1567,14 +1575,16 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 export default {
   data() {
     return {
-      searchQuery: "",
-      selectedStudent: null, // Store the selected student
+    //   searchQuery: "",
+    //   selectedStudent: null, // Store the selected student
+    //   startDate: this.getDefaultStartDate(),
+    //   endDate: this.getDefaultEndDate(),
+    //   filteredStudentList: [],
+     
+    // };
+    selectedStudent: null, // Store the selected student object
       startDate: this.getDefaultStartDate(),
       endDate: this.getDefaultEndDate(),
-      filteredStudentList: [],
-      // students: [
-        
-      // ],
     };
   },
   computed: {
@@ -1604,37 +1614,28 @@ export default {
   },
   methods: {
     ...mapActions(['fetchStudents', 'fetchAttendance']),
-    updateSearchResults() {
-      if (!this.searchQuery) {
-        this.filteredStudentList = [];
-        return;
-      }
-    // updateSearchResults() {
-    //   if (!this.searchQuery) {
-    //     this.filteredStudentList = [];
-    //     return;
-    //   }
-      this.filteredStudentList = this.students.filter(student =>
-        student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    },
-    selectStudent(student) {
-      this.selectedStudent = student;
-      // this.selectedStudent = student.userName;
-      this.searchQuery = student.userName;
-      this.filteredStudentList = [];
-    },
+    
     async onSearch() {
       if (!this.selectedStudent) {
         alert("Please select a student");
         return;
-      }
-      await this.fetchAttendance({
-        userId: this.selectedStudent.userId,
-        startDate: this.startDate,
-        endDate: this.endDate
-      });
-    },
+      }      //   userId: this.selectedStudent.userId,
+      //   startDate: this.startDate,
+      //   endDate: this.endDate
+      // });
+   
+      const payload = {
+    userId: this.selectedStudent.userId, // Use the selected student's userId
+    startDate: this.startDate,         // Use the startDate from the component's data
+    endDate: this.endDate               // Use the endDate from the component's data
+  };
+
+  // Call the action with the payload
+  console.log("Payload for fetchAttendance:", payload);
+
+  await this.fetchAttendance(payload);
+},
+    
     printPage() {
       const exportButton = document.querySelector(".export-btn");
       exportButton.style.display = "none";
@@ -1666,7 +1667,7 @@ export default {
   //   this.filteredStudents = this.students.filter(student =>
   //     student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
   //   );
-  // }
+  // },
   async created() {
     await this.fetchStudents();
   }
@@ -2198,6 +2199,118 @@ tbody tr:nth-child(odd) {
 .search-results li:hover {
   background-color: #f0f0f0;
   
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.filter-label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.nav-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+}
+
+.date-range-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.date-picker-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.date-picker {
+  width: 150px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+}
+
+.nav-search-submit {
+  padding: 8px 16px;
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-search-submit:hover {
+  background-color: #005bb5;
+}
+
+.export-btn-container {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.export-btn {
+  background: #64B5F6;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.export-btn:hover {
+  background-color: #74c1f5;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  border: 1px solid #a9e6fb;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background: #4FC3F7;
+  color: #fcffff;
+  font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #B3E5FC;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #81D4FA;
+}
+
+@media print {
+  .export-btn {
+    display: none;
+  }
 }
 
 </style>
