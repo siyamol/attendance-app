@@ -289,15 +289,21 @@ tbody tr:nth-child(even) {
     <option value=""></option>
     <option value=""></option>
   </select> -->
-  <!-- <select v-model="batchType" class="batch-type-box" required> -->
-    <!-- <option value="">Select Batch Type</option>
+   <!-- <select v-model="batchType" class="batch-type-box" required> 
+    <option value="">Select Batch Type</option>
     <option value=""></option>
-    <option value=""></option> -->
-    <!-- <option value="">Select Batch Type</option>
+    <option value=""></option> 
     <option v-for="type in batchTypes" :key="type.id" :value="type.id">
       {{ type.batchType }}
     </option>
-  </select> -->
+  </select>  -->
+  <select v-model="batchType" class="batch-type-box" required> 
+  <option value="">Select Batch Type</option>
+  <option v-for="type in batchTypes" :key="type.id" :value="type.id">
+    {{ type.batchType }}
+  </option>
+</select>
+
         <button type="submit" class="add-btn">{{ isEditing ? "Update" : "Add" }}</button>
         <button v-if="isEditing" type="button" @click="cancelEdit" class="cancel-btn">Cancel</button>
       </form>

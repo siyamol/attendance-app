@@ -36,6 +36,7 @@
 
 import axios from 'axios';
 
+
 export default {
 async adminLogin({ rootGetters,commit }, payload) {
   try {
@@ -491,9 +492,6 @@ async fetchFilter({ rootGetters, commit }, payload) {
 //   }
 // }
 
-
-
-
 async removeUser({  rootGetters,commit }, userId) {
   try {
      const response = await axios.delete(`${rootGetters.getURL}/AdminReg/deleteUser/${userId}`);
@@ -548,7 +546,10 @@ async dltBatch({  rootGetters }, payload) {
 
 async updateBatch({ rootGetters, dispatch },payload ) {
   try {
-    const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
+    // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
+    // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/updateBatch?batchTypeId=${payload.id}`,payload.data);
+
    if (response.status >= 200 && response.status < 300) {
       await dispatch("fetchBatch");
       return true; 
@@ -587,6 +588,15 @@ async getallbatchId({ rootGetters,commit }, payload) {
     return false; 
   }
 },
+// async fetchStudents({ commit },{ userId, startDate, endDate })  {
+//   const response = await axios.get(`/AdminReg/attendance/userDate-range?userId=${userId}&startDate=${startDate}&endDate=${endDate}`);
+//   commit('SET_STUDENTS', response.data);
+// },
+// async fetchAttendance({ commit }, { userId, startDate, endDate }) {
+//   const response = await axios.get(`/AdminReg/attendance/userDate-range?userId=${userId}&startDate=${startDate}&endDate=${endDate}`);
+//   commit('SET_ATTENDANCE', response.data);
+// }
+
 async fetchStudents({ commit }) {
   const response = await axios.get('/AdminReg/students');
   commit('SET_STUDENTS', response.data);

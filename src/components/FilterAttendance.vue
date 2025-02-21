@@ -1502,7 +1502,7 @@ tbody tr:nth-child(odd) {
         <!-- Student Name Search Field -->
         <div class="filter-container">
           <label class="filter-label">Select a Student</label>
-          <!-- <input 
+           <input 
             v-model="searchQuery" 
             type="text" 
             class="nav-input" 
@@ -1514,17 +1514,17 @@ tbody tr:nth-child(odd) {
               {{ student.userName }}
             </li>
           </ul>
-        </div> -->
-        <select v-model="selectedStudent" class="nav-input">
+        </div> 
+        <!-- <select v-model="selectedStudent" class="nav-input">
             <option value="" disabled>Select a student</option>
             <option v-for="student in students" :key="student.userId" :value="student">
               {{ student.userName }}
             </option>
           </select>
-        </div>
+        </div> -->
         <!-- Date Range Picker (Always Visible) -->
         <div class="date-range-container">
-          <label class="filter-label">Date range</label>
+          <label class="filter-label"></label>
           <div class="date-picker-wrapper">
             <input v-model="startDate" type="date" class="nav-input date-picker" placeholder="Start Date" />
             <input v-model="endDate" type="date" class="nav-input date-picker" placeholder="End Date" />
@@ -1575,18 +1575,19 @@ import { mapGetters} from 'vuex';
 export default {
   data() {
     return {
-    //   searchQuery: "",
-    //   selectedStudent: null, // Store the selected student
-    //   startDate: this.getDefaultStartDate(),
-    //   endDate: this.getDefaultEndDate(),
-    //   filteredStudentList: [],
-     
-    // };
-    selectedStudent: null, // Store the selected student object
+      searchQuery: "",
+      selectedStudent: null, // Store the selected student
       startDate: this.getDefaultStartDate(),
       endDate: this.getDefaultEndDate(),
+      filteredStudentList: [],
+     
     };
   },
+  //   selectedStudent: null, // Store the selected student object
+  //     startDate: this.getDefaultStartDate(),
+  //     endDate: this.getDefaultEndDate(),
+  //   };
+  // },
   computed: {
     ...mapGetters(['filteredAttendance']),
     // filtered() {
@@ -1609,17 +1610,17 @@ export default {
     // }
   },
   methods: {
-    ...mapActions(['fetchStudents', 'fetchAttendance']),
-    updateSearchResults() {
-      if (!this.searchQuery) {
-        this.filteredStudentList = [];
-        return;
-      }
+    // ...mapActions(['fetchStudents', 'fetchAttendance']),
     // updateSearchResults() {
     //   if (!this.searchQuery) {
     //     this.filteredStudentList = [];
     //     return;
     //   }
+    updateSearchResults() {
+      if (!this.searchQuery) {
+        this.filteredStudentList = [];
+        return;
+      }
       this.filteredStudentList = this.students.filter(student =>
         student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
@@ -1635,7 +1636,7 @@ export default {
         alert("Please select a student");
         return;
       }
-      await this.fetchAttendance({
+      await this.$store.dispatch('fetchAttendance', {
         userId: this.selectedStudent.userId,
         startDate: this.startDate,
         endDate: this.endDate
