@@ -62,7 +62,7 @@ export default {
     SET_STUDENTS(state, students) {
       state.students = students;
     },
-    SET_ATTENDANCE(state, attendance) {
+    set_ATTENDANCE(state, attendance) {
       state.attendance = attendance;
     }
     };
