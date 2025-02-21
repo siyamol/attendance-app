@@ -546,10 +546,14 @@ async dltBatch({  rootGetters }, payload) {
 
 async updateBatch({ rootGetters, dispatch },payload ) {
   try {
+  
     // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
-    // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
-    const response = await axios.post(`${rootGetters.getURL}/AdminReg/updateBatch?batchTypeId=${payload.id}`,payload.data);
-
+    // const response = await axios.post(`${rootGetters.getURL}/AdminReg/updateBatch?batchTypeId=${payload.id}`,payload.data);
+     const response = await axios.post(`${rootGetters.getURL}/AdminReg/updateBatch?batchTypeId=${payload.id}`, payload.data);
+    // const response = await axios.post(
+    //   `${rootGetters.getURL}/AdminReg/updateBatch?id=${payload.id}`, // Use batch ID
+    //   payload.data
+    // );
    if (response.status >= 200 && response.status < 300) {
       await dispatch("fetchBatch");
       return true; 
@@ -588,23 +592,14 @@ async getallbatchId({ rootGetters,commit }, payload) {
     return false; 
   }
 },
-<<<<<<< HEAD
 // async fetchStudents({ commit }) {
 //   const response = await axios.get('/AdminReg/students');
-=======
-// async fetchStudents({ commit },{ userId, startDate, endDate })  {
-//   const response = await axios.get(`/AdminReg/attendance/userDate-range?userId=${userId}&startDate=${startDate}&endDate=${endDate}`);
->>>>>>> fa90576495167cede58afc6a3677b2741b1b3dff
 //   commit('SET_STUDENTS', response.data);
 // },
 // async fetchAttendance({ commit }, { userId, startDate, endDate }) {
 //   const response = await axios.get(`/AdminReg/attendance/userDate-range?userId=${userId}&startDate=${startDate}&endDate=${endDate}`);
 //   commit('SET_ATTENDANCE', response.data);
 // }
-<<<<<<< HEAD
-=======
-
->>>>>>> fa90576495167cede58afc6a3677b2741b1b3dff
 async fetchStudents({ commit }) {
   const response = await axios.get('/AdminReg/students');
   commit('SET_STUDENTS', response.data);

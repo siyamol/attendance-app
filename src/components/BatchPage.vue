@@ -268,7 +268,7 @@ tbody tr:nth-child(even) {
         <li><router-link to="/batch">Batch</router-link></li>
       </ul>
     </div>
-
+  
     <div class="main-content">
       <h2>Manage Batches</h2>
       <div v-if="errorMessage" class="error-message">
@@ -376,13 +376,15 @@ export default {
 
   },
   methods: {
-    isDuplicateBatch() {
-      return this.batches.some(
-        (batch) =>
-          batch.batchName.toLowerCase() === this.batchName.toLowerCase() &&
-          batch.batchType === this.batchType
-      );
-    },
+     isDuplicateBatch() {
+       return this.batches.some(
+         (batch) =>
+           batch.batchName.toLowerCase() === this.batchName.toLowerCase() &&
+           batch.batchType.id === this.batchType
+       );
+     },
+  
+
     async addBatch() {
       this.errorMessage = "";
       if (!this.batchType || !this.batchName || !this.startTime || !this.endTime) {
@@ -416,6 +418,7 @@ export default {
         }
       } catch (error) {
         console.error("Error adding batch:", error);
+        this.errorMessage = "Failed to add batch. Please try again.";
       }
     },
 
@@ -432,33 +435,44 @@ export default {
     async updateBatch() {
       this.errorMessage = "";
       if (!this.batchName || !this.startTime || !this.endTime) {
-        // alert("Please fill all fields.");
+     
         this.errorMessage = "Please fill all fields.";
         return;
       }
-      if (this.isDuplicateBatch() && !this.isEditing) {
-        this.errorMessage = "A batch with the same name already exists for this batch type.";
-        return;
-      }
+       if (this.isDuplicateBatch() && !this.isEditing) {
+         this.errorMessage = "A batch with the same name already exists for this batch type.";
+         return;
+       }
       const payload = {
         id: this.batchId,
         data: {
       batchName: this.batchName,
       startTime: this.startTime,
       endTime: this.endTime,
-    }
-     
+    
+    },
+    resetForm() {
+      this.batchId = null;
+      this.batchType = "";
+      this.batchName = "";
+      this.startTime = "";
+      this.endTime = "";
+      this.isEditing = false;
+      this.errorMessage = ""; 
+    },
       };
 
       try {
         const res = await this.$store.dispatch("updateBatch", payload);
         if (res) {
           alert("Batch successfully updated!");
-          this.$store.dispatch("fetchbatch");
+          await this.$store.dispatch("fetchbatch");
           this.resetForm();
         }
       } catch (error) {
-        console.error(error);
+        // console.error(error);
+        console.error("Error updating batch:", error);
+        this.errorMessage = "Failed to update batch. Please try again.";
       }
     },
     
@@ -479,14 +493,8 @@ export default {
       this.resetForm();
     },
 
-    resetForm() {
-      this.batchId = null;
-      this.batchType = "";
-      this.batchName = "";
-      this.startTime = "";
-      this.endTime = "";
-      this.isEditing = false;
-    },
+  
+    
   },
   
 };

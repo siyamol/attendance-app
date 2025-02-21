@@ -1610,9 +1610,6 @@ export default {
     // }
   },
   methods: {
-<<<<<<< HEAD
-        updateSearchResults() {
-=======
     // ...mapActions(['fetchStudents', 'fetchAttendance']),
     // updateSearchResults() {
     //   if (!this.searchQuery) {
@@ -1620,27 +1617,10 @@ export default {
     //     return;
     //   }
     updateSearchResults() {
->>>>>>> fa90576495167cede58afc6a3677b2741b1b3dff
       if (!this.searchQuery) {
         this.filteredStudentList = [];
         return;
       }
-<<<<<<< HEAD
-   
-    //   this.filteredStudentList = this.students.filter(student =>
-    //     student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
-    //   );
-    // },
-    // selectStudent(student) {
-    //   this.selectedStudent = student;
-     
-    //   this.searchQuery = student.userName;
-    //   this.filteredStudentList = [];
-    // },
-    // Ensure students is defined before filtering
-  
-=======
->>>>>>> fa90576495167cede58afc6a3677b2741b1b3dff
       this.filteredStudentList = this.students.filter(student =>
         student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
