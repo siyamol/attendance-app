@@ -1604,18 +1604,26 @@ export default {
         this.filteredStudentList = [];
         return;
       }
-    // updateSearchResults() {
-    //   if (!this.searchQuery) {
-    //     this.filteredStudentList = [];
-    //     return;
-    //   }
+   
+    //   this.filteredStudentList = this.students.filter(student =>
+    //     student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
+    //   );
+    // },
+    // selectStudent(student) {
+    //   this.selectedStudent = student;
+     
+    //   this.searchQuery = student.userName;
+    //   this.filteredStudentList = [];
+    // },
+    // Ensure students is defined before filtering
+  
       this.filteredStudentList = this.students.filter(student =>
         student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
-    },
-    selectStudent(student) {
+    
+  },
+  selectStudent(student) {
       this.selectedStudent = student;
-      // this.selectedStudent = student.userName;
       this.searchQuery = student.userName;
       this.filteredStudentList = [];
     },
