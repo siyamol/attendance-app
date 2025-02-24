@@ -64,5 +64,21 @@ export default {
     },
     set_ATTENDANCE(state, attendance) {
       state.attendance = attendance;
-    }
+    },
+    SET_BATCH_LIST(state, batchList) {
+      state.batchList = batchList;
+    },
+    SET_ATTENDANCE_RECORDS(state, attendanceRecords) {
+      state.attendanceRecords = attendanceRecords;
+    },
+    // setBatchId(state, payload) {
+    //   state.batchId = payload;
+    // },
+    // setBatchType(state, payload) {
+    //   state.batchType = payload;
+    // },
+    // setAttendanceRecords(state, payload) {
+    //   state.attendanceRecords = payload;
+    // },
+    
     };

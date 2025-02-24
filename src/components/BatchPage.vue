@@ -274,8 +274,11 @@ tbody tr:nth-child(even) {
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
+      <div v-if="notificationMessage" class="notification">
+        {{ notificationMessage }}
+      </div>
       <form @submit.prevent="isEditing ? updateBatch() : addBatch()" class="batch-form">
-        <!-- Form inputs -->
+        
         
       <!-- <form @submit.prevent="isEditing ? updateBatch() : addBatch()" class="batch-form"> -->
         <input v-model="batchName" type="text" placeholder="Batch Name" required />
@@ -342,13 +345,15 @@ import { mapGetters} from 'vuex';
 export default {
   data() {
     return {
+      notificationMessage: "", // For non-blocking notifications
+      errorMessage: "",
       batchId: null,
       batchType: "",  
       batchName: "",
       startTime: "",
       endTime: "",
       isEditing: false, 
-      errorMessage: "",
+      // errorMessage: "",
     };
   },
   computed: {
@@ -383,6 +388,12 @@ export default {
           batch.batchType === this.batchType
       );
     },
+    showNotification(message) {
+      this.notificationMessage = message;
+      setTimeout(() => {
+        this.notificationMessage = ""; // Clear the message after 3 seconds
+      }, 3000);
+    },
     async addBatch() {
       this.errorMessage = "";
       if (!this.batchType || !this.batchName || !this.startTime || !this.endTime) {
@@ -408,14 +419,16 @@ export default {
       try {
         const res = await this.$store.dispatch("addBatch", payload);
         if (res) {
-          alert("Batch successfully added!");
+          // alert("Batch successfully added!");
           // this.$store.dispatch("fetchbatch");
           // this.resetForm();
           await this.$store.dispatch("fetchbatch"); // Fetch updated batches
           this.resetForm(); // Reset form fields
+          this.showNotification("Batch successfully added!"); 
         }
       } catch (error) {
         console.error("Error adding batch:", error);
+        this.errorMessage = "Failed to add batch. Please try again.";
       }
     },
 
@@ -431,48 +444,54 @@ export default {
 
     async updateBatch() {
       this.errorMessage = "";
-      if (!this.batchName || !this.startTime || !this.endTime) {
+      if (!this.batchName || !this.startTime || !this.endTime|| !this.batchType) {
         // alert("Please fill all fields.");
         this.errorMessage = "Please fill all fields.";
         return;
       }
-      if (this.isDuplicateBatch() && !this.isEditing) {
-        this.errorMessage = "A batch with the same name already exists for this batch type.";
-        return;
-      }
+      // if (this.isDuplicateBatch() && !this.isEditing) {
+      //   this.errorMessage = "A batch with the same name already exists for this batch type.";
+      //   return;
+      // }
       const payload = {
         id: this.batchId,
+        batchTypeId: this.batchType,
         data: {
       batchName: this.batchName,
       startTime: this.startTime,
       endTime: this.endTime,
-    }
+    },
      
       };
 
       try {
         const res = await this.$store.dispatch("updateBatch", payload);
         if (res) {
-          alert("Batch successfully updated!");
-          this.$store.dispatch("fetchbatch");
+          // alert("Batch successfully updated!");
+          await this.$store.dispatch("fetchbatch");
           this.resetForm();
+          this.showNotification("Batch successfully updated!");
         }
       } catch (error) {
-        console.error(error);
+        // console.error(error);
+        console.error("Error updating batch:", error);
+        this.errorMessage = "Failed to update batch. Please try again.";
       }
     },
     
-    async deleteBatch(index) {
-      if (confirm("Are you sure you want to remove this batch?")) {
+    async deleteBatch(id) {
+      // if (confirm("Are you sure you want to remove this batch?")) {
         try {
-          const res = await this.$store.dispatch("dltBatch", index);
+          const res = await this.$store.dispatch("dltBatch", id);
           if (res) {
             this.$store.dispatch("fetchbatch");
+            this.showNotification("Batch successfully deleted!"); 
           }
         } catch (error) {
           console.error("Error removing batch:", error);
+          this.errorMessage = "Failed to delete batch. Please try again.";
         }
-      }
+      
     },
 
     cancelEdit() {
@@ -746,5 +765,27 @@ input {
   color: red;
   margin-bottom: 10px;
   font-weight: bold;
+}
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #db4aff;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+.delete-btn {
+  background-color: rgb(215, 176, 255);
+  color: white;
+  padding: 5px 18px;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: rgb(254, 174, 242);
 }
 </style>

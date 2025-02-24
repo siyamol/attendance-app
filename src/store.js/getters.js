@@ -19,7 +19,12 @@ export default {
     getBatch: (state) => state.batch,
     getType:(state) => state.getall,
     getBatchid:(state) => state.batchId,
-    filteredAttendance: (state) => state.attendance
-
- };
+    filteredAttendance: (state) => state.attendance,
+    getBatchList: (state) => state.batchList, // Get all batches
+    getAttendanceRecords: (state) => state.attendanceRecords,
+    // getBatchId: (state) => state.batchId,
+    // getBatchType: (state) => state.batchType,
+    // getAttendanceRecords: (state) => state.attendanceRecords,
+ 
+};
   
