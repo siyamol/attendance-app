@@ -268,7 +268,7 @@ tbody tr:nth-child(even) {
         <li><router-link to="/batch">Batch</router-link></li>
       </ul>
     </div>
-
+  
     <div class="main-content">
       <h2>Manage Batches</h2>
       <div v-if="errorMessage" class="error-message">
@@ -388,12 +388,6 @@ export default {
           batch.batchType === this.batchType
       );
     },
-    showNotification(message) {
-      this.notificationMessage = message;
-      setTimeout(() => {
-        this.notificationMessage = ""; // Clear the message after 3 seconds
-      }, 3000);
-    },
     async addBatch() {
       this.errorMessage = "";
       if (!this.batchType || !this.batchName || !this.startTime || !this.endTime) {
@@ -444,15 +438,15 @@ export default {
 
     async updateBatch() {
       this.errorMessage = "";
-      if (!this.batchName || !this.startTime || !this.endTime|| !this.batchType) {
+      if (!this.batchName || !this.startTime || !this.endTime) {
         // alert("Please fill all fields.");
         this.errorMessage = "Please fill all fields.";
         return;
       }
-      // if (this.isDuplicateBatch() && !this.isEditing) {
-      //   this.errorMessage = "A batch with the same name already exists for this batch type.";
-      //   return;
-      // }
+      if (this.isDuplicateBatch() && !this.isEditing) {
+        this.errorMessage = "A batch with the same name already exists for this batch type.";
+        return;
+      }
       const payload = {
         id: this.batchId,
         batchTypeId: this.batchType,
@@ -460,15 +454,15 @@ export default {
       batchName: this.batchName,
       startTime: this.startTime,
       endTime: this.endTime,
-    },
+    }
      
       };
 
       try {
         const res = await this.$store.dispatch("updateBatch", payload);
         if (res) {
-          // alert("Batch successfully updated!");
-          await this.$store.dispatch("fetchbatch");
+          alert("Batch successfully updated!");
+          this.$store.dispatch("fetchbatch");
           this.resetForm();
           this.showNotification("Batch successfully updated!");
         }
@@ -498,14 +492,8 @@ export default {
       this.resetForm();
     },
 
-    resetForm() {
-      this.batchId = null;
-      this.batchType = "";
-      this.batchName = "";
-      this.startTime = "";
-      this.endTime = "";
-      this.isEditing = false;
-    },
+  
+    
   },
   
 };

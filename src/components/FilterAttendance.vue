@@ -1624,10 +1624,10 @@ export default {
       this.filteredStudentList = this.students.filter(student =>
         student.userName.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
-    },
-    selectStudent(student) {
+    
+  },
+  selectStudent(student) {
       this.selectedStudent = student;
-      // this.selectedStudent = student.userName;
       this.searchQuery = student.userName;
       this.filteredStudentList = [];
     },

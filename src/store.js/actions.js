@@ -603,15 +603,14 @@ async getallbatchId({ rootGetters,commit }, payload) {
     return false; 
   }
 },
-// async fetchStudents({ commit },{ userId, startDate, endDate })  {
-//   const response = await axios.get(`/AdminReg/attendance/userDate-range?userId=${userId}&startDate=${startDate}&endDate=${endDate}`);
+// async fetchStudents({ commit }) {
+//   const response = await axios.get('/AdminReg/students');
 //   commit('SET_STUDENTS', response.data);
 // },
 // async fetchAttendance({ commit }, { userId, startDate, endDate }) {
 //   const response = await axios.get(`/AdminReg/attendance/userDate-range?userId=${userId}&startDate=${startDate}&endDate=${endDate}`);
 //   commit('SET_ATTENDANCE', response.data);
 // }
-
 async fetchStudents({ commit }) {
   const response = await axios.get('/AdminReg/students');
   commit('SET_STUDENTS', response.data);
