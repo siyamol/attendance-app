@@ -7,11 +7,7 @@
         <li><router-link to="/leave">Leave Request</router-link></li>
         <li><router-link to="/late">Late Request</router-link></li>
         <li><router-link to="/todaysatn"> Attendance</router-link></li>
-<<<<<<< HEAD
         <li><router-link to="/batch">Batch</router-link></li>
-=======
-     
->>>>>>> 7a37809e3a6358da34f09cbdd1975d198f97634c
         <li><router-link to="/filter">Attendance Filter</router-link></li>
         <li><router-link to="/batch">Batch</router-link></li>
       </ul>
@@ -266,11 +262,12 @@ tbody tr:nth-child(even) {
         <li><router-link to="/todaysatn">Attendance</router-link></li>
         <li><router-link to="/filter">Attendance Filter</router-link></li>
         <li><router-link to="/batch">Batch</router-link></li>
+        <li><router-link to="/wrk">Work from Home</router-link></li>
       </ul>
     </div>
   
     <div class="main-content">
-      <h2>Manage Batches</h2>
+      <h2 class="mb">Manage Batches</h2>
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
@@ -279,11 +276,12 @@ tbody tr:nth-child(even) {
       </div>
       <form @submit.prevent="isEditing ? updateBatch() : addBatch()" class="batch-form">
         
-        
-      <!-- <form @submit.prevent="isEditing ? updateBatch() : addBatch()" class="batch-form"> -->
+<!--         
+       <form @submit.prevent="isEditing ? updateBatch() : addBatch()" class="batch-form">  -->
         <input v-model="batchName" type="text" placeholder="Batch Name" required />
         <input v-model="startTime" type="time" required />
         <input v-model="endTime" type="time" required />
+         
         <!-- <select v-model="batchType" class="batch-type-box" required>
 
      <option value="Select Batch Type">Select Batch Type</option> 
@@ -353,16 +351,17 @@ export default {
       startTime: "",
       endTime: "",
       isEditing: false, 
+      
       // errorMessage: "",
     };
   },
   computed: {
-    ...mapGetters(["getBatch","getType"]),
+    ...mapGetters(["getBatchid","getType"]),
     batchTypes() {
       return this.getType;
     },
     batches() {
-      return this.getBatch;
+      return this.getBatchid; 
     }
   },
 
@@ -375,12 +374,13 @@ export default {
   //       console.log('Failed to fetch batch types');
   //     }
   //   },
-  mounted() {
-    this.$store.dispatch("fetchbatch");
+  async mounted() {
     this.$store.dispatch('getallbatchType');
-
+    await this.fetchBatches(); // Fetch batches when the component is mounted
+    // await this.fetchAttendanceRecords(); // Fetch initial attendance records
   },
   methods: {
+    
     isDuplicateBatch() {
       return this.batches.some(
         (batch) =>
@@ -388,44 +388,53 @@ export default {
           batch.batchType === this.batchType
       );
     },
-    async addBatch() {
-      this.errorMessage = "";
-      if (!this.batchType || !this.batchName || !this.startTime || !this.endTime) {
-
-       this.errorMessage = "Please fill all fields.";
-        return;
-      
-      }
-          // Check for duplicate batch name
-          if (this.isDuplicateBatch()) {
-        this.errorMessage = "A batch with the same name already exists for this batch type.";
-        return;
-      }
-      const payload = {
-        id:this.batchType,
-        data:{
-        batchName: this.batchName,
-        startTime: this.startTime + ":00",
-        endTime: this.endTime + ":00",
-      }
-      };
-
+    showNotification(message) {
+      this.notificationMessage = message;
+      setTimeout(() => {
+        this.notificationMessage = ""; // Clear the message after 3 seconds
+      }, 3000);
+    },
+    async fetchBatches() {
       try {
-        const res = await this.$store.dispatch("addBatch", payload);
-        if (res) {
-          // alert("Batch successfully added!");
-          // this.$store.dispatch("fetchbatch");
-          // this.resetForm();
-          await this.$store.dispatch("fetchbatch"); // Fetch updated batches
-          this.resetForm(); // Reset form fields
-          this.showNotification("Batch successfully added!"); 
-        }
+        await this.$store.dispatch("fetchAllBatches"); // Dispatch the Vuex action
+        console.log("Batches fetched successfully");
       } catch (error) {
-        console.error("Error adding batch:", error);
-        this.errorMessage = "Failed to add batch. Please try again.";
+        console.error("Error fetching batches:", error);
+        this.errorMessage = "Failed to fetch batches. Please try again.";
       }
     },
+    async addBatch() {
+  // this.errorMessage = "";
+  if (!this.batchType || !this.batchName || !this.startTime || !this.endTime) {
+    this.errorMessage = "Please fill all fields.";
+    return;
+  }else{
+    console.log("error")
+  }
+  const payload = {
+    id: this.batchType,
+    data: {
+      batchName: this.batchName,
+      startTime: this.startTime + ":00",
+      endTime: this.endTime + ":00",
+    },
+  };
 
+  try {
+    const res = await this.$store.dispatch("addBatch", payload);
+    console.log(res);
+    if (res) {
+      this.fetchBatches(); // Fetch updated batches
+      // this.resetForm(); // Reset form fields
+      this.showNotification("Batch successfully added!"); // Show non-blocking notification
+    }else{
+      console.log("error")
+    }
+  } catch (error) {
+    console.error("Error adding batch:", error);
+    // this.errorMessage = error.response.data;
+  }
+},
   
     editBatch(batch) {
       this.batchId = batch.id;
@@ -438,7 +447,7 @@ export default {
 
     async updateBatch() {
       this.errorMessage = "";
-      if (!this.batchName || !this.startTime || !this.endTime) {
+      if (!this.batchName || !this.startTime || !this.endTime || !this.batchType) {
         // alert("Please fill all fields.");
         this.errorMessage = "Please fill all fields.";
         return;
@@ -459,12 +468,14 @@ export default {
       };
 
       try {
-        const res = await this.$store.dispatch("updateBatch", payload);
+        const res = this.$store.dispatch("updateBatch", payload);
         if (res) {
-          alert("Batch successfully updated!");
-          this.$store.dispatch("fetchbatch");
-          this.resetForm();
+          // alert("Batch successfully updated!");
+          await this.$store.dispatch("fetchbatch"); 
+          this.showNotification("Batch successfully deleted!"); 
+          // this.resetForm();
           this.showNotification("Batch successfully updated!");
+          this.fetchBatches();
         }
       } catch (error) {
         // console.error(error);
@@ -478,7 +489,7 @@ export default {
         try {
           const res = await this.$store.dispatch("dltBatch", id);
           if (res) {
-            this.$store.dispatch("fetchbatch");
+            this.fetchBatches();
             this.showNotification("Batch successfully deleted!"); 
           }
         } catch (error) {
@@ -775,5 +786,13 @@ input {
 
 .delete-btn:hover {
   background-color: rgb(254, 174, 242);
+}
+.mb {
+  text-align: center;
+  margin-top: 0px;
+  margin-right: 205px;
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #6d7078;
 }
 </style>

@@ -2072,6 +2072,7 @@ form input[type="submit"]:hover {
         <li><router-link to="/todaysatn">Attendance</router-link></li>
        <li><router-link to="/filter">Attendance Filter</router-link></li>
         <li><router-link to="/batch">Batch</router-link></li>
+        <li><router-link to="/wrk">Work from Home</router-link></li>
       </ul>
     </div>
     <div class="main-content">

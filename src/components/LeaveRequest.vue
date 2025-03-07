@@ -2646,6 +2646,7 @@ th.reason-column, td.reason-column {
         <li><router-link to="/todaysatn"> Attendance</router-link></li>
         <li><router-link to="/filter">Attendance Filter</router-link></li>
         <li><router-link to="/batch">Batch</router-link></li>
+        <li><router-link to="/wrk">Work from Home</router-link></li>
       </ul>
     </div>
 
@@ -2738,6 +2739,8 @@ th.reason-column, td.reason-column {
                 <span :class="getStatusClass(student.status)">{{ student.status }}</span>
               </div>
             </td>
+          </tr>
+        </tbody>
    <!-- <td class="status-column">
    
     </td>
@@ -2780,8 +2783,7 @@ th.reason-column, td.reason-column {
     The audio is not available.
   </div>
 </td> -->
-</tr>
-        </tbody>
+
         <!-- <tbody v-else>
           <tr>
             <td colspan="5">No records found</td>
@@ -2831,7 +2833,7 @@ export default {
       //   },
       // ],
       searchText: "",
-     userId: 1, // Replace with dynamic user ID if needed
+      userId: 1, // Replace with dynamic user ID if needed
       batchId: null,
       isLoading: true,
     };
@@ -2918,7 +2920,7 @@ export default {
           this.fetchUserLeaveRequestsData();
         }
       }catch (error) {
-          console.error(error);
+          console.error(error);  
       } 
     },
     async denyStudentreq(index) {

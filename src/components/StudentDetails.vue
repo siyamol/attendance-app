@@ -1551,6 +1551,7 @@ th, td {
         <li><router-link to="/todaysatn"> Attendance</router-link></li>
         <li><router-link to="/filter">Attendance Filter</router-link></li>
         <li><router-link to="/batch">Batch</router-link></li>
+        <li><router-link to="/wrk">Work from Home</router-link></li>
       </ul>
     </div>
  <div class="main-content">
@@ -1605,7 +1606,7 @@ th, td {
             
           <tr v-for="(student, index) in filteredStudents" :key="index">
             <td>{{ student.name }}</td>
-            <td>{{ student.batchId }}</td>
+            <td>{{ student.batchName}}</td>
             <td>{{ student.email }}</td> 
             <td>{{ student.phoneNumber }}</td>
             <td><button @click="removeStudent(student.userId)" class="remove-btn">Remove</button></td>

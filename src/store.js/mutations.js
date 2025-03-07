@@ -53,9 +53,9 @@ export default {
     setGetall(state, payload) {
       state.getall = payload;
      },
-    setBatchid(state, payload){
-      state.batchId = payload;
-    },
+    // setBatchid(state, payload){
+    //   state.batchId = payload;
+    // },
     setBatchleaverequests(state, payload) {
       state.batchLeaveRequests = payload;
     },
@@ -68,17 +68,34 @@ export default {
     SET_BATCH_LIST(state, batchList) {
       state.batchList = batchList;
     },
-    SET_ATTENDANCE_RECORDS(state, attendanceRecords) {
-      state.attendanceRecords = attendanceRecords;
+    // SET_ATTENDANCE_RECORDS(state, attendanceRecords) {
+    //   state.attendanceRecords = attendanceRecords;
+    // },
+    setBatchId(state, payload) {
+      state.batchId = payload;
     },
-    // setBatchId(state, payload) {
-    //   state.batchId = payload;
-    // },
-    // setBatchType(state, payload) {
-    //   state.batchType = payload;
-    // },
-    // setAttendanceRecords(state, payload) {
-    //   state.attendanceRecords = payload;
-    // },
+    setBatchType(state, payload) {
+      state.batchType = payload;
+    },
+    setAttendanceRecords(state, payload) {
+      state.attendanceRecords = payload;
+    },
+    setAttendanceRecordswrk(state, payload) {
+      state.attendanceRecordswrkhm = payload;
+    },
+    SET_BATCHES(state, batches) {
+      state.batches = batches; 
+    },
+   
+
     
+    setLeaveWfh(state, payload) {
+      state.leaveWfh = payload;
+    },
+    // setWfhRequests(state, payload) {
+    //   state.wfhRequests = payload;
+    // },
+    setWfhRequests(state, payload) {
+      state.wfhRequests = Array.isArray(payload) ? payload : []; // Ensure payload is an array
+    },
     };

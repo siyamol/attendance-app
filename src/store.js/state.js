@@ -1,8 +1,8 @@
 
 export default {
-  //  baseURL:'http://103.247.19.200:5050',
-   baseURL:'http://localhost:5050',
-  //  baseURL:'http://192.168.1.150:5050',
+    //  baseURL:'http://103.247.19.200:5050',
+    baseURL:'http://localhost:5050',
+    // baseURL:'http://192.168.1.150:5050',
     // baseURL:'http://192.168.1.45:5050',
 
 // baseURL:'http://192.168.1.110:5050',
@@ -22,16 +22,20 @@ export default {
     // anotherStatus: [],
     // batch:[],
     // allStudents: [] 
-    // batchType: [],
-    // batchId: [],
-    batchLeaveRequests: [],
-    students: [],
-    attendance: [],
-    batchList: [], // Stores all batches fetched from the API
-    attendanceRecords: [],
+    
+    // batchLeaveRequests: [],
   // batchId: [],
   // batchType: [],
   // attendanceRecords: [],
+  // students: [],
+    // attendance: [],
+    // batchList: [], 
+  batchId: [],
+  batchType: [],
+  attendanceRecords: [],
+  wfhRequests: [],
+  attendanceRecordswrkhm: [],
+  batches: [], 
   
  };
   

@@ -134,62 +134,70 @@ async fetchLateRequest({ rootGetters, commit }) {
     console.error(error);
   }
 },
+// async fetchBatchLateRequests({ commit, rootGetters }, batchId) {
+//   try {
+//     const response = await axios.get(`${rootGetters.getURL}/UserReg/late-requests?batchId=${batchId}`);
+//     commit('setBatchLateRequests', { batchId, requests: response.data });
+//   } catch (error) {
+//     console.error(error);
+//   }
+// },
 async fetchBatchLateRequests({ commit, rootGetters }, batchId) {
   try {
-    const response = await axios.get(`${rootGetters.getURL}/UserReg/late-requests?batchId=${batchId}`);
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/late-requests?batchId=${batchId}`);
     commit('setBatchLateRequests', { batchId, requests: response.data });
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching batch late requests:", error);
   }
 },
-async approveLate({ rootGetters }, payload) {
-  try {
-    const response = await axios.post(`${rootGetters.getURL}/AdminReg/approveLateRequest/${payload}`);
-    if (response.status >= 200 && response.status < 300) {
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error(error);
-  }
-},
-async denyLate({ rootGetters }, payload) {
-  try {
-    const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLateRequest/${payload}`);
-    if (response.status >= 200 && response.status < 300) {
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error(error);
-  }
-},
-async fetchUserLeaveRequests({ rootGetters, commit }, userId) {
-  try {
-    const response = await axios.get(`${rootGetters.getURL}/UserReg/leave-requests?userId=${userId}`);
-    if (response.status >= 200 && response.status < 300) {
-      const data = Array.isArray(response.data) ? response.data : [];
-        commit('setUserLeaveRequests', data); 
-        return true;
-    }
-    return false;
-  } catch (error) {
-    console.error(error);
-    commit('setUserLeaveRequests', []); // Fallback to an empty array on error
-      return false;
-  }
-},
-async approveLeave({ rootGetters }, payload) {
-  try {
-    const response = await axios.post(`${rootGetters.getURL}/AdminReg/approveLeaveRequest/${payload}`);
-    if (response.status >= 200 && response.status < 300) {
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error(error);
-  }
-},
+// async approveLate({ rootGetters }, payload) {
+//   try {
+//     const response = await axios.post(`${rootGetters.getURL}/AdminReg/approveLateRequest/${payload}`);
+//     if (response.status >= 200 && response.status < 300) {
+//       return true;
+//     }
+//     return false;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// },
+// async denyLate({ rootGetters }, payload) {
+//   try {
+//     const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLateRequest/${payload}`);
+//     if (response.status >= 200 && response.status < 300) {
+//       return true;
+//     }
+//     return false;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// },
+// async fetchUserLeaveRequests({ rootGetters, commit }, userId) {
+//   try {
+//     const response = await axios.get(`${rootGetters.getURL}/UserReg/leave-requests?userId=${userId}`);
+//     if (response.status >= 200 && response.status < 300) {
+//       const data = Array.isArray(response.data) ? response.data : [];
+//         commit('setUserLeaveRequests', data); 
+//         return true;
+//     }
+//     return false;
+//   } catch (error) {
+//     console.error(error);
+//     commit('setUserLeaveRequests', []); // Fallback to an empty array on error
+//       return false;
+//   }
+// },
+// async approveLeave({ rootGetters }, payload) {
+//   try {
+//     const response = await axios.post(`${rootGetters.getURL}/AdminReg/approveLeaveRequest/${payload}`);
+//     if (response.status >= 200 && response.status < 300) {
+//       return true;
+//     }
+//     return false;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// },
 async denyLeave({ rootGetters }, payload) {
   try {
     const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLeaveRequest/${payload}`);
@@ -201,7 +209,18 @@ async denyLeave({ rootGetters }, payload) {
     console.error(error);
   }
 },
-
+// async denyLeaves({ rootGetters }, payload) {
+//   try {
+//     const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLeaveRequest/${payload}`);
+//     if (response.status >= 200 && response.status < 300) {
+ 
+//       return true;
+//     }
+//     return false ;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// },
 
 
 
@@ -268,18 +287,7 @@ async approveLeaves({ rootGetters }, payload) {
     console.error(error);
   }
 },
-async denyLeaves({ rootGetters }, payload) {
-  try {
-    const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLeaveRequest/${payload}`);
-    if (response.status >= 200 && response.status < 300) {
-      // commit('setToken', response.data.token); 
-      return true;
-    }
-    return false ;
-  } catch (error) {
-    console.error(error);
-  }
-},
+
 async forgotPassword({ rootGetters,commit }, payload) {
   try {
     const response = await axios.post(`${rootGetters.getURL}/AdminReg/forgot-password`, payload);
@@ -505,19 +513,7 @@ async removeUser({  rootGetters,commit }, userId) {
     return false; 
   }
 },
-async addBatch({ rootGetters }, payload) {
-  try {
-     const response = await axios.post(`${rootGetters.getURL}/AdminReg/addBatch?batchTypeId=${payload.id}`,payload.data);
-  
-     if (response.status >= 200 && response.status < 300) {
-      
-      return true; 
-    }
-  } catch (error) {
-    console.error('Error removing user:', error);
-    return false; 
-  }
-},
+
 async fetchbatch({ rootGetters,commit }) {
   try {
     const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatches`);
@@ -560,22 +556,22 @@ async dltBatch({  rootGetters }, payload) {
 //  }
 //  return false;
 // },
-async updateBatch({ rootGetters, dispatch }, payload) {
-  try {
-    const response = await axios.put(
-      `${rootGetters.getURL}/AdminReg/updateBatch?id=${payload.id}&batchTypeId=${payload.batchTypeId}`,
-      payload.data
-    );
+// async updateBatch({ rootGetters, dispatch }, payload) {
+//   try {
+//     const response = await axios.put(
+//       `${rootGetters.getURL}/AdminReg/updateBatch?id=${payload.id}&batchTypeId=${payload.batchTypeId}`,
+//       payload.data
+//     );
 
-    if (response.status >= 200 && response.status < 300) {
-      await dispatch("fetchbatch"); // Fetch updated batches
-      return true;
-    }
-  } catch (error) {
-    console.error("Error updating batch:", error);
-  }
-  return false;
-},
+//     if (response.status >= 200 && response.status < 300) {
+//       await dispatch("fetchbatch"); // Fetch updated batches
+//       return true;
+//     }
+//   } catch (error) {
+//     console.error("Error updating batch:", error);
+//   }
+//   return false;
+// },
 
 async getallbatchType({ rootGetters,commit }, payload) {
   try {
@@ -617,55 +613,192 @@ async fetchStudents({ commit }) {
 },
  // Fetch all batches from the backend
 
- async fetchAllBatches({ commit }) {
+
+
+
+
+async fetchBatchTypes({ commit }) {
   try {
-    const response = await axios.get("/AdminReg/getAllBatches");
-    if (response.status === 200) {
-      commit("SET_BATCH_LIST", response.data); // Update state with batch list
+    const response = await axios.get("/AdminReg/getAllBatchType");
+    commit("SET_BATCH_TYPES", response.data);
+  } catch (error) {
+    console.error("Error fetching batch types:", error);
+  }
+},
+async addBatch({  rootGetters }, payload) {
+  try {
+    const response = await axios.post(
+      `${rootGetters.getURL}/AdminReg/addBatch?batchTypeId=${payload.id}`,
+      payload.data
+    );
+
+    if (response.status >= 200 && response.status < 300) {
+      // commit('ADD_BATCH', response.data); 
+      return true; // Indicate success
     }
   } catch (error) {
-    console.error("Error fetching batches:", error);
+    console.error('Error adding batch:', error);
+    // throw error; // Rethrow the error to handle it in the component
   }
 },
 
-// Fetch attendance records based on batch ID (optional)
-async fetchAttendanceRecords({ commit }, batchId = null) {
+async updateBatch({ rootGetters, dispatch },payload ) {
   try {
-    const url = batchId
-      ? `/AdminReg/attendance/today?batchId=${batchId}`
-      : "/AdminReg/attendance/today";
-    const response = await axios.get(url);
-    if (response.status === 200) {
-      commit("SET_ATTENDANCE_RECORDS", response.data); // Update state with attendance records
+    // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
+    // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
+    const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatch?id=${payload.id}&batchTypeId=${payload.batchTypeId}`,payload.data);
+
+   if (response.status >= 200 && response.status < 300) {
+      await dispatch("fetchBatch");
+      return true; 
+    }
+    
+  } catch (error) {
+    console.error("Error updating batch:", error);
+ }
+ return false;
+},
+
+// async fetchAllBatches({ commit }) {
+//   try {
+//     const response = await axios.get('/AdminReg/getAllBatches'); // Fetch batches from API
+//     commit('SET_BATCHES', response.data); // Save batches to state
+//   } catch (error) {
+//     console.error('Error fetching batches:', error);
+//   }
+// },
+async fetchAttendanceRecords({ commit, rootGetters }, batchId) {
+  try {
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/attendance/today?batchId=${batchId}`);
+    if (response.status >= 200 && response.status < 300) {
+      commit('setAttendanceRecords', response.data);
+      return true;
     }
   } catch (error) {
-    console.error("Error fetching attendance records:", error);
+    console.error('Error fetching attendance records:', error);
+    return false;
   }
 },
-// async fetchAllBatches({ commit, rootGetters }) {
-//     try {
-//       const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatches`);
-//       if (response.status >= 200 && response.status < 300) {
-//         commit('setBatchId', response.data);
-//         return true;
-//       }
-//     } catch (error) {
-//       console.error('Error fetching batches:', error);
-//       return false;
-//     }
-//   },
-//   async fetchAttendanceRecords({ commit, rootGetters }, batchId) {
-//     try {
-//       const response = await axios.get(`${rootGetters.getURL}/AdminReg/attendance/today?batchId=${batchId}`);
-//       if (response.status >= 200 && response.status < 300) {
-//         commit('setAttendanceRecords', response.data);
-//         return true;
-//       }
-//     } catch (error) {
-//       console.error('Error fetching attendance records:', error);
-//       return false;
-//     }
-//   },
+async fetchAllBatches({ commit, rootGetters }) {
+  try {
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatches`);
+    if (response.status >= 200 && response.status < 300) {
+      commit('setBatchId', response.data);
+      return true;
+    }
+  } catch (error) {
+    console.error('Error fetching batches:', error);
+    return false;
+  }
+},
+async fetchAtn({rootGetters, commit},payload){
+  try{
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/attendance/today?batchId=${payload}`);
+    if (response.status >= 200 && response.status < 300) {
+      commit('setAttendanceRecords', response.data);
+      return true;
+    }
+  } catch (error) {
+    console.error('Error fetching batches:', error);
+    return false;
+  }
+  
+},
+
+async fetchAttendanceRecordswrk({ commit, rootGetters }, batchId) {
+  try {
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/attendance/today?batchId=${batchId}`);
+    if (response.status >= 200 && response.status < 300) {
+      commit('setAttendanceRecordswrk', response.data);
+      return true;
+    }
+  } catch (error) {
+    console.error('Error fetching attendance records:', error);
+    return false;
+  }
+},
+async fetchAtnwrk({rootGetters, commit},payload){
+  try{
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/attendance/today?batchId=${payload}`);
+  
+    if (response.status >= 200 && response.status < 300) {
+      commit('setAttendanceRecordswrk', response.data);
+      return true;
+    }
+  } catch (error) {
+    console.error('Error fetching batches:', error);
+    return false;
+  }
+  
+},
+
+
+async fetchLeaveshome({ rootGetters,commit }) {
+  try {
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/LeaveWfh`);
+    if (response.status >= 200 && response.status < 300) {
+      commit('setLeavehome', response.data); 
+      return true;
+    }
+    return false ;
+  } catch (error) {
+    console.error(error);
+  }
+},
+async fetchLeaveWfh({ commit, rootGetters }) {
+  try {
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/LeaveWfh`);
+    if (response.status >= 200 && response.status < 300) {
+      commit('setLeaveWfh', response.data);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+},
+
+
+async approveWorkFromHomeRequest({ rootGetters }, requestId) {
+  try {
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/approveWorkFromHomeRequest/${requestId}`);
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+},
+
+async rejectWorkFromHomeRequest({ rootGetters }, requestId) {
+  try {
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectWorkFromHomeRequest/${requestId}`);
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+},
+async fetchWfhRequestsByStatusAndBatch({ commit, rootGetters }, { status, batchId }) {
+  try {
+    const response = await axios.get(`${rootGetters.getURL}/AdminReg/getWfhRequestsByStatusAndBatch?status=${status}&batchId=${batchId}`);
+    if (response.status >= 200 && response.status < 300) {
+      commit('setWfhRequests', response.data);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+},
+
 };
 
 

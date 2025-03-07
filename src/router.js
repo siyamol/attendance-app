@@ -10,11 +10,11 @@
 
 
 import { createRouter, createWebHistory } from 'vue-router';
- import NavBar from './components/NavBar.vue';
+import NavBar from './components/NavBar.vue';
 import RegisterPage from'./components/RegisterPage.vue';
 import FooterPage from './components/FooterPage.vue';
 import AdminloginPage from './components/AdminloginPage.vue';
- import HomePage from './components/HomePage.vue';
+import HomePage from './components/HomePage.vue';
 import AdminmainPage from './components/AdminmainPage.vue';
 import SideBar from './components/SideBar.vue';
 
@@ -27,6 +27,7 @@ import TodaysAttendance from './components/TodaysAttendance.vue';
 import AboutPage from './components/AboutPage.vue';
 import FilterAttendance from './components/FilterAttendance.vue';
 import BatchPage from './components/BatchPage.vue';
+import WorkfromHome from './components/WorkfromHome.vue';
 const routes = [
 
   { path: '/', component: HomePage },  
@@ -46,7 +47,8 @@ const routes = [
   { path: '/todaysatn',component:TodaysAttendance}  ,
   { path: '/about',component:AboutPage},
   { path: '/filter',component:FilterAttendance},
-  { path: '/batch',component:BatchPage}
+  { path: '/batch',component:BatchPage},
+  { path: '/wrk',component:WorkfromHome}
 ];
 
 
