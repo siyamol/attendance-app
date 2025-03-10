@@ -429,8 +429,8 @@
         <ul class="menu-items">
           <li><router-link to="/">Home</router-link></li>
           <!-- <li><router-link to="/adminmain">Adminmainpage</router-link></li> -->
-          <li><router-link to="/admin">Login</router-link></li>
-          <li><router-link to="/admin">Logout</router-link></li>
+          <li  v-if="!isLogin"><router-link to="/admin">Login</router-link></li>
+          <li v-else><router-link to="/admin" @click="logout">Logout</router-link></li>
           <li><router-link to="/about">About</router-link></li>
      
         
@@ -443,6 +443,16 @@
   <script>
   export default {
     name: 'NavBar',
+    computed:{
+      isLogin(){
+        return this.$store.state.login;
+      }
+    },
+    methods:{
+      logout(){
+        this.$store.commit('setLogin',false);
+      }
+    }
   };
   </script>
   

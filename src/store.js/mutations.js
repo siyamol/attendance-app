@@ -2,6 +2,10 @@ export default {
     setToken(state, payload) {
       state.token = payload;
     },
+    setLogin(state, payload) {
+      state.login = payload;
+      sessionStorage.setItem('login', payload);
+    },
     setUsers(state,payload) {
       state.allUsers = payload;
     },

@@ -42,7 +42,8 @@ async adminLogin({ rootGetters,commit }, payload) {
   try {
     const response = await axios.post(`${rootGetters.getURL}/AdminReg/login`, payload);
     if (response.status >= 200 && response.status < 300) {
-      commit('setToken', response.data.token); 
+      commit('setToken', response.data.token);
+      commit('setLogin', true); 
       return true;
     }
     return false ;

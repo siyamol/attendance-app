@@ -3,6 +3,7 @@ export default {
     getURL: (state) =>state.baseURL,
     getData: (state) => state.data,
     getToken: (state) => state.getToken,
+    getLogin: (state) => state.login,
     getUsers: (state) => state.allUsers,
     getLate: (state) => state.allLate,
      getBatchLateRequests: (state) => (batchId) => state.batchLateRequests[batchId] || [],
