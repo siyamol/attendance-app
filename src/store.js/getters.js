@@ -6,7 +6,7 @@ export default {
     getLogin: (state) => state.login,
     getUsers: (state) => state.allUsers,
     getLate: (state) => state.allLate,
-     getBatchLateRequests: (state) => (batchId) => state.batchLateRequests[batchId] || [],
+    getBatchLateRequests: (state) => (batchId) => state.batchLateRequests[batchId] || [],
     
     getLeave: (state) => state.allLeave,
     getStatus: (state) => state.allStatus,
@@ -37,11 +37,7 @@ export default {
     getCustomBatches: (state) => state.batchList.filter((batch) => batch.type === "custom"), // Getter for custom batches
     getRegularBatches: (state) => state.batchList.filter((batch) => batch.type === "regular"), // Getter for regular batches
     getBatches: (state) => state.batches,
-   
-
-
-
-
+    // getBatchLateRequests:(state) => state.leave,
     getLeaveWfh: (state) => state.leaveWfh,
     getWfhRequests: (state) => state.wfhRequests,
 };

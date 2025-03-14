@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <!-- Sidebar -->
+   
     <div class="sidebar">
       <h2>Admin Menu</h2>
       <ul>
@@ -12,7 +12,7 @@
       </ul>
     </div>
 
-    <!-- Main Content -->
+  
     <div class="main-content">
       <router-view />
     </div>

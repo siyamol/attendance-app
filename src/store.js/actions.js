@@ -1,42 +1,4 @@
-
-// import axios from 'axios';
-
-// export default {
-//   async adminLogin({ commit,rootGetters},payload) {
-//     try {
-//       console.log("action payload",payload)
-
-//       const response = await axios.post(`${rootGetters.getURL}/AdminReg/login` , payload);
-//       if(response.status >= 200 && response.status < 300){
-//         console.log("response",response)
-//         commit('setToken', response.data.token);
-//         return response.status;
-//       }
-     
-//     } catch (error) {
-//       console.error('Error fetching data:', error);
-//       // return null; 
-//       console.error('Detailed error:', error.response?.data);
-//       return error.response?.data?.message || 'An error occurred';
-//     }
-//   },
-
-
-
-
-  
-// Example Vuex action
-
-
-
-
-
-
-
-
 import axios from 'axios';
-
-
 export default {
 async adminLogin({ rootGetters,commit }, payload) {
   try {
@@ -104,48 +66,11 @@ async fetchStatus({rootGetters,commit}) {
     console.error(error);
   }
 },
-async allLates({ rootGetters,commit }) {
-  try {
-    const response = await axios.get(`${rootGetters.getURL}/AdminReg/getLateRequestsForToday`);
-    if (response.status >= 200 && response.status < 300) {
-      commit('setLate', response.data); 
-      return true;
-    }
-    return false ;
-  } catch (error) {
-    console.error(error);
-  }
-},
 
-
-
-
-
-
-
-
-
-
-
-async fetchLateRequest({ rootGetters, commit }) {
-  try {
-    const response = await axios.get(`${rootGetters.getURL}/AdminReg/late-requests`);
-    commit('setLate', response.data);
-  } catch (error) {
-    console.error(error);
-  }
-},
-// async fetchBatchLateRequests({ commit, rootGetters }, batchId) {
-//   try {
-//     const response = await axios.get(`${rootGetters.getURL}/UserReg/late-requests?batchId=${batchId}`);
-//     commit('setBatchLateRequests', { batchId, requests: response.data });
-//   } catch (error) {
-//     console.error(error);
-//   }
-// },
 async fetchBatchLateRequests({ commit, rootGetters }, batchId) {
   try {
     const response = await axios.get(`${rootGetters.getURL}/AdminReg/late-requests?batchId=${batchId}`);
+  
     commit('setBatchLateRequests', { batchId, requests: response.data });
   } catch (error) {
     console.error("Error fetching batch late requests:", error);
@@ -210,23 +135,6 @@ async denyLeave({ rootGetters }, payload) {
     console.error(error);
   }
 },
-// async denyLeaves({ rootGetters }, payload) {
-//   try {
-//     const response = await axios.post(`${rootGetters.getURL}/AdminReg/rejectLeaveRequest/${payload}`);
-//     if (response.status >= 200 && response.status < 300) {
- 
-//       return true;
-//     }
-//     return false ;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// },
-
-
-
-
-
 
 async fetchLeaves({ rootGetters,commit }) {
   try {
@@ -301,69 +209,7 @@ async forgotPassword({ rootGetters,commit }, payload) {
     console.error(error);
   }
 },
-// async fetchFilter({ rootGetters,commit },payload) {
-//   try {
-//     const response = await axios.get(`${rootGetters.getURL}/AdminReg/date-range?startDate=${payload.startDate}&endDate=${payload.endDate}`);
-//     if (response.status >= 200 && response.status < 300) {
-//       commit('setStatus', response.data); 
-//       return true;
-//     }
-//     return false ;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// // },
-// Backend dd mmm yyyyy
-// async fetchFilter({ rootGetters, commit }, payload) {
-//   try {
-//     const formatDate = (dateString) => {
-//       if (!dateString) return ''; 
-//       const [month, day, year] = dateString.split('/');
-//       return `${day}/${month}/${year}`; 
-//     };
 
-//     const startDateFormatted = formatDate(payload.startDate);
-//     const endDateFormatted = formatDate(payload.endDate);
-
-//     const response = await axios.get(
-//       `${rootGetters.getURL}/AdminReg/date-range?startDate=${startDateFormatted}&endDate=${endDateFormatted}`
-//     );
-
-//     if (response.status >= 200 && response.status < 300) {
-//       commit('setStatus', response.data);
-//       return true;
-//     }
-//     return false;
-//   } catch (error) {
-//     console.error("Error in fetchFilter:", error);
-//     return false; 
-//   }
-// }
-//  backend yyyy mm dd
-// async fetchFilter({ rootGetters, commit }, payload) {
-//   try {
-  
-//     const startDate = new Date(payload.startDate);
-//     const endDate = new Date(payload.endDate);
-
-  
-//     const formattedStartDate = startDate.toISOString().split('T')[0]; 
-//     const formattedEndDate = endDate.toISOString().split('T')[0]; 
-
-    
-//     const response = await axios.get(
-//       `${rootGetters.getURL}/AdminReg/date-range?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
-//     );
-    
-//     if (response.status >= 200 && response.status < 300) {
-//       commit('setStatus', response.data); 
-//       return true;
-//     }
-//     return false;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
 async fetchFilter({ rootGetters, commit }, payload) {
   try {
     // Convert frontend date format (MM/DD/YYYY) to backend format (YYYY-MM-DD)
@@ -391,115 +237,6 @@ async fetchFilter({ rootGetters, commit }, payload) {
     console.error("Error in fetchFilter:", error);
   }
 },
-
-
-
-// async deleteUser({ commit }, userId) {
-//   try {
-//     const response = await axios.delete(`/AdminReg/deleteUser/7`, {
-//       params: { id: userId }  
-//     });
-
-//     if (response.status >= 200 && response.status < 300) {
-//       commit('removeUser', userId);
-//       return true;
-//     }
-//     return false;
-//   } catch (error) {
-//     console.error("Error deleting user:", error.response ? error.response.data : error.message);
-//     return false;
-//   }
-// },
-
-// async fetchStudents({ commit }) {
-//   try {
-//     const response = await axios.get('/AdminReg/getAllStudents');  
-//     commit('setStudents', response.data);
-//   } catch (error) {
-//     console.error('Error fetching students:', error);
-//   }
-// },
-
-// async deleteStudent({ commit }, studentId) {
-//   try {
-   
-//     const response = await axios.delete(`/AdminReg/deleteUser/${studentId}`);
-    
-//     if (response.status >= 200 && response.status < 300) {
-     
-//       commit('removeStudent', studentId);
-//       return true;  
-//     }
-    
-//     return false;  
-//   } catch (error) {
-//     console.error('Error deleting student:', error);
-//     return false;
-//   }
-// }const actions = {
-  // async fetchUsers({ commit, rootGetters }) {
-  //   try {
-  //     const response = await axios.get(`${rootGetters.getURL}/AdminReg/getUsers`);
-  //     console.log("Fetched students:", response.data);
-  //     commit('setUsers', response.data); 
-  //   } catch (error) {
-  //     console.error("Error fetching students:", error);
-  //   }
-  // },
-
-  // async deleteUser({ commit, rootGetters }, userId) {
-  //   try {
-  //     const response = await axios.delete(`${rootGetters.getURL}/AdminReg/deleteUser?id=${userId}`);
-  //     if (response.status >= 200 && response.status < 300) {
-  //       commit('removeStudent', userId); 
-  //       return true;
-  //     }
-  //     return false;
-  //   } catch (error) {
-  //     console.error("Error deleting student:", error);
-  //     return false;
-  //   }
-  // }async fetchFilter({ rootGetters,commit },payload) {
-//   try {
-//     const response = await axios.get(`${rootGetters.getURL}/AdminReg/date-range?startDate=${payload.startDate}&endDate=${payload.endDate}`);
-//     if (response.status >= 200 && response.status < 300) {
-//       commit('setStatus', response.data); 
-//       return true;
-//     }
-//     return false ;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// // },
-
-// async removeUser({ rootGetters, commit }, userId) {
-//   try {
-//     const response = await axios.delete(`${rootGetters.getURL}/AdminReg/deleteUser/${userId}`);
-    
-//     if (response.status >= 200 && response.status < 300) {
-//       commit('setRemove', userId); 
-//       return true;
-//     }
-//     return false;
-//   } catch (error) {
-//     console.error('Error deleting user:', error);
-//     return false;
-//   }
-// }
-// async removeUser({ rootGetters, commit }, userId) {
-//   try {
-//     const response = await axios.delete(`${rootGetters.getURL}/AdminReg/deleteUser/${userId}`);
-    
-//     if (response.status >= 200 && response.status < 300) {
-//       commit('setRemove', userId); 
-//       return true;
-//     }
-//     return false;
-//   } catch (error) {
-//     console.error('Error deleting user:', error);
-//     return false;
-//   }
-// }
 
 async removeUser({  rootGetters,commit }, userId) {
   try {
@@ -541,39 +278,6 @@ async dltBatch({  rootGetters }, payload) {
   }
 },
 
-// async updateBatch({ rootGetters, dispatch },payload ) {
-//   try {
-//     // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
-//     // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
-//     const response = await axios.post(`${rootGetters.getURL}/AdminReg/updateBatch?batchTypeId=${payload.id}`,payload.data);
-
-//    if (response.status >= 200 && response.status < 300) {
-//       await dispatch("fetchBatch");
-//       return true; 
-//     }
-    
-//   } catch (error) {
-//     console.error("Error updating batch:", error);
-//  }
-//  return false;
-// },
-// async updateBatch({ rootGetters, dispatch }, payload) {
-//   try {
-//     const response = await axios.put(
-//       `${rootGetters.getURL}/AdminReg/updateBatch?id=${payload.id}&batchTypeId=${payload.batchTypeId}`,
-//       payload.data
-//     );
-
-//     if (response.status >= 200 && response.status < 300) {
-//       await dispatch("fetchbatch"); // Fetch updated batches
-//       return true;
-//     }
-//   } catch (error) {
-//     console.error("Error updating batch:", error);
-//   }
-//   return false;
-// },
-
 async getallbatchType({ rootGetters,commit }, payload) {
   try {
      const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatchType`,payload);
@@ -600,24 +304,11 @@ async getallbatchId({ rootGetters,commit }, payload) {
     return false; 
   }
 },
-// async fetchStudents({ commit }) {
-//   const response = await axios.get('/AdminReg/students');
-//   commit('SET_STUDENTS', response.data);
-// },
-// async fetchAttendance({ commit }, { userId, startDate, endDate }) {
-//   const response = await axios.get(`/AdminReg/attendance/userDate-range?userId=${userId}&startDate=${startDate}&endDate=${endDate}`);
-//   commit('SET_ATTENDANCE', response.data);
-// }
+
 async fetchStudents({ commit }) {
   const response = await axios.get('/AdminReg/students');
   commit('SET_STUDENTS', response.data);
 },
- // Fetch all batches from the backend
-
-
-
-
-
 async fetchBatchTypes({ commit }) {
   try {
     const response = await axios.get("/AdminReg/getAllBatchType");
@@ -659,15 +350,6 @@ async updateBatch({ rootGetters, dispatch },payload ) {
  }
  return false;
 },
-
-// async fetchAllBatches({ commit }) {
-//   try {
-//     const response = await axios.get('/AdminReg/getAllBatches'); // Fetch batches from API
-//     commit('SET_BATCHES', response.data); // Save batches to state
-//   } catch (error) {
-//     console.error('Error fetching batches:', error);
-//   }
-// },
 async fetchAttendanceRecords({ commit, rootGetters }, batchId) {
   try {
     const response = await axios.get(`${rootGetters.getURL}/AdminReg/attendance/today?batchId=${batchId}`);
@@ -732,8 +414,6 @@ async fetchAtnwrk({rootGetters, commit},payload){
   }
   
 },
-
-
 async fetchLeaveshome({ rootGetters,commit }) {
   try {
     const response = await axios.get(`${rootGetters.getURL}/AdminReg/LeaveWfh`);
