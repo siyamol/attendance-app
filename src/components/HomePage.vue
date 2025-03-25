@@ -68,11 +68,11 @@ export default {
     onMounted(() => {
       generateQr(); // Initial QR generation
       fetchStatus(); // Fetch status immediately
-      intervalId = setInterval(fetchStatus, 5000); // Fetch status every 5 seconds
+      intervalId = setInterval(fetchStatus, 5000); 
     });
 
     onUnmounted(() => {
-      clearInterval(intervalId); // Stop polling when component unmounts
+      clearInterval(intervalId); 
     });
 
     return { Qr, isLoading, generateQr, fetchStatus };
@@ -92,7 +92,7 @@ export default {
 }
 
 .title {
-  margin-top: 1px; /* Adjust this to move the heading down */
+  margin-top: 1px;
 }
 
 .img {

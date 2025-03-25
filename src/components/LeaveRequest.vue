@@ -15,58 +15,24 @@
 
     <div class="main-content">
       <h1 class="thr">Leave Request</h1>
-      <!-- <div class="search-bar-container ms-5">
+      
+      <div class="ms-5 d-flex justify-content-between me-3">
         <div class="search-bar">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search icon" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
           </svg>
-          <input v-model="searchText" type="text" placeholder="Search by Name/Batch" />
-          <input type="date" v-model="selectedDate" class="date-picker" />  -->
-          
-          <!-- <input type="date" v-model="selectedDate" @change="search" class="date-picker" /> -->
-        <!-- </div>
-      </div> -->
-      
-      <!-- <div class="filters-container">
-        <div class="filter">
-          <label for="nameSearch">Search by Name:</label>
-          <input id="nameSearch" v-model="searchText" type="text" placeholder="Enter Name" />
+          <input v-model="searchText" type="text" placeholder="Search by Name" @input="search" />
         </div>
-      
+        
         <div class="filter">
-          <label for="batchFilter">Filter by Batch:</label>
-          <select id="batchFilter" v-model="searchBatch" type="text" placeholder="Enter Batch">
-            <option value="">All</option>
-            <option value="morning batch">Morning</option>
-            <option value="evening batch">Evening</option>
+          
+          <select id="batchFilter" v-model="searchBatch">
+            <option value="">Select Batch</option>
+            
           </select>
         </div>
-      </div>    -->
-      <!-- Date Picker -->
-        <!-- <div class="filter">
-          <label for="dateFilter">Filter by Date:</label>
-
-          <input 
-            id="dateFilter" 
-            type="date" 
-            v-model="selectedDate" 
-            @change="updateFormattedDate"
-          />
-        </div> -->
-        
-        <div class=" ms-5 d-flex justify-content-end me-3">
-        <div class="search">
-          <div class="search-bar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search icon" viewBox="0 0 16 16">
-              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-            </svg>
-            <input v-model="searchText" type="text" placeholder="Search by Name/Batch" @input="search" />
-          </div>
-          
-        </div>
-  
+      </div>
       
-      </div> 
       <table>
         <thead>
           <tr>
@@ -78,22 +44,18 @@
             <th>Type of Leave</th>
             <th class="reason-column">Reason for Leave</th>
             <th class="status-column">Today's Status</th>
-            <!-- <th>Reason for Leave</th>
-            <th>Today's Status</th> -->
           </tr>
         </thead>
         <tbody v-if="filteredLeaveRequest && filteredLeaveRequest.length > 0">
-        <!-- <tbody v-if="leaveRequest && leaveRequest.length >0"> -->
-          <!-- <tr v-for="(student, index) in leaveRequest" :key="index"> -->
-            <tr v-for="(student, index) in filteredLeaveRequest" :key="index">
+          <tr v-for="(student, index) in filteredLeaveRequest" :key="index">
             <td>{{ student.name }}</td>
             <td>{{ student.batch }}</td>
-            <td>{{ student.fromDate? formatDate(student.fromDate) : '' }}</td>
-            <td>{{ student.toDate? formatDate(student.toDate) : '' }}</td>
+            <td>{{ student.fromDate ? formatDate(student.fromDate) : '' }}</td>
+            <td>{{ student.toDate ? formatDate(student.toDate) : '' }}</td>
             <td>{{ student.numberOfDays }}</td>
             <td>{{ student.leaveType }}</td>
-             <td class="reason-column">{{ student.reason }}</td>
-             <td>
+            <td class="reason-column">{{ student.reason }}</td>
+            <td>
               <div v-if="student.status == 'PENDING'" class="status-buttons">
                 <button @click="approveStudent(index)" class="approve-btn">Approve</button>
                 <button @click="denyStudentreq(index)" class="deny-btn">Deny</button>
@@ -104,56 +66,7 @@
             </td>
           </tr>
         </tbody>
-   <!-- <td class="status-column">
-   
-    </td>
-           -->
-            <!-- <td class="reason-column">
-              <div v-if="student.voiceNote">
-                <audio v-if="student.voiceNote" controls>
-                  <source :src="student.voiceNote" type="audio/mpeg" />
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-              <div v-else>
-                {{ student.reasonForLeave }}
-              </div>
-            </td> -->
-            <!-- <td class="reason-column"> -->
-              <!-- <div v-if="student.voiceNote">
-                <div class="audio-container">
-                  <audio
-                    ref="audioPlayers"
-                    :src="student.voiceNote"
-                    controls
-                    class="audio-player"
-                  ></audio>
-                </div>
-               </div> -->
-              <!-- <div v-else>
-                {{ student.reason }}
-              </div> -->
-            <!-- </td>  -->
-
-            <!-- <td class="reason-column">
-  <div v-if="student.voiceNote">
-    <audio controls>
-      <source :src="student.voiceNote" type="audio/mpeg" />
-      Your browser does not support the audio element. Please try a different browser.
-    </audio>
-  </div>
-  <div v-else>
-    The audio is not available.
-  </div>
-</td> -->
-
-        <!-- <tbody v-else>
-          <tr>
-            <td colspan="5">No records found</td>
-         
-          </tr>
-       </tbody> -->
-       <tbody v-else>
+        <tbody v-else>
           <tr>
             <td colspan="8">No records found</td>
           </tr>
@@ -167,98 +80,43 @@
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  // name: "AudioPlayer",
   data() {
     return {
-      // audioSrc: "https://www.coothead.co.uk/audio/You-Cant-Always-Get-What-You-Want.mp3",
-      // students: [
-      //   {
-      //     studentName: "Siya",
-      //     batch: "morning",
-      //     fromDate: "2024-11-15",
-      //     toDate: "2024-11-18",
-      //     numberOfDays: 4,
-      //     leaveType: "Sick",
-      //     reasonForLeave: "Fever",
-      //     voiceNote: "", // Add voiceNote field
-      //     status: "",
-      //   },
-      //   {
-      //     studentName: "Reshma",
-      //     batch: "morning",
-      //     fromDate: "2024-11-19",
-      //     toDate: "2024-11-21",
-      //     numberOfDays: 3,
-      //     leaveType: "Casual",
-      //     reasonForLeave: "Travel",
-      //     voiceNote: "https://www.coothead.co.uk/audio/sample-audio.mp3", // Add voiceNote field with a URL
-      //     status: "",
-      //   },
-      // ],
       searchText: "",
-      userId: 1, // Replace with dynamic user ID if needed
-      batchId: null,
+      searchBatch: "",
+      userId: 1, 
       isLoading: true,
     };
   },
   mounted() {
-    // this.currentSpeed = this.students.map(() => 0);
     this.fetchLeaveRequest();
     this.fetchUserLeaveRequestsData();
   },
   computed: {
     ...mapGetters(['getLeave', 'getUserLeaveRequests']),
-    leaveRequest(){
-      // return this.getLeave;
-      return Array.isArray(this.getLeave) ? this.getLeave : [];
+    userLeaveRequests() {
+      return Array.isArray(this.getUserLeaveRequests) ? this.getUserLeaveRequests : [];
     },
-    // filteredStudents() {
-    //   return this.students.filter((student) => {
-    //     const matchesName = student.studentName.toLowerCase().includes(this.searchText.toLowerCase());
-    //     const matchesDate =
-    //       this.selectedDate &&
-    //       (new Date(student.fromDate) <= new Date(this.selectedDate) && new Date(student.toDate) >= new Date(this.selectedDate));
-    //     return matchesName && (!this.selectedDate || matchesDate);
-    //   });
-    // },
     filteredLeaveRequest() {
-    // Return filtered data based on the searchText
-    // return this.leaveRequest.filter((student) => {
-      if (!Array.isArray(this.userLeaveRequests)) {
-        return [];
-      }
       return this.userLeaveRequests.filter((student) => {
-      const searchText = this.searchText.toLowerCase();
-      return (
-        student.name.toLowerCase().includes(searchText) ||
-        student.batch.toLowerCase().includes(searchText)
-      );
-    });
-  },
-
-
+        const searchText = this.searchText.toLowerCase();
+        const batchFilter = this.searchBatch.toLowerCase();
+        return (
+          (student.name.toLowerCase().includes(searchText) || searchText === "") &&
+          (student.batch.toLowerCase() === batchFilter || batchFilter === "")
+        );
+      });
+    },
   },
   methods: {
     ...mapActions(['fetchLeaves', 'fetchUserLeaveRequests', 'approveLeave', 'denyLeave']),
-    async fetchLeaveRequest(){
-      // try{
-      //   await this.$store.dispatch('fetchLeaves'); 
-      // }
-    
+    async fetchLeaveRequest() {
       try {
         await this.fetchLeaves();
-      } 
-      catch (error) {
-          console.error(error);
-      } 
+      } catch (error) {
+        console.error(error);
+      }
     },
-    // async fetchUserLeaveRequests() {
-    //   try {
-    //     await this.$store.dispatch('fetchUserLeaveRequests', this.userId); 
-    //   } catch (error) {
-    //     console.error(error);
-    //   } 
-    // },
     async fetchUserLeaveRequestsData() {
       this.isLoading = true;
       try {
@@ -270,37 +128,29 @@ export default {
       }
     },
     async approveStudent(index) {
-      // this.students[index].status = 'Approved';
-      // const payload = this.leaveRequest[index].id;
       const payload = this.userLeaveRequests[index].id;
-      try{
-        const res = await this. this.approveLeave(payload);
-        if(res){
-          //  this.leaveRequest[index].status = 'Approved';
-          // this.fetchLeaveRequest();
+      try {
+        const res = await this.approveLeave(payload);
+        if (res) {
           this.userLeaveRequests[index].status = 'Approved';
-          // this.fetchUserLeaveRequests();
           this.fetchUserLeaveRequestsData();
         }
-      }catch (error) {
-          console.error(error);  
-      } 
+      } catch (error) {
+        console.error(error);
+      }
     },
     async denyStudentreq(index) {
-      // this.students[index].status = 'Denied';
-      // const payload = this.leaveRequest[index].id;
-            const payload = this.userLeaveRequests[index].id;
-      try{
+      const payload = this.userLeaveRequests[index].id;
+      try {
         const res = await this.denyLeave(payload);
-      if(res){
-        this.userLeaveRequests[index].status = 'Denied';
-        this.fetchUserLeaveRequestsData();
+        if (res) {
+          this.userLeaveRequests[index].status = 'Denied';
+          this.fetchUserLeaveRequestsData();
         }
-      }catch (error) {
-          console.error(error);
-      } 
+      } catch (error) {
+        console.error(error);
+      }
     },
-
     getStatusClass(status) {
       if (status === "Approved") return "status-approved";
       if (status === "Denied") return "status-denied";
@@ -309,14 +159,11 @@ export default {
     formatDate(date) {
       return new Date(date).toLocaleDateString("en-GB");
     },
-
-    search() {
-      // This method is required to trigger the filter operation when the input changes
-    },
+    search() {}
   },
 };
-
 </script>
+
 
 <style scoped>
 .page-container {
@@ -384,6 +231,7 @@ export default {
   padding: 5px;
   border-radius: 8px;
   background-color: #dffbfb;
+  height: 40px;
 }
 
 .search-bar input {
@@ -522,80 +370,28 @@ th.reason-column, td.reason-column {
   max-height: 35px;
 }
 
-/* .icon {
-  width: 1px;
-  height: 1px;
-  margin-right: 10px;
-} 
-/* 
-.audio-player {
-  max-width: 20px;
-  max-height: 5px;
-} */
 
-/* .audio-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-
-} */
-/* 
-.audio-player {
-  flex: 100;
-} */
-
-/* .speed-toggle-btn {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #007bff;
-  color: white;
-  border: none;
-
-  border-radius: 20%;
-  font-size: 140px;
-  font-weight: bold;
-  cursor: pointer;
-  width: 200px;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-} */
-
-/* .speed-toggle-btn:hover {
-  background-color: #0056b3;
-} */
- 
-/* .filters-container {
-  display: flex;
-  justify-content: space-around;
-  margin: 1px 100;
-  flex-wrap: wrap;
-  
-
-} */
 
  
 .filter {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 10px;
-  color: #2f6ff9;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  width: 250px;
+  height: 30px;
+  
 } 
 
 input,
 select {
   padding: 8px;
+    border-radius: 8px;
+    background-color: white;
+    border: 1px solid #cfccfc;
   margin-top: 5px;
-  color: #656363;
-  /* background-color: #bddffb; */
-  /* border: 1px solid #a5b9f4;  */
-  margin-bottom: 1px;
-  /* border-radius: 4px; */
-  width: 250px;
+   width: 220px;
+   height: 39px;
   
 }
 
@@ -628,99 +424,6 @@ select {
   color: #888; 
   cursor: pointer; 
 }
-
-
-
-
-
-
-
-
-/* 
-
-th:nth-child(1),
-td:nth-child(1) {
-  width: 200px; 
-}
-
-th:nth-child(2),
-td:nth-child(2) {
-  width: 150px; 
-}
-
-th:nth-child(3),
-td:nth-child(3) {
-  width: 150px; 
-}
-
-th:nth-child(4),
-td:nth-child(4) {
-  width: 150px; 
-}
-
-th:nth-child(5),
-td:nth-child(5) {
-  width: 100px; 
-}
-
-th:nth-child(6),
-td:nth-child(6) {
-  width: 150px; 
-}
-
-th.reason-column,
-td.reason-column {
-  width: 330px;  
-}
-
-th.status-column,
-td.status-column {
-  width: 150px; 
-}
-
-button {
-  border: 1px solid #ddd;
-  padding: 6px 12px; 
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  border-radius: 4px;
-  min-width: 80px;
-  min-height: 33px;
-  font-size: 10px;
-}
-
-button:hover {
-  transform: scale(1.05);
-}
-
-.status-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.approve-btn {
-  background:#87CEEB;
-  font-size: 12px;
-}
-
-.deny-btn {
-  background:#89d2fd ;
-  font-size: 12px;
-}
-
-.status-approved {
-  color: rgb(90, 148, 255);
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.status-denied {
-  color: rgb(121, 73, 252);
-  font-weight: bold;
-  font-size: 14px;
-} */
 
 .reason-column {
   word-wrap: break-word;

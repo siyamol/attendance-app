@@ -232,7 +232,7 @@ export default {
 
 .search-results {
   position: absolute;
-  background: white;
+
   border: 1px solid #ccc;
   width: 100%;
   max-height: 150px;

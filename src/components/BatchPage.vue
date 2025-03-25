@@ -12,57 +12,51 @@
         <li><router-link to="/wrk">Work from Home</router-link></li>
       </ul>
     </div>
-  
+    
     <div class="main-content">
       <h2 class="mb">Manage Batches</h2>
-      <div v-if="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </div>
-      <div v-if="notificationMessage" class="notification">
-        {{ notificationMessage }}
-      </div>
+      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+      <div v-if="notificationMessage" class="notification">{{ notificationMessage }}</div>
+      
       <form @submit.prevent="isEditing ? updateBatch() : addBatch()" class="batch-form">
-        
-<!--         
-       <form @submit.prevent="isEditing ? updateBatch() : addBatch()" class="batch-form">  -->
         <input v-model="batchName" type="text" placeholder="Batch Name" required />
+        
+        <div class="location-container">
+          <input v-model="location" type="text" placeholder="Select a location" class="location-input" readonly />
+          <button type="button" @click="navigateToMap" class="location-btn">
+            <span class="location-icon"> 🗺️</span>
+          </button>
+        </div>
+        
         <input v-model="startTime" type="time" required />
         <input v-model="endTime" type="time" required />
-         
-        <!-- <select v-model="batchType" class="batch-type-box" required>
-
-     <option value="Select Batch Type">Select Batch Type</option> 
- 
-    <option value="morning">morning</option>
-    <option value=""></option>
-    <option value=""></option>
-  </select> -->
-   <!-- <select v-model="batchType" class="batch-type-box" required> 
-    <option value="">Select Batch Type</option>
-    <option value=""></option>
-    <option value=""></option> 
-    <option v-for="type in batchTypes" :key="type.id" :value="type.id">
-      {{ type.batchType }}
-    </option>
-  </select>  -->
-  <select v-model="batchType" class="batch-type-box" required> 
-  <option value="">Select Batch Type</option>
-  <option v-for="type in batchTypes" :key="type.id" :value="type.id">
-    {{ type.batchType }}
-  </option>
-</select>
-
+    
+        <select v-model="batchType" class="batch-type-box" required> 
+          <option value="">Select Batch Type</option>
+          <option v-for="type in batchTypes" :key="type.id" :value="type.id">
+            {{ type.batchType }}
+          </option>
+        </select>
+    
         <button type="submit" class="add-btn">{{ isEditing ? "Update" : "Add" }}</button>
         <button v-if="isEditing" type="button" @click="cancelEdit" class="cancel-btn">Cancel</button>
       </form>
-
+      
+      <div class="input-container">
+        <label>Latitude:</label>
+        <input type="text" v-model="storedLat" readonly />
+        <label>Longitude:</label>
+        <input type="text" v-model="storedLng" readonly />
+      </div>
+      
       <table>
-        <thead> 
+        <thead>
           <tr>
             <th>Batch Name</th>
             <th>Starting Time</th>
             <th>Ending Time</th>
             <th>Batch Type</th>
+            <th>Location Name</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -72,10 +66,10 @@
             <td>{{ batch.startTime }}</td>
             <td>{{ batch.endTime }}</td>
             <td>{{ batch.batchType.batchType }}</td>
+            <td>{{ batch.location || 'Not specified' }}</td>
             <td>
               <button @click="editBatch(batch)" class="edit-btn">Edit</button>
               <button @click="deleteBatch(batch.id)" class="delete-btn">Delete</button>
-          
             </td>
           </tr>
         </tbody>
@@ -85,21 +79,22 @@
 </template>
 
 <script>
-import { mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
     return {
-      notificationMessage: "", // For non-blocking notifications
+      notificationMessage: "",
       errorMessage: "",
       batchId: null,
       batchType: "",  
       batchName: "",
       startTime: "",
       endTime: "",
+      location: "",
+      storedLat: "",
+      storedLng: "",
       isEditing: false, 
-      
-      // errorMessage: "",
     };
   },
   computed: {
@@ -111,152 +106,122 @@ export default {
       return this.getBatchid; 
     }
   },
-
-
-  // async fetchBatchTypes() {
-  //     const success = await this.$store.dispatch("getallbatchType");
-  //     if (success) {
-  //       console.log('Batch types fetched successfully');
-  //     } else {
-  //       console.log('Failed to fetch batch types');
-  //     }
-  //   },
-  async mounted() {
+  mounted() {
     this.$store.dispatch('getallbatchType');
-    await this.fetchBatches(); // Fetch batches when the component is mounted
-    // await this.fetchAttendanceRecords(); // Fetch initial attendance records
+    this.fetchBatches();
+    
+    if (this.$route.query.lat && this.$route.query.lng) {
+      this.storedLat = this.$route.query.lat;
+      this.storedLng = this.$route.query.lng;
+      this.location = this.$route.query.location || "Selected Location"; 
+    }
   },
   methods: {
-    
-    isDuplicateBatch() {
-      return this.batches.some(
-        (batch) =>
-          batch.batchName.toLowerCase() === this.batchName.toLowerCase() &&
-          batch.batchType === this.batchType
-      );
-    },
-    showNotification(message) {
-      this.notificationMessage = message;
-      setTimeout(() => {
-        this.notificationMessage = ""; // Clear the message after 3 seconds
-      }, 3000);
+    navigateToMap() {
+      this.$router.push({ path: '/map', query: { location: this.location || '' } });
     },
     async fetchBatches() {
       try {
-        await this.$store.dispatch("fetchAllBatches"); // Dispatch the Vuex action
-        console.log("Batches fetched successfully");
+        await this.$store.dispatch("fetchAllBatches");
       } catch (error) {
-        console.error("Error fetching batches:", error);
         this.errorMessage = "Failed to fetch batches. Please try again.";
       }
     },
-    async addBatch() {
-  // this.errorMessage = "";
-  if (!this.batchType || !this.batchName || !this.startTime || !this.endTime) {
+async addBatch() {
+  if (!this.batchType || !this.batchName || !this.startTime || !this.endTime || !this.location) {
     this.errorMessage = "Please fill all fields.";
     return;
-  }else{
-    console.log("error")
   }
+
   const payload = {
     id: this.batchType,
     data: {
       batchName: this.batchName,
       startTime: this.startTime + ":00",
       endTime: this.endTime + ":00",
+      location: this.location,  // Sending location
+      batchLatitude: this.storedLat,  // Sending latitude
+      batchLongitude: this.storedLng  // Sending longitude
     },
   };
 
   try {
     const res = await this.$store.dispatch("addBatch", payload);
-    console.log(res);
     if (res) {
-      this.fetchBatches(); // Fetch updated batches
-      // this.resetForm(); // Reset form fields
-      this.showNotification("Batch successfully added!"); // Show non-blocking notification
-    }else{
-      console.log("error")
+      this.fetchBatches();
+      this.resetForm();
+      this.showNotification("Batch successfully added!");
     }
   } catch (error) {
     console.error("Error adding batch:", error);
-    // this.errorMessage = error.response.data;
   }
 },
-  
+
+    async updateBatch() {
+      if (!this.batchId) {
+        this.errorMessage = "No batch selected for update.";
+        return;
+      }
+      const payload = {
+        id: this.batchId,
+        data: {
+          batchName: this.batchName,
+          startTime: this.startTime + ":00",
+          endTime: this.endTime + ":00",
+          location: this.location || '',
+          batchType: this.batchType
+        },
+      };
+      try {
+        await this.$store.dispatch("updateBatch", payload);
+        this.fetchBatches();
+        this.resetForm();
+        this.showNotification("Batch successfully updated!");
+      } catch (error) {
+        console.error("Error updating batch:", error);
+      }
+    },
+    async deleteBatch(batchId) {
+      try {
+        await this.$store.dispatch("deleteBatch", batchId);
+        this.fetchBatches();
+        this.showNotification("Batch successfully deleted!");
+      } catch (error) {
+        console.error("Error deleting batch:", error);
+      }
+    },
     editBatch(batch) {
       this.batchId = batch.id;
       this.batchName = batch.batchName;
       this.startTime = batch.startTime;
       this.endTime = batch.endTime;
-      this.batchType = batch.batchType;
+      this.batchType = batch.batchType.id;
+      this.location = batch.location || '';
       this.isEditing = true;
     },
-
-    async updateBatch() {
-      this.errorMessage = "";
-      if (!this.batchName || !this.startTime || !this.endTime || !this.batchType) {
-        // alert("Please fill all fields.");
-        this.errorMessage = "Please fill all fields.";
-        return;
-      }
-      if (this.isDuplicateBatch() && !this.isEditing) {
-        this.errorMessage = "A batch with the same name already exists for this batch type.";
-        return;
-      }
-      const payload = {
-        id: this.batchId,
-        batchTypeId: this.batchType,
-        data: {
-      batchName: this.batchName,
-      startTime: this.startTime,
-      endTime: this.endTime,
-    }
-     
-      };
-
-      try {
-        const res = this.$store.dispatch("updateBatch", payload);
-        if (res) {
-          // alert("Batch successfully updated!");
-          await this.$store.dispatch("fetchbatch"); 
-          this.showNotification("Batch successfully deleted!"); 
-          // this.resetForm();
-          this.showNotification("Batch successfully updated!");
-          this.fetchBatches();
-        }
-      } catch (error) {
-        // console.error(error);
-        console.error("Error updating batch:", error);
-        this.errorMessage = "Failed to update batch. Please try again.";
-      }
+    resetForm() {
+      this.batchId = null;
+      this.batchName = "";
+      this.startTime = "";
+      this.endTime = "";
+      this.batchType = "";
+      this.location = "";
+      this.isEditing = false;
     },
-    
-    async deleteBatch(id) {
-      // if (confirm("Are you sure you want to remove this batch?")) {
-        try {
-          const res = await this.$store.dispatch("dltBatch", id);
-          if (res) {
-            this.fetchBatches();
-            this.showNotification("Batch successfully deleted!"); 
-          }
-        } catch (error) {
-          console.error("Error removing batch:", error);
-          this.errorMessage = "Failed to delete batch. Please try again.";
-        }
-      
-    },
-
     cancelEdit() {
       this.resetForm();
     },
-
-  
-    
-  },
-  
+    showNotification(message) {
+      this.notificationMessage = message;
+      setTimeout(() => {
+        this.notificationMessage = "";
+      }, 3000);
+    }
+  }
 };
-
 </script>
+
+
 
 <style scoped>
 tbody tr:nth-child(odd) {
@@ -316,71 +281,72 @@ tbody tr:nth-child(even) {
   padding: 20px;
   background-color: rgb(204, 238, 245);
 }
+
 .batch-container {
-          max-width: 600px;
-          margin: auto;
-          padding: 20px;
-          text-align: center;
-        }
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+}
         
-        .batch-form {
-          display: flex;
-          gap: 10px;
-          margin-bottom: 20px;
-        }
+.batch-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
         
-        input {
-          padding: 8px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
+input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
         
-        .add-btn {
-          background-color: rgb(19, 123, 187);
-          color: white;
-          padding: 8px 15px;
-          border: none;
-          cursor: pointer;
-        }
+.add-btn {
+  background-color: rgb(19, 123, 187);
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background-color: darkgreen;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
         
-        .add-btn:hover {
-          background-color: darkgreen;
-        }
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
         
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
+.delete-btn {
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}
         
-        th, td {
-          padding: 10px;
-          border: 1px solid #ddd;
-          text-align: center;
-        }
-        
-        .delete-btn {
-          background-color: red;
-          color: white;
-          padding: 5px 10px;
-          border: none;
-          cursor: pointer;
-        }
-        
-        .delete-btn:hover {
-          background-color: darkred;
-        }
-        table {
+.delete-btn:hover {
+  background-color: darkred;
+}
+
+table {
   width: 99%;
   border-collapse: collapse;
   margin: 20px auto;
   background-color: #ffffff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   table-layout: fixed;
-
 }
 
-th,
-td {
+th, td {
   border: 5px solid #a9e6fb;
   padding: 12px;
   text-align: center;
@@ -391,11 +357,6 @@ th {
   color: #fcffff;
   font-weight: bold;
 }
-
-
-
-
-
 
 .page-container {
   display: flex;
@@ -416,14 +377,12 @@ th {
   flex: 10;
   padding: 20px;
   background-color: rgb(204, 238, 245);
-  
 }
 
 .batch-form {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
-  
 }
 
 input {
@@ -480,9 +439,11 @@ input {
 .delete-btn:hover {
   background-color: rgb(254, 174, 242);
 }
+
 .edit-btn{
   background-color: rgb(142, 201, 253);
 }
+
 .batch-type-box {
   width: 14%; /* Adjust as needed */
   padding: 10px;
@@ -492,19 +453,15 @@ input {
   font-size: 16px;
   outline: none;
   padding: 8px;
-
   border-radius: 4px;
   background-color: rgb(179, 221, 248);
-
   padding: 8px 15px;
   border: none;
-
 }
 
 .batch-type-box:focus {
   border-color: #0056b3; /* Darker blue on focus */
   background-color: #a8f4fa; /* White background on focus */
-  
 }
 
 .error-message {
@@ -512,6 +469,7 @@ input {
   margin-bottom: 10px;
   font-weight: bold;
 }
+
 .notification {
   position: fixed;
   bottom: 20px;
@@ -523,17 +481,7 @@ input {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
-.delete-btn {
-  background-color: rgb(215, 176, 255);
-  color: white;
-  padding: 5px 18px;
-  border: none;
-  cursor: pointer;
-}
 
-.delete-btn:hover {
-  background-color: rgb(254, 174, 242);
-}
 .mb {
   text-align: center;
   margin-top: 0px;
@@ -541,5 +489,41 @@ input {
   margin-bottom: 20px;
   font-size: 28px;
   color: #6d7078;
+}
+
+.location-container {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.location-input {
+  width: 150px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: 0;
+}
+
+.location-btn {
+  background-color: #29B6F6;
+  color: white;
+  height: 36px;
+  width: 36px;
+  border: none;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.location-btn:hover {
+  background-color: #0288D1;
+}
+
+.location-icon {
+  font-size: 20px;
 }
 </style>

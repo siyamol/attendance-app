@@ -327,7 +327,7 @@ tbody tr:nth-child(odd) {
   align-items: center;
   width: 100%;
   max-width: 800px;
-  background-color: #f3f3f3;
+
   padding: 10px;
   border-radius: 5px;
   gap: 10px;
@@ -362,7 +362,7 @@ tbody tr:nth-child(odd) {
   border: 1px solid #cfccfc;
   padding: 5px;
   border-radius: 8px;
-  background-color: #dffbfb;
+ 
   flex: 1; 
   max-width: 250px; 
 }
@@ -371,26 +371,29 @@ tbody tr:nth-child(odd) {
 .nav-dropdown {
   position: relative;
   display: inline-block;
+  
 }
 
 .nav-dropdown select {
-  padding: 6px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  appearance: none;
-  width: 120px;
+   width: 200px; /* Fixed width for dropdown */
+  cursor: pointer;
+  border: 1px solid #cfccfc;
+  padding: 5px;
+  border-radius: 8px;
+  background-color: #dffbfb;
+  margin-left: 1000px;
+  flex: 1; 
+  max-width: 250px; 
 }
 
 .nav-dropdown::after {
-  content: '\f0d7';
-  font-family: 'FontAwesome';
-  font-size: 14px;
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
+  padding: 8px;
+    border-radius: 8px;
+    background-color: white;
+    border: 1px solid #cfccfc;
+  margin-top: 5px;
+   width: 220px;
+   height: 39px;
 }
 
 .nav-input-container {

@@ -28,9 +28,16 @@ import AboutPage from './components/AboutPage.vue';
 import FilterAttendance from './components/FilterAttendance.vue';
 import BatchPage from './components/BatchPage.vue';
 import WorkfromHome from './components/WorkfromHome.vue';
+import MapPage from './components/MapPage.vue';
 const routes = [
 
-  { path: '/', component: HomePage },  
+  { path: '/', component: HomePage }, 
+  {
+    path: '/map',
+    name: 'MapPage',
+    component: () => import('@/components/MapPage.vue') // Adjust the path if needed
+  },
+   
 
   { path: '/nav', component: NavBar},
   { path: '/register',component:RegisterPage},
@@ -39,6 +46,7 @@ const routes = [
   { path: '/adminmain',component:AdminmainPage},
   { path: '/sidebar',component:SideBar},
   { path: '/lay',component:AdminLayout},
+  { path: '/map',component:MapPage},
   
   { path: '/late',component:LateRequest},
   { path: '/leave',component:LeaveRequest},

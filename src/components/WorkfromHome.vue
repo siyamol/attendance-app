@@ -251,7 +251,7 @@ export default {
   border: 1px solid #cfccfc;
   padding: 5px;
   border-radius: 8px;
-  background-color: #dffbfb;
+
   flex: 1; 
   max-width: 250px; 
 }
