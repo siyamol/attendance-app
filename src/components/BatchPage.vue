@@ -128,7 +128,7 @@ export default {
       }
     },
 async addBatch() {
-  if (!this.batchType || !this.batchName || !this.startTime || !this.endTime || !this.location) {
+  if (!this.batchType || !this.batchName || !this.startTime || !this.endTime ) {
     this.errorMessage = "Please fill all fields.";
     return;
   }
