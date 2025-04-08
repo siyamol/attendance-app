@@ -31,10 +31,10 @@
         <p class="forgot-password">
           <router-link to="/forgot">Forgot Password?</router-link>
         </p>
-        <p>
+        <!-- <p>
           Are you a new user ?
           <router-link to="/register">Register here</router-link>
-        </p>
+        </p> -->
       </div>
     </div>
     <router-view></router-view>

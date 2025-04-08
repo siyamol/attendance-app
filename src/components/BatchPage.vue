@@ -156,31 +156,96 @@ async addBatch() {
     console.error("Error adding batch:", error);
   }
 },
-
-    async updateBatch() {
-      if (!this.batchId) {
-        this.errorMessage = "No batch selected for update.";
-        return;
-      }
-      const payload = {
-        id: this.batchId,
-        data: {
-          batchName: this.batchName,
-          startTime: this.startTime + ":00",
-          endTime: this.endTime + ":00",
-          location: this.location || '',
-          batchType: this.batchType
-        },
-      };
-      try {
-        await this.$store.dispatch("updateBatch", payload);
-        this.fetchBatches();
-        this.resetForm();
-        this.showNotification("Batch successfully updated!");
-      } catch (error) {
-        console.error("Error updating batch:", error);
-      }
-    },
+// async updateBatch() {
+//   if (!this.batchId) {
+//     this.errorMessage = "No batch selected for update.";
+//     return;
+//   }
+  
+//   const payload = {
+//     id: this.batchId,
+//     batchTypeId: this.batchType, // This was missing or incorrect
+//     data: {
+//       batchName: this.batchName,
+//       startTime: this.startTime + ":00",
+//       endTime: this.endTime + ":00",
+//       location: this.location || '',
+//       batchLatitude: this.storedLat,  // Include these values
+//       batchLongitude: this.storedLng  // Include these values
+//     }
+//   };
+  
+//   try {
+//     const result = await this.$store.dispatch("updateBatch", payload);
+//     if (result) {
+//       this.fetchBatches();
+//       this.resetForm();
+//       this.showNotification("Batch successfully updated!");
+//     } else {
+//       this.errorMessage = "Failed to update batch.";
+//     }
+//   } catch (error) {
+//     console.error("Error updating batch:", error);
+//     this.errorMessage = "Error updating batch: " + error.message;
+//   }
+// },
+async updateBatch() {
+  if (!this.batchId) {
+    this.errorMessage = "No batch selected for update.";
+    return;
+  }
+  
+  const payload = {
+    id: this.batchId,
+    batchTypeId: this.batchType,
+    data: {
+      batchName: this.batchName,
+      startTime: this.startTime + ":00",
+      endTime: this.endTime + ":00",
+      location: this.location,
+      batchLatitude: this.storedLat,
+      batchLongitude: this.storedLng
+    }
+  };
+  
+  try {
+    const result = await this.$store.dispatch("updateBatch", payload);
+    if (result) {
+      this.fetchBatches();
+      this.resetForm();
+      this.showNotification("Batch successfully updated!");
+    } else {
+      this.errorMessage = "Failed to update batch.";
+    }
+  } catch (error) {
+    console.error("Error updating batch:", error);
+    this.errorMessage = "Error updating batch: " + error.message;
+  }
+},
+    // async updateBatch() {
+    //   if (!this.batchId) {
+    //     this.errorMessage = "No batch selected for update.";
+    //     return;
+    //   }
+    //   const payload = {
+    //     id: this.batchId,
+    //     data: {
+    //       batchName: this.batchName,
+    //       startTime: this.startTime + ":00",
+    //       endTime: this.endTime + ":00",
+    //       location: this.location || '',
+    //       batchType: this.batchType
+    //     },
+    //   };
+    //   try {
+    //     await this.$store.dispatch("updateBatch", payload);
+    //     this.fetchBatches();
+    //     this.resetForm();
+    //     this.showNotification("Batch successfully updated!");
+    //   } catch (error) {
+    //     console.error("Error updating batch:", error);
+    //   }
+    // },
     async deleteBatch(batchId) {
       try {
         await this.$store.dispatch("deleteBatch", batchId);
