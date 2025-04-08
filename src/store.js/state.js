@@ -26,6 +26,7 @@ export default {
   wfhRequests: [],
   attendanceRecordswrkhm: [],
   batches: [], 
-  leave: []
+  leave: [],
+  resetPasswordStatus: null,
  };
   

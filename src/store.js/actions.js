@@ -197,18 +197,18 @@ async approveLeaves({ rootGetters }, payload) {
   }
 },
 
-async forgotPassword({ rootGetters,commit }, payload) {
-  try {
-    const response = await axios.post(`${rootGetters.getURL}/AdminReg/forgot-password`, payload);
-    if (response.status >= 200 && response.status < 300) {
-      commit('forgotPassword', response.data.token); 
-      return true;
-    }
-    return false ;
-  } catch (error) {
-    console.error(error);
-  }
-},
+// async forgotPassword({ rootGetters,commit }, payload) {
+//   try {
+//     const response = await axios.post(`${rootGetters.getURL}/AdminReg/forgot-password`, payload);
+//     if (response.status >= 200 && response.status < 300) {
+//       commit('forgotPassword', response.data.token); 
+//       return true;
+//     }
+//     return false ;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// },
 
 async fetchFilter({ rootGetters, commit }, payload) {
   try {
@@ -251,33 +251,51 @@ async removeUser({  rootGetters,commit }, userId) {
     return false; 
   }
 },
-
-async fetchbatch({ rootGetters,commit }) {
+async fetchBatches() {
   try {
-    const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatches`);
+    await this.$store.dispatch("fetchAllBatches");
+  } catch (error) {
+    this.errorMessage = "Failed to fetch batches: " + error.message;
+    console.error("Error fetching batches:", error);
+  }
+},
+// async fetchbatch({ rootGetters,commit }) {
+//   try {
+//     const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatches`);
+//     if (response.status >= 200 && response.status < 300) {
+//       commit('setBatch', response.data); 
+//       return true;
+//     }
+//     return false ;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// },
+// async dltBatch({  rootGetters }, payload) {
+//   try {
+//      const response = await axios.delete(`${rootGetters.getURL}/AdminReg/deleteBatch?id=${payload}`);
+  
+//      if (response.status >= 200 && response.status < 300) {
+
+//       return true; 
+//     }
+//   } catch (error) {
+//     console.error('Error removing user:', error);
+//     return false; 
+//   }
+// },
+async deleteBatch({ rootGetters, dispatch }, batchId) {
+  try {
+    const response = await axios.delete(`${rootGetters.getURL}/AdminReg/deleteBatch?id=${batchId}`);
     if (response.status >= 200 && response.status < 300) {
-      commit('setBatch', response.data); 
+      await dispatch("fetchAllBatches"); // Refresh the batch list
       return true;
     }
-    return false ;
   } catch (error) {
-    console.error(error);
+    console.error('Error deleting batch:', error);
+    return false;
   }
 },
-async dltBatch({  rootGetters }, payload) {
-  try {
-     const response = await axios.delete(`${rootGetters.getURL}/AdminReg/deleteBatch?id=${payload}`);
-  
-     if (response.status >= 200 && response.status < 300) {
-
-      return true; 
-    }
-  } catch (error) {
-    console.error('Error removing user:', error);
-    return false; 
-  }
-},
-
 async getallbatchType({ rootGetters,commit }, payload) {
   try {
      const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatchType`,payload);
@@ -334,22 +352,22 @@ async addBatch({  rootGetters }, payload) {
   }
 },
 
-async updateBatch({ rootGetters, dispatch },payload ) {
-  try {
-    // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
-    // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
-    const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatch?id=${payload.id}&batchTypeId=${payload.batchTypeId}`,payload.data);
+// async updateBatch({ rootGetters, dispatch },payload ) {
+//   try {
+//     // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
+//     // const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatchType=${payload}`);
+//     const response = await axios.put(`${rootGetters.getURL}/AdminReg/updateBatch?id=${payload.id}&batchTypeId=${payload.batchTypeId}`,payload.data);
 
-   if (response.status >= 200 && response.status < 300) {
-      await dispatch("fetchBatch");
-      return true; 
-    }
+//    if (response.status >= 200 && response.status < 300) {
+//       await dispatch("fetchBatch");
+//       return true; 
+//     }
     
-  } catch (error) {
-    console.error("Error updating batch:", error);
- }
- return false;
-},
+//   } catch (error) {
+//     console.error("Error updating batch:", error);
+//  }
+//  return false;
+// },
 async fetchAttendanceRecords({ commit, rootGetters }, batchId) {
   try {
     const response = await axios.get(`${rootGetters.getURL}/AdminReg/attendance/today?batchId=${batchId}`);
@@ -362,6 +380,30 @@ async fetchAttendanceRecords({ commit, rootGetters }, batchId) {
     return false;
   }
 },
+// async fetchAllBatches({ commit, rootGetters }) {
+//   try {
+//     const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatches`);
+//     if (response.status >= 200 && response.status < 300) {
+//       commit('setBatchId', response.data);
+//       return true;
+//     }
+//   } catch (error) {
+//     console.error('Error fetching batches:', error);
+//     return false;
+//   }
+// },
+// async fetchAllBatches({ commit, rootGetters }) {
+//   try {
+//     const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatches`);
+//     if (response.status >= 200 && response.status < 300) {
+//       commit('setBatchId', response.data); // Make sure this matches your getter
+//       return true;
+//     }
+//   } catch (error) {
+//     console.error('Error fetching batches:', error);
+//     return false;
+//   }
+// },
 async fetchAllBatches({ commit, rootGetters }) {
   try {
     const response = await axios.get(`${rootGetters.getURL}/AdminReg/getAllBatches`);
@@ -479,7 +521,172 @@ async fetchWfhRequestsByStatusAndBatch({ commit, rootGetters }, { status, batchI
     return false;
   }
 },
+// async resetPassword({ rootGetters }, payload) {
+//   try {
+//     const response = await axios.post(`${rootGetters.getURL}/AdminReg/forgot-password`, payload);
+//     if (response.status >= 200 && response.status < 300) {
+//       return { success: true, message: response.data.message || 'Password reset successful' };
+//     }
+//     return { success: false, message: 'Failed to reset password' };
+//   } catch (error) {
+//     console.error('Error resetting password:', error);
+//     return { 
+//       success: false, 
+//       message: error.response?.data?.message || 'An error occurred while resetting password'
+//     };
+//   }
+// },
+// async updateBatch({ rootGetters, dispatch }, payload) {
+//   try {
+//     const response = await axios.put(
+//      `${rootGetters.getURL}/AdminReg/updateBatch/${payload.id}`,
+//       payload.data
+//     );
 
+//     if (response.status >= 200 && response.status < 300) {
+//       await dispatch("fetchAllBatches");
+//       return true;
+//     }
+//     return false;
+//   } catch (error) {
+//     console.error("Error updating batch:", error);
+//     throw error; // Propagate error to component
+//   }
+// }
+// async updateBatch({ rootGetters, dispatch }, payload) {
+//   try {
+//     const response = await axios.put(
+//       `${rootGetters.getURL}/AdminReg/updateBatch/${payload.id}`,
+//       payload.data
+//     );
+
+//     if (response.status >= 200 && response.status < 300) {
+//       await dispatch("fetchAllBatches");
+//       return true;
+//     }
+//     return false;
+//   } catch (error) {
+//     console.error("Error updating batch:", error);
+//     throw error; // Propagate error to component
+//   }
+// }
+// async updateBatch({ rootGetters, dispatch }, payload) {
+//   try {
+//     const response = await axios.put(
+//       `${rootGetters.getURL}/AdminReg/updateBatch/${payload.id}`,
+//       {
+//         batchName: payload.data.batchName,
+//         startTime: payload.data.startTime,
+//         endTime: payload.data.endTime,
+//         batchLatitude: payload.data.batchLatitude,
+//         batchLongitude: payload.data.batchLongitude,
+//         batchType: {
+//           id: payload.batchTypeId
+//         }
+//       }
+//     );
+
+//     if (response.status >= 200 && response.status < 300) {
+//       await dispatch("fetchAllBatches");
+//       return true;
+//     }
+//     return false;
+//   } catch (error) {
+//     console.error("Error updating batch:", error);
+//     throw error;
+//   }
+// },
+async updateBatch({ rootGetters, dispatch }, payload) {
+  try {
+    const response = await axios.put(
+      `${rootGetters.getURL}/AdminReg/updateBatch?id=${payload.id}&batchTypeId=${payload.batchTypeId}`,
+      payload.data
+    );
+
+    if (response.status >= 200 && response.status < 300) {
+      await dispatch("fetchAllBatches"); // Refresh the batch list
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error updating batch:", error);
+    throw error;
+  }
+},
+// Add these actions to your existing actions.js file
+
+async forgotPassword({ rootGetters }, payload) {
+  try {
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/forgot-password`, {
+      email: payload.email
+    });
+    
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Error requesting OTP:', error);
+    throw new Error(error.response?.data?.message || 'Failed to send OTP');
+  }
+},
+
+async verifyOTP({ rootGetters }, payload) {
+  try {
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/verify-otp`, {
+      email: payload.email,
+      otp: payload.otp
+    });
+    
+    if (response.status >= 200 && response.status < 300) {
+      return { 
+        success: true, 
+        message: response.data.message || 'OTP verified successfully' 
+      };
+    }
+    return { 
+      success: false, 
+      message: 'Invalid OTP' 
+    };
+  } catch (error) {
+    console.error('Error verifying OTP:', error);
+    return { 
+      success: false, 
+      message: error.response?.data?.message || 'Failed to verify OTP' 
+    };
+  }
+},
+
+async resetPassword({ rootGetters, commit }, payload) {
+  try {
+    const response = await axios.post(`${rootGetters.getURL}/AdminReg/reset-password`, {
+      email: payload.email,
+      otp: payload.otp,
+      newPassword: payload.newPassword
+    });
+    
+    if (response.status >= 200 && response.status < 300) {
+      commit('setResetPasswordStatus', 'success');
+      return { 
+        success: true, 
+        message: response.data.message || 'Password reset successful' 
+      };
+    }
+    
+    commit('setResetPasswordStatus', 'failed');
+    return { 
+      success: false, 
+      message: 'Failed to reset password' 
+    };
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    commit('setResetPasswordStatus', 'failed');
+    return { 
+      success: false, 
+      message: error.response?.data?.message || 'An error occurred while resetting password' 
+    };
+  }
+}
 };
 
 

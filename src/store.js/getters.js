@@ -40,5 +40,6 @@ export default {
     // getBatchLateRequests:(state) => state.leave,
     getLeaveWfh: (state) => state.leaveWfh,
     getWfhRequests: (state) => state.wfhRequests,
+    getResetPasswordStatus: (state) => state.resetPasswordStatus,
 };
   

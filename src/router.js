@@ -29,6 +29,8 @@ import FilterAttendance from './components/FilterAttendance.vue';
 import BatchPage from './components/BatchPage.vue';
 import WorkfromHome from './components/WorkfromHome.vue';
 import MapPage from './components/MapPage.vue';
+import PasswordReset from './components/PasswordReset.vue';
+
 const routes = [
 
   { path: '/', component: HomePage }, 
@@ -56,7 +58,8 @@ const routes = [
   { path: '/about',component:AboutPage},
   { path: '/filter',component:FilterAttendance},
   { path: '/batch',component:BatchPage},
-  { path: '/wrk',component:WorkfromHome}
+  { path: '/wrk',component:WorkfromHome},
+  { path: '/reset-password',component: PasswordReset}
 ];
 
 
@@ -69,3 +72,7 @@ export default router;
 
 
 
+
+
+  
+  

@@ -200,7 +200,7 @@ async updateBatch() {
     batchTypeId: this.batchType,
     data: {
       batchName: this.batchName,
-      startTime: this.startTime + ":00",
+      startTime: this.startTime + ":00", // Add seconds if needed by backend
       endTime: this.endTime + ":00",
       location: this.location,
       batchLatitude: this.storedLat,
@@ -211,7 +211,7 @@ async updateBatch() {
   try {
     const result = await this.$store.dispatch("updateBatch", payload);
     if (result) {
-      this.fetchBatches();
+      await this.fetchBatches();
       this.resetForm();
       this.showNotification("Batch successfully updated!");
     } else {
@@ -219,7 +219,7 @@ async updateBatch() {
     }
   } catch (error) {
     console.error("Error updating batch:", error);
-    this.errorMessage = "Error updating batch: " + error.message;
+    this.errorMessage = "Error updating batch: " + (error.response?.data?.message || error.message);
   }
 },
     // async updateBatch() {
@@ -255,15 +255,29 @@ async updateBatch() {
         console.error("Error deleting batch:", error);
       }
     },
+    // editBatch(batch) {
+    //   this.batchId = batch.id;
+    //   this.batchName = batch.batchName;
+    //   this.startTime = batch.startTime;
+    //   this.endTime = batch.endTime;
+    //   this.batchType = batch.batchType.id;
+    //   this.location = batch.location || '';
+    //   this.isEditing = true;
+    // },
     editBatch(batch) {
-      this.batchId = batch.id;
-      this.batchName = batch.batchName;
-      this.startTime = batch.startTime;
-      this.endTime = batch.endTime;
-      this.batchType = batch.batchType.id;
-      this.location = batch.location || '';
-      this.isEditing = true;
-    },
+  this.batchId = batch.id;
+  this.batchName = batch.batchName;
+  
+  // Remove seconds if present in time (backend often returns HH:mm:ss)
+  this.startTime = batch.startTime.includes(':') ? batch.startTime.substring(0, 5) : batch.startTime;
+  this.endTime = batch.endTime.includes(':') ? batch.endTime.substring(0, 5) : batch.endTime;
+  
+  this.batchType = batch.batchType.id;
+  this.location = batch.location || '';
+  this.storedLat = batch.batchLatitude || '';
+  this.storedLng = batch.batchLongitude || '';
+  this.isEditing = true;
+},
     resetForm() {
       this.batchId = null;
       this.batchName = "";

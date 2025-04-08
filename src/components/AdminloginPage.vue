@@ -21,7 +21,7 @@
           class="toggle-password"
           @click="showPassword = !showPassword"
         >
-          {{ showPassword ? "👁" : "👁️‍🗨️" }}
+          {{ showPassword ? "👁️‍🗨️" : "👁" }}
         </button>
       </div>
 
