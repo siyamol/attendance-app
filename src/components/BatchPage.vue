@@ -136,11 +136,11 @@ export default {
         this.errorMessage = "Failed to fetch batches. Please try again.";
       }
     },
-    async addBatch() {
-      if (!this.batchType || !this.batchName || !this.startTime || !this.endTime || !this.location) {
-        this.errorMessage = "Please fill all fields.";
-        return;
-      }
+async addBatch() {
+  if (!this.batchType || !this.batchName || !this.startTime || !this.endTime || !this.location) {
+    this.errorMessage = "Please fill all fields.";
+    return;
+  }
 
       const payload = {
         id: this.batchType,
@@ -154,17 +154,18 @@ export default {
         },
       };
 
-      try {
-        const res = await this.$store.dispatch("addBatch", payload);
-        if (res) {
-          this.fetchBatches();
-          this.resetForm();
-          this.showNotification("Batch successfully added!");
-        }
-      } catch (error) {
-        console.error("Error adding batch:", error);
-      }
-    },
+  try {
+    const res = await this.$store.dispatch("addBatch", payload);
+    if (res) {
+      this.fetchBatches();
+      this.resetForm();
+      this.showNotification("Batch successfully added!");
+    }
+  } catch (error) {
+    console.error("Error adding batch:", error);
+  }
+},
+
     async updateBatch() {
       if (!this.batchId) {
         this.errorMessage = "No batch selected for update.";
@@ -198,15 +199,29 @@ export default {
         console.error("Error deleting batch:", error);
       }
     },
+    // editBatch(batch) {
+    //   this.batchId = batch.id;
+    //   this.batchName = batch.batchName;
+    //   this.startTime = batch.startTime;
+    //   this.endTime = batch.endTime;
+    //   this.batchType = batch.batchType.id;
+    //   this.location = batch.location || '';
+    //   this.isEditing = true;
+    // },
     editBatch(batch) {
-      this.batchId = batch.id;
-      this.batchName = batch.batchName;
-      this.startTime = batch.startTime;
-      this.endTime = batch.endTime;
-      this.batchType = batch.batchType.id;
-      this.location = batch.location || '';
-      this.isEditing = true;
-    },
+  this.batchId = batch.id;
+  this.batchName = batch.batchName;
+  
+  // Remove seconds if present in time (backend often returns HH:mm:ss)
+  this.startTime = batch.startTime.includes(':') ? batch.startTime.substring(0, 5) : batch.startTime;
+  this.endTime = batch.endTime.includes(':') ? batch.endTime.substring(0, 5) : batch.endTime;
+  
+  this.batchType = batch.batchType.id;
+  this.location = batch.location || '';
+  this.storedLat = batch.batchLatitude || '';
+  this.storedLng = batch.batchLongitude || '';
+  this.isEditing = true;
+},
     resetForm() {
       this.batchId = null;
       this.batchName = "";

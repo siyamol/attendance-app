@@ -16,6 +16,7 @@
     "dayjs": "^1.11.13",
     "jquery": "^3.7.1",
     "jquery-ui": "^1.14.1",
+    "leaflet": "^1.9.4",
     "recordrtc": "^5.6.2",
     "roboto-fontface": "*",
     "vue": "^3.2.13",

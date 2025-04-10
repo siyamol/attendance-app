@@ -78,9 +78,13 @@ export default {
     // SET_ATTENDANCE_RECORDS(state, attendanceRecords) {
     //   state.attendanceRecords = attendanceRecords;
     // },
-    setBatchId(state, payload) {
-      state.batchId = payload;
-    },
+    // setBatchId(state, payload) {
+    //   state.batchId = payload;
+    // },
+    // Ensure you have this mutation
+setBatchId(state, payload) {
+  state.batchId = payload;
+},
     setBatchType(state, payload) {
       state.batchType = payload;
     },
@@ -105,4 +109,12 @@ export default {
     setWfhRequests(state, payload) {
       state.wfhRequests = Array.isArray(payload) ? payload : []; // Ensure payload is an array
     },
+    // setResetPasswordStatus(state, status) {
+    //   state.resetPasswordStatus = status;
+    // },
+   
+
+setResetPasswordStatus(state, status) {
+  state.resetPasswordStatus = status;
+},
     };
