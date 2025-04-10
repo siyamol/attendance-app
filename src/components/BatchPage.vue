@@ -113,12 +113,21 @@ export default {
     if (this.$route.query.lat && this.$route.query.lng) {
       this.storedLat = this.$route.query.lat;
       this.storedLng = this.$route.query.lng;
-      this.location = this.$route.query.location || "Selected Location"; 
+    }
+    if (this.$route.query.location) {
+      this.location = this.$route.query.location; // Set location name
     }
   },
   methods: {
     navigateToMap() {
-      this.$router.push({ path: '/map', query: { location: this.location || '' } });
+      this.$router.push({ 
+        path: '/map', 
+        query: { 
+          location: this.location || '', 
+          lat: this.storedLat || '', 
+          lng: this.storedLng || '' 
+        } 
+      });
     },
     async fetchBatches() {
       try {
@@ -127,36 +136,35 @@ export default {
         this.errorMessage = "Failed to fetch batches. Please try again.";
       }
     },
-async addBatch() {
-  if (!this.batchType || !this.batchName || !this.startTime || !this.endTime || !this.location) {
-    this.errorMessage = "Please fill all fields.";
-    return;
-  }
+    async addBatch() {
+      if (!this.batchType || !this.batchName || !this.startTime || !this.endTime || !this.location) {
+        this.errorMessage = "Please fill all fields.";
+        return;
+      }
 
-  const payload = {
-    id: this.batchType,
-    data: {
-      batchName: this.batchName,
-      startTime: this.startTime + ":00",
-      endTime: this.endTime + ":00",
-      location: this.location,  // Sending location
-      batchLatitude: this.storedLat,  // Sending latitude
-      batchLongitude: this.storedLng  // Sending longitude
+      const payload = {
+        id: this.batchType,
+        data: {
+          batchName: this.batchName,
+          startTime: this.startTime + ":00",
+          endTime: this.endTime + ":00",
+          location: this.location,
+          batchLatitude: this.storedLat,
+          batchLongitude: this.storedLng
+        },
+      };
+
+      try {
+        const res = await this.$store.dispatch("addBatch", payload);
+        if (res) {
+          this.fetchBatches();
+          this.resetForm();
+          this.showNotification("Batch successfully added!");
+        }
+      } catch (error) {
+        console.error("Error adding batch:", error);
+      }
     },
-  };
-
-  try {
-    const res = await this.$store.dispatch("addBatch", payload);
-    if (res) {
-      this.fetchBatches();
-      this.resetForm();
-      this.showNotification("Batch successfully added!");
-    }
-  } catch (error) {
-    console.error("Error adding batch:", error);
-  }
-},
-
     async updateBatch() {
       if (!this.batchId) {
         this.errorMessage = "No batch selected for update.";
@@ -220,6 +228,7 @@ async addBatch() {
   }
 };
 </script>
+
 
 
 
@@ -445,11 +454,10 @@ input {
 }
 
 .batch-type-box {
-  width: 14%; /* Adjust as needed */
+  width: 14%; 
   padding: 10px;
-  border: 2px solid #007bff; /* Blue border */
+  border: 2px solid #007bff; 
   border-radius: 5px;
-  /* Light gray background */
   font-size: 16px;
   outline: none;
   padding: 8px;
@@ -460,8 +468,8 @@ input {
 }
 
 .batch-type-box:focus {
-  border-color: #0056b3; /* Darker blue on focus */
-  background-color: #a8f4fa; /* White background on focus */
+  border-color: #0056b3;
+  background-color: #a8f4fa; 
 }
 
 .error-message {
