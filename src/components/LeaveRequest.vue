@@ -174,7 +174,7 @@ export default {
 .sidebar {
   width: 250px;
   padding: 20px;
-  /* background: linear-gradient(to top, #7fd7da, #8e4eef); */
+
   background: #8ddbf7; 
   color: white;
   border-right: 1px solid #ddd;
@@ -218,10 +218,12 @@ export default {
   background-color: rgb(204, 238, 245);
 }
 
+
 .search-bar-container {
   display: flex;
   justify-content: center;
    margin: 20px 0;
+
 } 
 
 .search-bar {
@@ -232,6 +234,7 @@ export default {
   border-radius: 8px;
   background-color: #dffbfb;
   height: 40px;
+  
 }
 
 .search-bar input {
@@ -241,6 +244,7 @@ export default {
   margin-right: 10px;
   border: none;
   border-radius: 4px;
+
 }
 
 .date-picker {
@@ -270,7 +274,7 @@ td {
 }
 
 th {
-  /* background: linear-gradient(to left, #4830e8, #a485f2); */
+
   background:#4FC3F7;
   color: #fcffff;
   font-weight: bold;
@@ -333,13 +337,12 @@ button:hover {
 }
 
 .approve-btn {
-  /* background: linear-gradient(to right, rgb(109, 93, 172), #6a96f5);  */
+
   background:#87CEEB;
   font-size: 12px;
 }
 
 .deny-btn {
-  /* background: linear-gradient(to right, rgb(106, 110, 218), #6e92b8); */
   background:#89d2fd ;
   font-size: 12px;
 }
@@ -370,9 +373,6 @@ th.reason-column, td.reason-column {
   max-height: 35px;
 }
 
-
-
- 
 .filter {
   display: flex;
   align-items: center;
@@ -380,9 +380,8 @@ th.reason-column, td.reason-column {
   border-radius: 8px;
   width: 250px;
   height: 30px;
-  
-} 
 
+} 
 input,
 select {
   padding: 8px;
@@ -392,6 +391,7 @@ select {
   margin-top: 5px;
    width: 220px;
    height: 39px;
+   
   
 }
 
@@ -399,38 +399,41 @@ select {
   display: flex;
   align-items: center;
   width: 250px;
-  border: 1px solid #ccc; /* Add border to create the box */
-  border-radius: 6px; /* Add rounded corners */
-  padding: 5px; /* Add padding for inner spacing */
-  background-color: rgb(255, 249, 249);/* Ensure a clear background */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  border: 1px solid #ccc; 
+  border-radius: 6px; 
+  padding: 5px; 
+  background-color: #dffbfb;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 }
 
 .search-bar input[type="text"] {
-  border: none; /* Remove inner input border */
-  outline: none; /* Remove focus outline */
-  width: calc(100% - 30px); /* Full width minus space for icon */
-  padding: 5px; /* Add padding for better spacing */
-  font-size: 14px; /* Adjust text size */
+  border: none; 
+  outline: none; 
+  width: calc(100% - 30px); 
+  padding: 5px;
+  font-size: 14px; 
   margin-bottom:3px;
   margin-top:3px;
+   background-color: #dffbfb;
+      font-size: 1rem
 }
   
 .search-bar i {
-    margin-left: 9px; /* Adjust icon spacing */
+    margin-left: 9px; 
   }
 .search-bar i {
   margin-left: 10px; 
   color: #888; 
-  cursor: pointer; 
+  cursor: pointer;
+   
 }
 
 .reason-column {
   word-wrap: break-word;
   overflow-wrap: break-word;
-  white-space: normal; /* Allow word breaks */
+  white-space: normal; 
   min-width: 110px;
-  max-width: 50px; /* Adjustable maximum width */
+  max-width: 50px;
 }
 
 </style>

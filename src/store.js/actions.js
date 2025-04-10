@@ -30,6 +30,7 @@ async adminRegister ({rootGetters }, payload) {
     throw new Error(error.response?.data?.message ?? error.message);
   }
 },
+
 async generateQr({ rootGetters,commit }) {
   try {
     const response = await axios.get(`${rootGetters.getURL}/AdminReg/generateQr`);

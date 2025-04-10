@@ -17,7 +17,6 @@ import AdminloginPage from './components/AdminloginPage.vue';
 import HomePage from './components/HomePage.vue';
 import AdminmainPage from './components/AdminmainPage.vue';
 import SideBar from './components/SideBar.vue';
-
 import LateRequest from './components/LateRequest.vue';
 import LeaveRequest from './components/LeaveRequest.vue';
 import StudentDetails from './components/StudentDetails.vue';
